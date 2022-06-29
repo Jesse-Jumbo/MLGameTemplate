@@ -3,7 +3,7 @@ import sys
 
 from mlgame.game.generic import quit_or_esc
 
-from Shmup.src.ShmupGame import Shmup
+from game.src.MyGame import FindTheWay
 
 sys.path.append(r"../..")
 from mlgame.view.view import PygameView
@@ -11,7 +11,7 @@ from mlgame.view.view import PygameView
 FPS = 30
 if __name__ == '__main__':
     pygame.init()
-    game = Shmup(time_limit=300, sound="off")
+    game = FindTheWay(time_limit=300, sound="off")
     scene_init_info_dict = game.get_scene_init_data()
     game_view = PygameView(scene_init_info_dict)
     frame_count = 0

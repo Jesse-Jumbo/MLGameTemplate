@@ -3,26 +3,30 @@ import pygame
 from os import path
 from mlgame.game.paia_game import PaiaGame, GameResultState, GameStatus
 from mlgame.view.decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import Scene, create_asset_init_data, create_text_view_data, create_scene_progress_data
-from Shmup.src.Mob import Mob
-from Shmup.src.Player import Player
+from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data
+
+from game.src.Mob import Mob
+from game.src.Player import Player
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
+WIDTH = 1000
+HEIGHT = 700
 
 
-class Shmup(PaiaGame):
-    def __init__(self, time_limit: int, sound: str):
+class FindTheWay(PaiaGame):
+    def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", maps: int = None, *args, **kwargs):
+        super().__init__(user_num, *args, **kwargs)
         self.game_result_state = GameResultState.FAIL
-        self.scene = Scene(width=400, height=700, color="#000000", bias_x=0, bias_y=0)
+        self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
         # self.sound_controller = SoundController(sound)
         self.player = Player()
+        self.walls = pygame.sprite.Group()
         self.mobs = pygame.sprite.Group()
         self.score = 0
-        self._create_mobs(8)
         self._begin_frame = 0
-        self._timer = time_limit
+        self._timer = frame_limit
         self.frame_count = 0
-        self.time_limit = time_limit
+        self.frame_limit = frame_limit
 
     def update(self, commands):
         # handle command
@@ -31,16 +35,20 @@ class Shmup(PaiaGame):
         self.player.update(ai_1p_cmd)
 
         # update sprite
+        self.walls.update()
         self.mobs.update()
 
         # handle collision
-        hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.spritecollide(self.player, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
-            self.score += len(hits)
-            self._create_mobs(len(hits))
+            self.player.collide_with_walls()
+
+        hits = pygame.sprite.spritecollide(self.player, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.player.collide_with_mobs()
 
         self.frame_count += 1
-        self._timer = self.time_limit - self.frame_count
+        self._timer = self.frame_limit - self.frame_count
         # self.draw()
 
         if not self.is_running:
@@ -52,6 +60,9 @@ class Shmup(PaiaGame):
         we could send different data to different ai
         """
         to_players_data = {}
+        walls_data = []
+        for wall in self.walls:
+            walls_data.append({"x": wall.rect.x, "y": wall.rect.y})
         mobs_data = []
         for mob in self.mobs:
             mobs_data.append({"x": mob.rect.x, "y": mob.rect.y})
@@ -59,6 +70,7 @@ class Shmup(PaiaGame):
             "frame": self.frame_count,
             "ball_x": self.player.rect.centerx,
             "ball_y": self.player.rect.centery,
+            "walls": walls_data,
             "mobs": mobs_data,
             "score": self.score,
             "status": self.get_game_status()
@@ -105,14 +117,18 @@ class Shmup(PaiaGame):
         """
         Get the position of game objects for drawing on the web
         """
+        walls_data = []
+        for wall in self.walls:
+            walls_data.append(wall.game_object_data)
         mobs_data = []
         for mob in self.mobs:
             mobs_data.append(mob.game_object_data)
         game_obj_list = [self.player.game_object_data]
+        game_obj_list.extend(walls_data)
         game_obj_list.extend(mobs_data)
         backgrounds = []
-        foregrounds = [create_text_view_data(f"Score: {str(self.score)}", 160, 5, "#FF0000", "24px Arial BOLD")]
-        toggle_objs = [create_text_view_data(f"Timer: {str(self._timer)} s", 280, 5, "#FFAA00", "24px Arial")]
+        foregrounds = [create_text_view_data(f"Score: {str(self.score)}", WIDTH // 2 - 50, 5, "#FF0000", "24px Arial BOLD")]
+        toggle_objs = [create_text_view_data(f"Timer: {str(self._timer)} s", WIDTH-100, 5, "#FFAA00", "24px Arial")]
         scene_progress = create_scene_progress_data(frame=self.frame_count, background=backgrounds,
                                                     object_list=game_obj_list,
                                                     foreground=foregrounds, toggle=toggle_objs)
@@ -158,8 +174,8 @@ class Shmup(PaiaGame):
 
     def _create_mobs(self, count: int = 8):
         for i in range(count):
-            # add mob to group
             mob = Mob()
+            # add mob to group
             self.mobs.add(mob)
 
     @staticmethod

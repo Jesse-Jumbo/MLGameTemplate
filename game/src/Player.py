@@ -19,6 +19,12 @@ class Player(pygame.sprite.Sprite):
         elif motion == "RIGHT":
             self.rect.centerx += 10.5
 
+    def collide_with_walls(self):
+        pass
+
+    def collide_with_mobs(self):
+        pass
+
     @property
     def game_object_data(self):
         return {"type": "rect",
