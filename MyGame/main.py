@@ -3,7 +3,7 @@ import sys
 
 from mlgame.game.generic import quit_or_esc
 
-from game.src.MyGame import FindTheWay
+from MyGame.src.MyGame import FindTheWay
 
 sys.path.append(r"../..")
 from mlgame.view.view import PygameView

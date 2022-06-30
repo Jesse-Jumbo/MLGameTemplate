@@ -5,8 +5,10 @@ from mlgame.game.paia_game import PaiaGame, GameResultState, GameStatus
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data
 
-from game.src.Mob import Mob
-from game.src.Player import Player
+from MyGame.src.Mob import Mob
+from MyGame.src.Player import Player
+from MyGame.src.SoundController import SoundController
+from MyGame.src.TiledMap import TiledMap
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 1000
@@ -14,11 +16,16 @@ HEIGHT = 700
 
 
 class FindTheWay(PaiaGame):
-    def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", maps: int = None, *args, **kwargs):
+    def __init__(self, user_num: int = 1, frame_limit: int = 300, is_sound: str = "off", map_no: int = None, *args, **kwargs):
         super().__init__(user_num, *args, **kwargs)
         self.game_result_state = GameResultState.FAIL
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
-        # self.sound_controller = SoundController(sound)
+        self.is_sound = False
+        if is_sound == "on":
+            self.is_sound = True
+            self.sound_controller = SoundController()
+        self.map_path = path.join(ASSET_PATH, "map", f"map_0{map_no}")
+        # self.map = TiledMap(self.map_path)
         self.player = Player()
         self.walls = pygame.sprite.Group()
         self.mobs = pygame.sprite.Group()
@@ -52,11 +59,11 @@ class FindTheWay(PaiaGame):
         # self.draw()
 
         if not self.is_running:
-            return "QUIT"
+            return "RESET"
 
     def get_data_from_game_to_player(self):
         """
-        send something to game AI
+        send something to MyGame AI
         we could send different data to different ai
         """
         to_players_data = {}
@@ -91,7 +98,7 @@ class FindTheWay(PaiaGame):
         return status
 
     def reset(self):
-        pass
+        self.__init__()
 
     @property
     def is_running(self):
@@ -115,7 +122,7 @@ class FindTheWay(PaiaGame):
     @check_game_progress
     def get_scene_progress_data(self):
         """
-        Get the position of game objects for drawing on the web
+        Get the position of MyGame objects for drawing on the web
         """
         walls_data = []
         for wall in self.walls:
@@ -137,7 +144,7 @@ class FindTheWay(PaiaGame):
     @check_game_result
     def get_game_result(self):
         """
-        send game result
+        send MyGame result
         """
         if self.get_game_status() == GameStatus.GAME_PASS:
             self.game_result_state = GameResultState.FINISH
@@ -155,7 +162,7 @@ class FindTheWay(PaiaGame):
 
     def get_keyboard_command(self):
         """
-        Define how your game will run by your keyboard
+        Define how your MyGame will run by your keyboard
         """
         cmd_1p = []
         key_pressed_list = pygame.key.get_pressed()
