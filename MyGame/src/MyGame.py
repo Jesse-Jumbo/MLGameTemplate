@@ -11,8 +11,8 @@ from MyGame.src.SoundController import SoundController
 from MyGame.src.TiledMap import TiledMap
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
-WIDTH = 1000
-HEIGHT = 700
+WIDTH = 800
+HEIGHT = 600
 
 
 class FindTheWay(PaiaGame):
@@ -34,6 +34,7 @@ class FindTheWay(PaiaGame):
         self._timer = frame_limit
         self.frame_count = 0
         self.frame_limit = frame_limit
+        self._create_mobs(8)
 
     def update(self, commands):
         # handle command
@@ -112,11 +113,11 @@ class FindTheWay(PaiaGame):
         # bg_path = path.join(ASSET_PATH, "img/background.jpg")
         # background = create_asset_init_data("background", 800, 600, bg_path, "url")
         scene_init_data = {"scene": self.scene.__dict__,
-                           "assets": [
+                           "assets": [mob.game_init_object_data for mob in self.mobs],
                                # background
-                           ],
                            # "audios": {}
                            }
+        scene_init_data["assets"].append(self.player.game_init_object_data)
         return scene_init_data
 
     @check_game_progress
