@@ -1,9 +1,13 @@
+from os import path
+
 import pytmx
 
-
 class TiledMap:
-    def __init__(self, filepath):
-        tm = pytmx.TiledMap(filepath)
+    def __init__(self, map_no):
+        if not map_no:
+            return
+        map_no = path.join(path.dirname(__file__), f"../asset/map/map_0{map_no}")
+        tm = pytmx.TiledMap(map_no)
         self.width = tm.tilewidth
         self.height = tm.tileheight
         self.tmx_data = tm

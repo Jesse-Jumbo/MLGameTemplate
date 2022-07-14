@@ -1,28 +1,15 @@
 import pygame
+from mlgame.view.view_model import create_rect_view_data
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int):
-        super().__init__()
-        self.image = pygame.Surface([50, 50])
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, init_pos: tuple, init_size: tuple, *groups):
+        super().__init__(*groups)
+        self.rect = pygame.Rect(*init_pos, *init_size)
 
-    def update(self):
-        self.collide_with_bomb()
-
-    def collide_with_bomb(self):
-        pass
+    def get_xy(self):
+        return self.rect.topleft
 
     @property
-    def game_object_data(self):
-        return {"type": "rect",
-                "name": "player",
-                "x": self.rect.x,
-                "y": self.rect.y,
-                "angle": 0,
-                "width": self.rect.width,
-                "height": self.rect.height,
-                "color": "#ff0000"
-                }
+    def get_object_data(self):
+        return create_rect_view_data(name="wall", x=self.rect.x, y=self.rect.y, width=self.rect.width, height=self.rect.height, color="#ff0000", angle=0)
