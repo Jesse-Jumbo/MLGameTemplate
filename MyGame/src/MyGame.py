@@ -32,8 +32,8 @@ class MyGame(PaiaGame):
         self._frame_count = 0
         self._frame_limit = frame_limit
         self._game_status = GameStatus.GAME_ALIVE
-        self._mobs = []
-        self._walls = []
+        self._mobs = pygame.sprite.Group()
+        self._walls = pygame.sprite.Group()
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
         self._create_init_scene()
 
@@ -45,12 +45,11 @@ class MyGame(PaiaGame):
         if self._is_sound:
             self.sound_controller = SoundController()
         self._player_1P = Player((WIDTH//2, 50), (50, 50), pygame.Rect(0, 0, WIDTH, HEIGHT), "1P", self._draw_group)
-        for i in range(random.randrange(10)):
+        for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
             wall = Wall((random.randrange(WIDTH), random.randrange(HEIGHT)), (50, 50), self._draw_group)
-            self._walls.append(wall)
-
+            self._walls.add(wall)
 
     def update(self, commands: dict):
         self._frame_count += 1
@@ -68,14 +67,21 @@ class MyGame(PaiaGame):
             mob.move()
 
         if self.get_game_status() != GameStatus.GAME_ALIVE:
-            if self._game_over(self.get_game_status()):
-                self._print_result()
-                self._game_status = GameStatus.GAME_OVER
-                return "QUIT"
+            self._game_status = self.get_game_status()
+            self._print_result()
             return "RESET"
 
         if not self.is_running:
             return "QUIT"
+
+        # handle collision
+        hits = pygame.sprite.spritecollide(self._player_1P, self._walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self._player_1P.collide_with_walls()
+
+        hits = pygame.sprite.spritecollide(self._player_1P, self._walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self._player_1P.collide_with_mobs()
 
     def _game_over(self, status: str):
         """
@@ -97,16 +103,6 @@ class MyGame(PaiaGame):
         """
         if self._frame_count >= self._frame_limit:
             print(f"Time Out ! Your Score is {self._score}")
-        # handle collision
-        hits = pygame.sprite.spritecollide(self._player_1P, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
-            self._player_1P.collide_with_walls()
-
-        hits = pygame.sprite.spritecollide(self._player_1P, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
-            self._player_1P.collide_with_mobs()
-
-        # self.draw()
 
         if not self.is_running:
             return "RESET"
@@ -139,7 +135,9 @@ class MyGame(PaiaGame):
         return to_players_data
 
     def get_game_status(self):
-        if self.is_running:
+        if self._frame_count >= self._frame_limit:
+            status = GameStatus.GAME_OVER
+        elif self.is_running:
             status = GameStatus.GAME_ALIVE
         else:
             status = GameStatus.GAME_PASS
@@ -194,8 +192,8 @@ class MyGame(PaiaGame):
             attachment = [
                 {
                     "player": get_ai_name(0),
-                    "rank": 1,
                     "score": self._score,
+                    "used_frame": self._frame_count,
                     "status": GameStatus.GAME_PASS
                 }
             ]
@@ -203,8 +201,8 @@ class MyGame(PaiaGame):
             attachment = [
                 {
                     "player": get_ai_name(0),
-                    "rank": 1,
                     "score": self._score,
+                    "used_frame": self._frame_count,
                     "status": GameStatus.GAME_OVER
                 }
             ]
@@ -235,4 +233,4 @@ class MyGame(PaiaGame):
     def _create_mobs(self, count: int = 8):
         for i in range(count):
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100), pygame.sprite.RenderPlain())
-            self._mobs.append(mob)
+            self._mobs.add(mob)
