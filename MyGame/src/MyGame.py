@@ -23,9 +23,7 @@ class MyGame(PaiaGame):
     def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", map_no: int = None, *args, **kwargs):
         super().__init__(user_num=user_num, *args, **kwargs)
         self._timer = frame_limit
-        self._is_sound = False
-        if is_sound == "on":
-            self._is_sound = True
+        self._is_sound = is_sound
         self._map_no = map_no
         self._score = 0
         self._begin_frame = 0
@@ -42,7 +40,7 @@ class MyGame(PaiaGame):
 
         if self._map_no:
             self.map = TiledMap(self._map_no)
-        if self._is_sound:
+        if self._is_sound == "on":
             self.sound_controller = SoundController()
         self._player_1P = Player((WIDTH//2, 50), (50, 50), pygame.Rect(0, 0, WIDTH, HEIGHT), "1P", self._draw_group)
         for i in range(random.randrange(1, 10)):
@@ -53,7 +51,7 @@ class MyGame(PaiaGame):
 
     def update(self, commands: dict):
         self._frame_count += 1
-        self._timer = self._frame_limit - self._frame_count
+        self._timer -= 1
         # handle command
         ai_1p_cmd = commands[get_ai_name(0)]
         # print(ai_1p_cmd)
@@ -101,7 +99,7 @@ class MyGame(PaiaGame):
         Print the result
         :return:
         """
-        if self._frame_count >= self._frame_limit:
+        if self._timer <= 0:
             print(f"Time Out ! Your Score is {self._score}")
 
         if not self.is_running:
@@ -145,7 +143,7 @@ class MyGame(PaiaGame):
 
     def reset(self):
         print("reset MyGame")
-        self.__init__()
+        self.__init__(frame_limit=self._frame_limit, is_sound=self._is_sound, map_no=self._map_no)
 
     @property
     def is_running(self):
