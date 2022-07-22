@@ -5,27 +5,27 @@ import pygame
 from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
-
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 
 
-class PlayerAction(StringEnum):
-    UP = auto()
-    DOWN = auto()
-    LEFT = auto()
-    RIGHT = auto()
-    NONE = auto()
-
-
 class Player(pygame.sprite.Sprite):
-    def __init__(self, init_pos: tuple, init_size: tuple, play_area_rect: pygame.Rect, side, *group):
-        super().__init__(*group)
+    def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
+        super().__init__()
         self._play_area_rect = play_area_rect
-        self._shift_speed = 5
-        self._speed = [0, 0]
-        self._init_pos = init_pos
-        self.rect = pygame.Rect(*init_pos, *init_size)
+        self._speed = 5
+        self._init_pos = pos
+        self.rect = pygame.Rect(*pos, *size)
         self._score = 0
+
+    def update(self, action: str) -> None:
+        if action == "UP" and self.rect.top > self._play_area_rect.top:
+            self.rect.centery -= self._speed
+        elif action == "DOWN" and self.rect.bottom < self._play_area_rect.bottom:
+            self.rect.centery += self._speed
+        elif action == "LEFT" and self.rect.left > self._play_area_rect.left:
+            self.rect.centerx -= self._speed
+        elif action == "RIGHT" and self.rect.right < self._play_area_rect.right:
+            self.rect.centerx += self._speed
 
     @property
     def score(self):
@@ -37,20 +37,6 @@ class Player(pygame.sprite.Sprite):
 
     def reset(self):
         self.rect.x, self.rect.y = self._init_pos
-
-    def move(self, move_action: PlayerAction):
-        if move_action == PlayerAction.UP and self.rect.top > self._play_area_rect.top:
-            self._speed[1] = -self._shift_speed
-        elif move_action == PlayerAction.DOWN and self.rect.bottom < self._play_area_rect.bottom:
-            self._speed[1] = self._shift_speed
-        elif move_action == PlayerAction.LEFT and self.rect.left > self._play_area_rect.left:
-            self._speed[0] = -self._shift_speed
-        elif move_action == PlayerAction.RIGHT and self.rect.right < self._play_area_rect.right:
-            self._speed[0] = self._shift_speed
-        else:
-            self._speed = [0, 0]
-
-        self.rect.move_ip(*self._speed)
 
     def collide_with_walls(self):
         pass

@@ -9,8 +9,8 @@ MOB_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, play_area_rect: pygame.Rect, *groups):
-        super().__init__(*groups)
+    def __init__(self, play_area_rect: pygame.Rect):
+        super().__init__()
         self._play_area_rect = play_area_rect
         self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
         self._pos = (random.randrange(0, 800), random.randrange(-100, -15))
@@ -29,7 +29,7 @@ class Mob(pygame.sprite.Sprite):
         self.rect = self.rect = pygame.Rect(*self._pos, *self._size)
         self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
 
-    def move(self):
+    def update(self, *args, **kwargs) -> None:
         self.rect.move_ip(self._speed)
 
         if self.rect.left >= self._play_area_rect.right:

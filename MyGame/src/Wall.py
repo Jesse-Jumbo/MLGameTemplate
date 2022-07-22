@@ -3,8 +3,8 @@ from mlgame.view.view_model import create_rect_view_data
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, init_pos: tuple, init_size: tuple, *groups):
-        super().__init__(*groups)
+    def __init__(self, init_pos: tuple, init_size: tuple):
+        super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
 
     def get_xy(self):
