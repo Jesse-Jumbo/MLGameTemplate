@@ -156,6 +156,7 @@ class MyGame(PaiaGame):
                 {
                     "player": get_ai_name(0),
                     "score": self.score,
+                    "used_frame": self.used_frame,
                     "status": GameStatus.GAME_PASS
                 }
             ]
@@ -165,6 +166,7 @@ class MyGame(PaiaGame):
                 {
                     "player": get_ai_name(0),
                     "score": self.score,
+                    "used_frame": self.used_frame,
                     "status": GameStatus.GAME_OVER
                 }
             ]
