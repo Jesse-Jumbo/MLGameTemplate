@@ -16,8 +16,8 @@ class Mob(pygame.sprite.Sprite):
         self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
         self.rect = pygame.Rect(*self._pos, *self._size)
         self.img_index = random.randrange(0, 2)
-        self._image_id = f"mob_{self.img_index}.png"
-        self.image = pygame.image.load(path.join(MOB_PATH, self._image_id))
+        self._image_id = f"mob_{self.img_index}"
+        self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
         self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
 
     def update(self, *args, **kwargs) -> None:
@@ -42,8 +42,8 @@ class Mob(pygame.sprite.Sprite):
         self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
         self.rect = pygame.Rect(*self._pos, *self._size)
         self.img_index = random.randrange(0, 2)
-        self._image_id = f"mob_{self.img_index}.png"
-        self.image = pygame.image.load(path.join(MOB_PATH, self._image_id))
+        self._image_id = f"mob_{self.img_index}"
+        self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
         self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
 
     @property
@@ -52,12 +52,12 @@ class Mob(pygame.sprite.Sprite):
 
     @property
     def get_object_data(self):
-        return create_image_view_data(image_id=f"mob_{self.img_index}", x=self.rect.x, y=self.rect.y,
+        return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
     @property
     def get_init_object_data(self):
-        return create_asset_init_data(image_id=f"mob_{self.img_index}",
+        return create_asset_init_data(image_id=self._image_id,
                                       width=self.rect.width, height=self.rect.height,
-                                      file_path=path.join(MOB_PATH, self._image_id),
-                                      github_raw_url="")
+                                      file_path=path.join(MOB_PATH, f"{self._image_id}.png"),
+                                      github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/{self._image_id}.png")

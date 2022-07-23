@@ -41,7 +41,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall((random.randrange(WIDTH), random.randrange(HEIGHT)), (50, 50))
+            wall = Wall((random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), (50, 50))
             self.walls.add(wall)
 
     def update(self, commands: dict):
@@ -118,7 +118,7 @@ class MyGame(PaiaGame):
         """
         # TODO add music or sound
         bg_path = path.join(ASSET_PATH, "image/background.png")
-        background = create_asset_init_data("background", 800, 600, bg_path, "")
+        background = create_asset_init_data("background", 800, 600, bg_path, "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
         scene_init_data = {"scene": self.scene.__dict__,
                            "assets": [background],
                            }

@@ -32,7 +32,7 @@
 # View
 
 1. 認識MLGame遊戲框架 [MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)
-2. 查詢所有Pygame函示 [Pygame](https://www.pygame.org/docs/index.html#)
+2. 查詢所有Pygame函式 [Pygame](https://www.pygame.org/docs/index.html#)
 3. 開源的素材網站 [OpenGameArt.Org](https://opengameart.org/)
 
 ---
