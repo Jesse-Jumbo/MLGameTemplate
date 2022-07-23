@@ -12,30 +12,34 @@
 
 ---
 # 使用方式
-1. create a new folder
-2. copy and past MyGame
-3. refactor code in MyGame
 
+1. **create a new folder**
+2. **copy and past MyGame**
+3. **refactor MyGame to fit your NewGame**
+
+---
 # PAIA 遊戲相關專案
 
-> 1. [PAIA-Desktop](https://github.com/PAIA-Playful-AI-Arena/Paia-Desktop)
-> 2. 範例遊戲 [easy_game](https://github.com/PAIA-Playful-AI-Arena/easy_game)
-> 3. 打磚塊 [arkanoid](https://github.com/PAIA-Playful-AI-Arena/arkanoid)
-> 4. 乒乓球 [pingpong](https://github.com/PAIA-Playful-AI-Arena/pingpong)
-> 5. 賽車 [Racing Car](https://github.com/yen900611/racing_car)
-> 6. 迷宮自走車 [Maze Car](https://github.com/yen900611/maze_car)
-> 6. 坦克車 [Tank Man](https://github.com/Jesse-Jumbo/TankMan)
+1. PAIA 線下版 [PAIA-Desktop](https://github.com/PAIA-Playful-AI-Arena/Paia-Desktop)
+2. 範例遊戲 [easy_game](https://github.com/PAIA-Playful-AI-Arena/easy_game)
+3. 打磚塊 [arkanoid](https://github.com/PAIA-Playful-AI-Arena/arkanoid)
+4. 乒乓球 [pingpong](https://github.com/PAIA-Playful-AI-Arena/pingpong)
+5. 賽車 [Racing Car](https://github.com/yen900611/racing_car)
+6. 迷宮自走車 [Maze Car](https://github.com/yen900611/maze_car)
+7. 坦克車 [Tank Man](https://github.com/Jesse-Jumbo/TankMan)
+
+---
+# View
+
+1. 認識MLGame遊戲框架 [MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+2. 查詢所有Pygame函示 [Pygame](https://www.pygame.org/docs/index.html#)
+3. 開源的素材網站 [OpenGameArt.Org](https://opengameart.org/)
 
 ---
 # Future Work
 
-1. [ ] 新增遊戲框架
+1. [ ] 新增遊戲開發框架
 2. [ ] test case
-
----
-## Package Info
-
-View [MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 
 ---
 ## 圖片來源

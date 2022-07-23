@@ -11,6 +11,7 @@ from mlgame.view.view_model import Scene, create_text_view_data, create_scene_pr
 
 from .Mob import Mob
 from .Player import Player
+from .Prop import Prop
 from .SoundController import SoundController
 from .TiledMap import TiledMap
 from .Wall import Wall
@@ -58,7 +59,7 @@ class MyGame(PaiaGame):
         self.mobs.update()
 
         # handle collision
-        hits = pygame.sprite.spritecollide(self.player, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
 
@@ -81,10 +82,10 @@ class MyGame(PaiaGame):
         to_players_data = {}
         walls_data = []
         for wall in self.walls:
-            walls_data.append({"x": wall.rect.x, "y": wall.rect.y})
+            walls_data.append({"x": wall.get_xy[0], "y": wall.get_xy[1]})
         mobs_data = []
         for mob in self.mobs:
-            mobs_data.append({"x": mob.rect.x, "y": mob.rect.y})
+            mobs_data.append({"x": mob.get_xy[0], "y": mob.get_xy[1]})
         data_to_1p = {
             "used_frame": self.used_frame,
             "player_x": self.player.rect.centerx,

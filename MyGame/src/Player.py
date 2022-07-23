@@ -5,7 +5,7 @@ import pygame
 from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
-PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
+PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
 
 
 class Player(pygame.sprite.Sprite):
@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         return self.rect.topleft
 
     def reset(self):
-        self.rect.x, self.rect.y = self._init_pos
+        self.rect.topleft = self._init_pos
 
     def collide_with_walls(self):
         pass
@@ -53,5 +53,5 @@ class Player(pygame.sprite.Sprite):
     def get_init_object_data(self):
         return create_asset_init_data(image_id="player",
                                       width=self.rect.width, height=self.rect.height,
-                                      file_path=path.join(PLAYER_PATH, f"player.png"),
-                                      github_raw_url="")
+                                      file_path=PLAYER_PATH,
+                                      github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
