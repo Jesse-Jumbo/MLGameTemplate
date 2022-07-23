@@ -9,27 +9,18 @@ MOB_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, play_area_rect: pygame.Rect, *groups):
-        super().__init__(*groups)
+    def __init__(self, play_area_rect: pygame.Rect):
+        super().__init__()
         self._play_area_rect = play_area_rect
-        self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
-        self._pos = (random.randrange(0, 800), random.randrange(-100, -15))
+        self._pos = (random.randrange(-60, 800), random.randrange(-200, -60))
         self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
-        self.img_index = random.randrange(0, 2)
-        self.image = pygame.image.load(path.join(MOB_PATH, f"mob_{self.img_index}.png"))
         self.rect = pygame.Rect(*self._pos, *self._size)
-
-    @property
-    def xy(self):
-        return self.rect.topleft
-
-    def reset(self):
-        self._pos = (random.randrange(0, 800), random.randrange(-100, -15))
-        self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
-        self.rect = self.rect = pygame.Rect(*self._pos, *self._size)
+        self.img_index = random.randrange(0, 2)
+        self._image_id = f"mob_{self.img_index}.png"
+        self.image = pygame.image.load(path.join(MOB_PATH, self._image_id))
         self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
 
-    def move(self):
+    def update(self, *args, **kwargs) -> None:
         self.rect.move_ip(self._speed)
 
         if self.rect.left >= self._play_area_rect.right:
@@ -46,6 +37,19 @@ class Mob(pygame.sprite.Sprite):
         if is_out:
             self.reset()
 
+    def reset(self):
+        self._pos = (random.randrange(-60, 800), random.randrange(-200, -60))
+        self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
+        self.rect = pygame.Rect(*self._pos, *self._size)
+        self.img_index = random.randrange(0, 2)
+        self._image_id = f"mob_{self.img_index}.png"
+        self.image = pygame.image.load(path.join(MOB_PATH, self._image_id))
+        self._speed = [random.randrange(-4, 5), random.randrange(4, 8)]
+
+    @property
+    def get_xy(self):
+        return self.rect.topleft
+
     @property
     def get_object_data(self):
         return create_image_view_data(image_id=f"mob_{self.img_index}", x=self.rect.x, y=self.rect.y,
@@ -55,5 +59,5 @@ class Mob(pygame.sprite.Sprite):
     def get_init_object_data(self):
         return create_asset_init_data(image_id=f"mob_{self.img_index}",
                                       width=self.rect.width, height=self.rect.height,
-                                      file_path=path.join(MOB_PATH, f"mob_{self.img_index}.png"),
+                                      file_path=path.join(MOB_PATH, self._image_id),
                                       github_raw_url="")
