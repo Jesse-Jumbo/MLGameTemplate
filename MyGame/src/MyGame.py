@@ -1,5 +1,4 @@
 import random
-
 import pygame
 
 from os import path
@@ -46,6 +45,7 @@ class MyGame(PaiaGame):
 
     def update(self, commands: dict):
         self.used_frame += 1
+        self.score = self.player.score
         # handle command
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
@@ -82,14 +82,16 @@ class MyGame(PaiaGame):
         to_players_data = {}
         walls_data = []
         for wall in self.walls:
-            walls_data.append({"x": wall.get_xy[0], "y": wall.get_xy[1]})
+            if isinstance(wall, Wall):
+                walls_data.append({"x": wall.xy[0], "y": wall.xy[1]})
         mobs_data = []
         for mob in self.mobs:
-            mobs_data.append({"x": mob.get_xy[0], "y": mob.get_xy[1]})
+            if isinstance(mob, Mob):
+                mobs_data.append({"x": mob.xy[0], "y": mob.xy[1]})
         data_to_1p = {
             "used_frame": self.used_frame,
-            "player_x": self.player.rect.centerx,
-            "player_y": self.player.rect.centery,
+            "player_x": self.player.xy[0],
+            "player_y": self.player.xy[1],
             "walls": walls_data,
             "mobs": mobs_data,
             "score": self.score,
@@ -118,13 +120,15 @@ class MyGame(PaiaGame):
         """
         # TODO add music or sound
         bg_path = path.join(ASSET_PATH, "image/background.png")
-        background = create_asset_init_data("background", 800, 600, bg_path, "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
+        background = create_asset_init_data(
+            "background", 800, 600, bg_path, "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
         scene_init_data = {"scene": self.scene.__dict__,
                            "assets": [background],
                            }
         for mob in self.mobs:
-            scene_init_data["assets"].append(mob.get_init_object_data)
-        scene_init_data["assets"].append(self.player.get_init_object_data)
+            if isinstance(mob, Mob):
+                scene_init_data["assets"].append(mob.game_init_object_data)
+        scene_init_data["assets"].append(self.player.game_init_object_data)
         return scene_init_data
 
     @check_game_progress
@@ -134,16 +138,20 @@ class MyGame(PaiaGame):
         """
         game_obj_list = []
         for wall in self.walls:
-            game_obj_list.append(wall.get_object_data)
+            if isinstance(wall, Wall):
+               game_obj_list.append(wall.game_object_data)
         for mob in self.mobs:
-            game_obj_list.append(mob.get_object_data)
-        game_obj_list.append(self.player.get_object_data)
+            if isinstance(mob, Mob):
+                game_obj_list.append(mob.game_object_data)
+        game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data("background", 0, 0, WIDTH, HEIGHT)]
-        foregrounds = [create_text_view_data(f"Score: {str(self.score)}", WIDTH // 2 - 50, 5, "#FF0000", "24px Arial BOLD")]
-        toggle_objs = [create_text_view_data(f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAA00", "24px Arial")]
-        scene_progress = create_scene_progress_data(frame=self.used_frame, background=backgrounds,
-                                                    object_list=game_obj_list,
-                                                    foreground=foregrounds, toggle=toggle_objs)
+        foregrounds = [create_text_view_data(
+            f"Score: {str(self.score)}", WIDTH // 2 - 50, 5, "#FF0000", "24px Arial BOLD")]
+        toggle_objs = [create_text_view_data(
+            f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAA00", "24px Arial")]
+        scene_progress = create_scene_progress_data(
+            frame=self.used_frame, background=backgrounds,
+            object_list=game_obj_list, foreground=foregrounds, toggle=toggle_objs)
         return scene_progress
 
     @check_game_result
@@ -180,7 +188,7 @@ class MyGame(PaiaGame):
         """
         Define how your MyGame will run by your keyboard
         """
-        cmd_1p = ""
+        cmd_1p = "NONE"
         key_pressed_list = pygame.key.get_pressed()
         if key_pressed_list[pygame.K_UP]:
             cmd_1p = "UP"
@@ -190,8 +198,6 @@ class MyGame(PaiaGame):
             cmd_1p = "LEFT"
         elif key_pressed_list[pygame.K_RIGHT]:
             cmd_1p = "RIGHT"
-        else:
-            cmd_1p = "NONE"
         return {get_ai_name(0): cmd_1p}
 
     def _create_mobs(self, count: int = 8):

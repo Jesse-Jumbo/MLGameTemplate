@@ -45,12 +45,12 @@ class Player(pygame.sprite.Sprite):
         pass
 
     @property
-    def get_object_data(self):
+    def game_object_data(self):
         return create_image_view_data(image_id="player", x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
     @property
-    def get_init_object_data(self):
+    def game_init_object_data(self):
         return create_asset_init_data(image_id="player",
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,

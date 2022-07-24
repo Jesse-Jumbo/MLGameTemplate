@@ -9,9 +9,9 @@ class Wall(pygame.sprite.Sprite):
         self.color = "#ff0000"
 
     @property
-    def get_xy(self):
+    def xy(self):
         return self.rect.topleft
 
     @property
-    def get_object_data(self):
+    def game_object_data(self):
         return create_rect_view_data(name="wall", x=self.rect.x, y=self.rect.y, width=self.rect.width, height=self.rect.height, color=self.color, angle=0)

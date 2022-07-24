@@ -13,16 +13,16 @@ class Prop(pygame.sprite.Sprite):
         self._image_id = image_id
 
     @property
-    def get_xy(self):
+    def xy(self):
         return self.rect.topleft
 
     @property
-    def get_object_data(self):
+    def game_object_data(self):
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
     @property
-    def get_init_object_data(self):
+    def game_init_object_data(self):
         return create_asset_init_data(image_id=self._image_id,
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=path.join(IMG_PATH, f"{self._image_id}.png"),
