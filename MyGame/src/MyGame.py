@@ -20,22 +20,31 @@ WIDTH = 800
 HEIGHT = 600
 
 
+# class 類別名稱(繼承的類別):
+# 這是建立遊戲所使用的模板
 class MyGame(PaiaGame):
+    # def 方法名稱(參數: 型態 = 預設值):
+    # 定義遊戲的初始化
     def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", map_no: int = None, *args, **kwargs):
+        # super().要繼承的父類別方法的名字(初始化父類別的參數)
         super().__init__(user_num=user_num, *args, **kwargs)
+        # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
+        # 宣告各個物件的集合
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        # 其他屬性
         self.used_frame = 0
         self.frame_to_end = frame_limit
         self.score = 0
         self.is_sound = is_sound
         self.map_no = map_no
+        # 判定是否需要並建立地圖和加載聲音
         if self.map_no:
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
-
+        # 建立遊戲物件，並加入該物件的集合
         self.player = Player((WIDTH // 2, 50), (50, 50), pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
@@ -43,51 +52,59 @@ class MyGame(PaiaGame):
             wall = Wall((random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), (50, 50))
             self.walls.add(wall)
 
+    # 定義遊戲的更新
     def update(self, commands: dict):
+        # 紀錄程式運作到目前的總frame
         self.used_frame += 1
+        # 更新遊戲的分數
         self.score = self.player.score
-        # handle command
+        # 處裡ＡＩ輸入的指令(command)
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
         else:
             action = "NONE"
         # print(ai_1p_cmd)
-
-        # update sprite
+        # 更新物件
         self.player.update(action)
         self.mobs.update()
-
-        # handle collision
+        # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
-
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_mobs()
-
+        # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
 
+    # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
     def reset(self):
         print("reset MyGame")
+        # 重新初始化遊戲
         self.__init__(frame_limit=self.frame_to_end, is_sound=self.is_sound, map_no=self.map_no)
 
+    # 在這裡定義要給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
         """
         send something to MyGame AI
         we could send different data to different ai
         """
+        # 一個玩家是key對應一份完整的資料value
         to_players_data = {}
+        # 存放一筆筆所有wall的資訊
         walls_data = []
         for wall in self.walls:
+            # 確認walls裡的物件是wall這個class的instance
             if isinstance(wall, Wall):
+                # 將wall的座標記錄下來
                 walls_data.append({"x": wall.xy[0], "y": wall.xy[1]})
         mobs_data = []
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 mobs_data.append({"x": mob.xy[0], "y": mob.xy[1]})
+        # 將所有要給（AI）玩家1的資料打包起來
         data_to_1p = {
             "used_frame": self.used_frame,
             "player_x": self.player.xy[0],
@@ -97,12 +114,13 @@ class MyGame(PaiaGame):
             "score": self.score,
             "status": self.get_game_status()
         }
-
+        # to_players_data = {"1P": data_to_1p}
         to_players_data[get_ai_name(0)] = data_to_1p
         # should be equal to config. GAME_SETUP["ml_clients"][0]["name"]
 
         return to_players_data
 
+    # 獲取遊戲狀態的method，在這裡定義遊戲什麼時候是存活、結束、勝利
     def get_game_status(self):
         if self.is_running:
             status = GameStatus.GAME_ALIVE
@@ -110,18 +128,23 @@ class MyGame(PaiaGame):
             status = GameStatus.GAME_OVER
         return status
 
+    # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
         return self.used_frame < self.frame_to_end
 
+    # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
     def get_scene_init_data(self):
         """
         Get the initial scene and object information for drawing on the web
         """
         # TODO add music or sound
+        # 獲取圖片路徑
         bg_path = path.join(ASSET_PATH, "image/background.png")
         background = create_asset_init_data(
-            "background", 800, 600, bg_path, "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
+            image_id="background", width=800, height=600, file_path=bg_path
+            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
+        # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典，將所有圖片資訊加入assets裡
         scene_init_data = {"scene": self.scene.__dict__,
                            "assets": [background],
                            }
@@ -131,6 +154,7 @@ class MyGame(PaiaGame):
         scene_init_data["assets"].append(self.player.game_init_object_data)
         return scene_init_data
 
+    # 獲取所有遊戲畫面的更新資訊
     @check_game_progress
     def get_scene_progress_data(self):
         """
@@ -144,9 +168,9 @@ class MyGame(PaiaGame):
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
         game_obj_list.append(self.player.game_object_data)
-        backgrounds = [create_image_view_data("background", 0, 0, WIDTH, HEIGHT)]
+        backgrounds = [create_image_view_data(image_id="background", x=0, y=0, width=WIDTH, height=HEIGHT)]
         foregrounds = [create_text_view_data(
-            f"Score: {str(self.score)}", WIDTH // 2 - 50, 5, "#FF0000", "24px Arial BOLD")]
+            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#FF0000", font_style="24px Arial BOLD")]
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAA00", "24px Arial")]
         scene_progress = create_scene_progress_data(
@@ -154,11 +178,13 @@ class MyGame(PaiaGame):
             object_list=game_obj_list, foreground=foregrounds, toggle=toggle_objs)
         return scene_progress
 
+    # 遊戲結束或重置前，讀取遊戲結果資料，在這裡定義遊戲結果的資料
     @check_game_result
     def get_game_result(self):
         """
         send MyGame result
         """
+        # 定義獲勝的結果
         if self.get_game_status() == GameStatus.GAME_PASS:
             self.game_result_state = GameResultState.FINISH
             attachment = [
@@ -169,6 +195,7 @@ class MyGame(PaiaGame):
                     "status": GameStatus.GAME_PASS
                 }
             ]
+        # 定義失敗的結果
         else:
             self.game_result_state = GameResultState.FAIL
             attachment = [
@@ -180,27 +207,22 @@ class MyGame(PaiaGame):
                 }
             ]
 
+        # 回傳使用時間、遊戲狀態給mlgame並把結果資料（attachment）顯示在terminal
         return {"frame_used": self.used_frame,
                 "state": self.game_result_state,
                 "attachment": attachment}
 
+    # 這裡由於我們是用ＡＩ玩遊戲，定義在ＡＩ的update即可
     def get_keyboard_command(self):
         """
         Define how your MyGame will run by your keyboard
         """
-        cmd_1p = "NONE"
-        key_pressed_list = pygame.key.get_pressed()
-        if key_pressed_list[pygame.K_UP]:
-            cmd_1p = "UP"
-        elif key_pressed_list[pygame.K_DOWN]:
-            cmd_1p = "DOWN"
-        elif key_pressed_list[pygame.K_LEFT]:
-            cmd_1p = "LEFT"
-        elif key_pressed_list[pygame.K_RIGHT]:
-            cmd_1p = "RIGHT"
-        return {get_ai_name(0): cmd_1p}
+        pass
 
+    # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
     def _create_mobs(self, count: int = 8):
+        # 根據傳入的參數，決定建立幾個mob（莫認為8）
         for i in range(count):
+            # 建立mob物件，並加入到mob的集合裡
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
             self.mobs.add(mob)
