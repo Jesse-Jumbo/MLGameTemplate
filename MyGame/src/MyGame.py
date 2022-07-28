@@ -21,7 +21,7 @@ HEIGHT = 600
 
 
 # class 類別名稱(繼承的類別):
-# 這是建立遊戲所使用的模板
+# 這是遊戲的類別，用於建立遊戲的模板
 class MyGame(PaiaGame):
     # def 方法名稱(參數: 型態 = 預設值):
     # 定義遊戲的初始化
@@ -30,42 +30,42 @@ class MyGame(PaiaGame):
         super().__init__(user_num=user_num, *args, **kwargs)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
-        # 宣告各個物件的集合
+        # 宣告存放多個同類別物件的集合
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        # 其他屬性
+        # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
         self.score = 0
         self.is_sound = is_sound
         self.map_no = map_no
-        # 判定是否需要並建立地圖和加載聲音
+        # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
         if self.map_no:
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player((WIDTH // 2, 50), (50, 50), pygame.Rect(0, 0, WIDTH, HEIGHT))
+        self.player = Player(pos=(WIDTH // 2, 50), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall((random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), (50, 50))
+            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
             self.walls.add(wall)
 
-    # 定義遊戲的更新
+    # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
-        # 紀錄程式運作到目前的總frame
+        # 更新已使用的frame
         self.used_frame += 1
         # 更新遊戲的分數
         self.score = self.player.score
-        # 處裡ＡＩ輸入的指令(command)
+        # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
         else:
             action = "NONE"
         # print(ai_1p_cmd)
-        # 更新物件
+        # 更新物件內部資訊
         self.player.update(action)
         self.mobs.update()
         # 處理碰撞
@@ -85,7 +85,7 @@ class MyGame(PaiaGame):
         # 重新初始化遊戲
         self.__init__(frame_limit=self.frame_to_end, is_sound=self.is_sound, map_no=self.map_no)
 
-    # 在這裡定義要給ＡＩ哪些資料
+    # 在這裡定義要回傳給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
         """
         send something to MyGame AI
@@ -144,7 +144,8 @@ class MyGame(PaiaGame):
         background = create_asset_init_data(
             image_id="background", width=800, height=600, file_path=bg_path
             , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
-        # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典，將所有圖片資訊加入assets裡
+        # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典
+        # 將所有圖片資訊加入assets裡
         scene_init_data = {"scene": self.scene.__dict__,
                            "assets": [background],
                            }
