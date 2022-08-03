@@ -1,3 +1,5 @@
 *venv/*
 *.idea/*
-*MyGame/__pycache__/*
+Racing/__pycache__/*
+README.md
+Racing/src/__p
