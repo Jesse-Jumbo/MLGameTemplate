@@ -14,4 +14,19 @@ class Wall(pygame.sprite.Sprite):
 
     @property
     def game_object_data(self):
-        return create_rect_view_data(name="wall", x=self.rect.x, y=self.rect.y, width=self.rect.width, height=self.rect.height, color=self.color, angle=0)
+        return create_rect_view_data(
+            name="wall"
+            , x=self.rect.x
+            , y=self.rect.y
+            , width=self.rect.width
+            , height=self.rect.height
+            , color=self.color
+            , angle=0)
+
+
+
+
+
+
+
+

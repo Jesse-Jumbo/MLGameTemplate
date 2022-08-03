@@ -29,7 +29,7 @@ class MyGame(PaiaGame):
         # super().要繼承的父類別方法的名字(初始化父類別的參數)
         super().__init__(user_num=user_num, *args, **kwargs)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
-        self.scene = Scene(width=WIDTH, height=HEIGHT, color="#000000", bias_x=0, bias_y=0)
+        self.scene = Scene(width=WIDTH, height=HEIGHT, color="#ffffff", bias_x=0, bias_y=0)
         # 宣告存放多個同類別物件的集合
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
@@ -45,7 +45,7 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player(pos=(WIDTH // 2, 50), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
+        self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
@@ -142,7 +142,10 @@ class MyGame(PaiaGame):
         # 獲取圖片路徑
         bg_path = path.join(ASSET_PATH, "image/background.png")
         background = create_asset_init_data(
-            image_id="background", width=800, height=600, file_path=bg_path
+            image_id="background"
+            , width=WIDTH-50
+            , height=HEIGHT-50
+            , file_path=bg_path
             , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
         # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典
         # 將所有圖片資訊加入assets裡
@@ -169,11 +172,11 @@ class MyGame(PaiaGame):
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
         game_obj_list.append(self.player.game_object_data)
-        backgrounds = [create_image_view_data(image_id="background", x=0, y=0, width=WIDTH, height=HEIGHT)]
+        backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [create_text_view_data(
-            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#FF0000", font_style="24px Arial BOLD")]
+            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="24px Arial")]
         toggle_objs = [create_text_view_data(
-            f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAA00", "24px Arial")]
+            f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(
             frame=self.used_frame, background=backgrounds,
             object_list=game_obj_list, foreground=foregrounds, toggle=toggle_objs)
