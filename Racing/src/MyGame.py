@@ -16,8 +16,9 @@ from .TiledMap import TiledMap
 from .Wall import Wall
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
-WIDTH = 800
+WIDTH = 400
 HEIGHT = 600
+
 
 
 # class 類別名稱(繼承的類別):
@@ -49,7 +50,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
+            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(50,60), random.randint(50,60)))
             self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
@@ -140,7 +141,7 @@ class MyGame(PaiaGame):
         """
         # TODO add music or sound
         # 獲取圖片路徑
-        bg_path = path.join(ASSET_PATH, "image/background.png")
+        bg_path = path.join(ASSET_PATH, "image/OIP.jfif")
         background = create_asset_init_data(
             image_id="background"
             , width=WIDTH-50
@@ -174,7 +175,7 @@ class MyGame(PaiaGame):
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [create_text_view_data(
-            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="24px Arial")]
+            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#000000", font_style="24px Arial")]
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(

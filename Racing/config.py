@@ -1,9 +1,9 @@
 import sys
 from os import path
-
-from MyGame.src.MyGame import MyGame
-
 sys.path.append(path.dirname(__file__))
+
+from src.MyGame import MyGame
+
 GAME_SETUP = {
     "game": MyGame,
 }
