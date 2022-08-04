@@ -1,5 +1,4 @@
 *venv/*
 *.idea/*
 *ShmupSharp/__pycache__/*
-*ShmupSharp
-
+README.md

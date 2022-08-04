@@ -2,7 +2,7 @@ import random
 
 
 class MLPlay:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         print("Initial ml script")
 
     def update(self, scene_info: dict, *args, **kwargs):
@@ -13,7 +13,9 @@ class MLPlay:
         # print(scene_info)
         actions = ["UP", "DOWN", "LEFT", "RIGHT"]
 
-        return random.sample(actions, 1)
+        action = random.choice(actions)
+
+        return action
 
     def reset(self):
         """

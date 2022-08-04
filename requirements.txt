@@ -1,2 +1,2 @@
-mlgame==9.5.2.4a0
+mlgame
 pytmx
