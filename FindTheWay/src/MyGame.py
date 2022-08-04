@@ -20,7 +20,6 @@ ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 800
 HEIGHT = 600
 
-
 # class 類別名稱(繼承的類別):
 # 這是遊戲的類別，用於建立遊戲的模板
 class MyGame(PaiaGame):
@@ -54,7 +53,7 @@ class MyGame(PaiaGame):
             wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(50, 100), random.randint(50, 100)))
             self.walls.add(wall)
 
-    # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
+    # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
         # 更新已使用的frame
         self.used_frame += 1
@@ -66,7 +65,7 @@ class MyGame(PaiaGame):
             action = ai_1p_cmd
             if self.used_frame % 5 == 0:
                 self.cooldown = True
-            if ai_1p_cmd == "shoot" and self.cooldown == True:
+            if "shoot" in action and self.cooldown == True:
                 self._create_bullets(True, self.player.rect.midtop)
                 self.cooldown = False
         else:
