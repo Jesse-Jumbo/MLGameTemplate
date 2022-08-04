@@ -71,7 +71,7 @@ class MyGame(PaiaGame):
         else:
             action = "NONE"
         # print(ai_1p_cmd)
-        if self.used_frame % 30 == 0:
+        if self.used_frame % random.randint(1, 30) == 0:
             for mob in self.mobs:
                 if isinstance(mob, Mob):
                     self._create_bullets(is_player=False, init_pos=mob.rect.center)
