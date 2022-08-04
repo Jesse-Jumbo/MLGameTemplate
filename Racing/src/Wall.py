@@ -6,7 +6,7 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, init_pos: tuple, init_size: tuple):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
-        self.color = "#ff0000"
+        self.color = "#228b22"
 
     @property
     def xy(self):

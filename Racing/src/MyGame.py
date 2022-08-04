@@ -119,7 +119,7 @@ class MyGame(PaiaGame):
         Get the initial scene and object information for drawing on the web
         """
         # TODO add music or sound
-        bg_path = path.join(ASSET_PATH, "image/background.png")
+        bg_path = path.join(ASSET_PATH, "image/mob_0.png")
         background = create_asset_init_data(
             "background", 800, 600, bg_path, "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
         scene_init_data = {"scene": self.scene.__dict__,
@@ -146,9 +146,9 @@ class MyGame(PaiaGame):
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data("background", 0, 0, WIDTH, HEIGHT)]
         foregrounds = [create_text_view_data(
-            f"Score: {str(self.score)}", WIDTH // 2 - 50, 5, "#FF0000", "24px Arial BOLD")]
+            f"Score123: {str(self.score)}", WIDTH // 1 - 150, 30, "#FF00FF", "24px Arial BOLD")]
         toggle_objs = [create_text_view_data(
-            f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAA00", "24px Arial")]
+            f"Timer456: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFAAAA", "24px Arial")]
         scene_progress = create_scene_progress_data(
             frame=self.used_frame, background=backgrounds,
             object_list=game_obj_list, foreground=foregrounds, toggle=toggle_objs)

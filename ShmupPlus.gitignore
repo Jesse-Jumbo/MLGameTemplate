@@ -1,0 +1,5 @@
+*venv/*
+*.idea/*
+ShmupPlus/__pycache__/*
+README.md
+ShmupPlus/src/__p
