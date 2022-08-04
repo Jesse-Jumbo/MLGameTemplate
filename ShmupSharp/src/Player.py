@@ -12,6 +12,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
         super().__init__()
         self._play_area_rect = play_area_rect
+        self.HP = 100
         self._speed = 5
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
@@ -43,6 +44,10 @@ class Player(pygame.sprite.Sprite):
 
     def collide_with_mobs(self):
         pass
+    def collide_with_bullet(self):
+        self.HP -= 2
+        print(self.HP)
+        #受到傷害血量減少2
 
     @property
     def game_object_data(self):

@@ -2,12 +2,12 @@ import pygame
 import random
 from mlgame.view.view_model import create_rect_view_data
 
-Colarlist = ["#000000","#ff0000","#ffff00","#00ff00","#8c8c8c","#0000ff","#00FFFF","#FF00FF","#282828","#22390A"]
+Colarlist = ["#000000", "#ff0000", "#ffff00", "#00ff00", "#8c8c8c", "#0000ff", "#00FFFF", "#FF00FF", "#282828", "#22390A" ]
 class Wall(pygame.sprite.Sprite):
     def __init__(self, init_pos: tuple, init_size: tuple):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
-        self.color = Colarlist[random.randint(0,9)]
+        self.color = Colarlist[random.randint(0, 9)]
     @property
     def xy(self):
         return self.rect.topleft

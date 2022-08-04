@@ -24,6 +24,8 @@ class MLPlay:
             action = "LEFT"
         elif pygame.K_d in keyboard or pygame.K_RIGHT in keyboard:
             action = "RIGHT"
+        elif pygame.K_f in keyboard:
+            action = "SHOOT"
         else:
             action = "NONE"
 

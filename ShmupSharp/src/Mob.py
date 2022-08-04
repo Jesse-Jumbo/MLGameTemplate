@@ -36,6 +36,9 @@ class Mob(pygame.sprite.Sprite):
     def reset(self):
         self.__init__(self._play_area_rect)
 
+    def collide_with_bullets(self):
+        self.kill()
+
     @property
     def xy(self):
         return self.rect.topleft
