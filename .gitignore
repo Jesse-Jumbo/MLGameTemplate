@@ -1,4 +1,4 @@
 *venv/*
 *.idea/*
 *MyGame/__pycache__/*
-*MyGame/scr/__pycache__/
+*MyGame/src/__pycache__/*

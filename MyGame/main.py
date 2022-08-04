@@ -2,10 +2,10 @@ import pygame
 import sys
 
 from mlgame.game.generic import quit_or_esc
-
-from MyGame.src.MyGame import MyGame
-
 sys.path.append(r"../..")
+
+
+from src.MyGame import MyGame
 from mlgame.view.view import PygameView
 
 FPS = 30
