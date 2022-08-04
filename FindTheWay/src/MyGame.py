@@ -14,6 +14,7 @@ from .Prop import Prop
 from .SoundController import SoundController
 from .TiledMap import TiledMap
 from .Wall import Wall
+from .Bullet import Bullet
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 800
@@ -33,6 +34,7 @@ class MyGame(PaiaGame):
         # 宣告存放多個同類別物件的集合
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -62,12 +64,22 @@ class MyGame(PaiaGame):
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
+            if self.used_frame % 5 == 0:
+                self.cooldown = True
+            if ai_1p_cmd == "shoot" and self.cooldown == True:
+                self._create_bullets(True, self.player.rect.midtop)
+                self.cooldown = False
         else:
             action = "NONE"
         # print(ai_1p_cmd)
+        if self.used_frame % 30 == 0:
+            for mob in self.mobs:
+                if isinstance(mob, Mob):
+                    self._create_bullets(is_player=False, init_pos=mob.rect.center)
         # 更新物件內部資訊
         self.player.update(action)
         self.mobs.update()
+        self.bullets.update()
         # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -75,6 +87,17 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_mobs()
+        hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            if hits[0].is_player == False:
+                hits[0].kill()
+                self.player.collide_with_bullets()
+        hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
+        for mob, bullets in hits.items():
+            if bullets[0].is_player:
+                bullets[0].kill()
+                mob.collide_with_bullets()
+
         # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
@@ -167,7 +190,10 @@ class MyGame(PaiaGame):
         game_obj_list = []
         for wall in self.walls:
             if isinstance(wall, Wall):
-               game_obj_list.append(wall.game_object_data)
+                game_obj_list.append(wall.game_object_data)
+        for bullet in self.bullets:
+            if isinstance(bullet, Bullet):
+                game_obj_list.append(bullet.game_object_data)
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
@@ -175,6 +201,7 @@ class MyGame(PaiaGame):
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [create_text_view_data(
             content=f"My_Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="35px Arial")]
+        foregrounds.append(create_text_view_data(content=f"HP: {str(self.player.live)}", x=0, y=5, color="#21A1F1", font_style="35px Arial"))
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(
@@ -230,3 +257,11 @@ class MyGame(PaiaGame):
             # 建立mob物件，並加入到mob的集合裡
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
             self.mobs.add(mob)
+
+    def _create_bullets(self, is_player: bool, init_pos: tuple = None):
+        if is_player:
+            player_bullet = Bullet(True, self.player.xy, pygame.Rect(0, 0, WIDTH, HEIGHT))
+            self.bullets.add(player_bullet)
+        else:
+            mob_bullet = Bullet(False, init_pos, pygame.Rect(0, 0, WIDTH, HEIGHT))
+            self.bullets.add(mob_bullet)

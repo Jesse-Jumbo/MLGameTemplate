@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._score = 0
+        self.live = 100
 
     def update(self, action: str) -> None:
         if action == "UP" and self.rect.top > self._play_area_rect.top:
@@ -43,6 +44,12 @@ class Player(pygame.sprite.Sprite):
 
     def collide_with_mobs(self):
         pass
+
+    def collide_with_bullets(self):
+        self.live -= 5
+        if self.live <= 0:
+            self.live = 0
+        print(self.live)
 
     @property
     def game_object_data(self):

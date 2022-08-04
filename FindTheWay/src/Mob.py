@@ -40,6 +40,9 @@ class Mob(pygame.sprite.Sprite):
     def xy(self):
         return self.rect.topleft
 
+    def collide_with_bullets(self):
+        self.kill()
+
     @property
     def game_object_data(self):
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,

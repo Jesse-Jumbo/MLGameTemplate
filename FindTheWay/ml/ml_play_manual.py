@@ -19,13 +19,15 @@ class MLPlay:
             action = "UP"
         elif pygame.K_s in keyboard or pygame.K_DOWN in keyboard:
             action = "DOWN"
-
         elif pygame.K_a in keyboard or pygame.K_LEFT in keyboard:
             action = "LEFT"
         elif pygame.K_d in keyboard or pygame.K_RIGHT in keyboard:
             action = "RIGHT"
         else:
             action = "NONE"
+
+        if pygame.K_f in keyboard:
+            action = "shoot"
 
         return action
 
