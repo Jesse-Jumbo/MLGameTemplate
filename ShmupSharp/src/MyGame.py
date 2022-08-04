@@ -65,7 +65,7 @@ class MyGame(PaiaGame):
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
             if self.used_frame % 10 == 0:
-                if ai_1p_cmd == "SHOOT":
+                if "SHOOT" in ai_1p_cmd:
                     self._create_bullet(is_player=True, init_pos=self.player.rect.center)
         else:
             action = "NONE"
