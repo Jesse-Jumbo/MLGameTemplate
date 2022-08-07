@@ -23,9 +23,9 @@ class Mob(pygame.sprite.Sprite):
     def update(self, *args, **kwargs) -> None:
         self.rect.x += self._x_speed
 
-        if self.rect.left <= self._play_area_rect.left:
+        if self.rect.left < self._play_area_rect.left:
             is_out = True
-        elif self.rect.right >= self._play_area_rect.right:
+        elif self.rect.right > self._play_area_rect.right:
             is_out = True
         else:
             is_out = False
@@ -41,6 +41,10 @@ class Mob(pygame.sprite.Sprite):
         return self.rect.topleft
 
     @property
+    def center(self):
+        return self.rect.center
+
+    @property
     def game_object_data(self):
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
@@ -51,3 +55,6 @@ class Mob(pygame.sprite.Sprite):
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=path.join(MOB_PATH, f"{self._image_id}.png"),
                                       github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/{self._image_id}.png")
+
+    def collide_with_bullets(self):
+        self.kill()
