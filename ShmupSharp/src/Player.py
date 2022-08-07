@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
 
     @property
     def score(self):
-        return self._score
+        self.score += 10
 
     @property
     def xy(self):

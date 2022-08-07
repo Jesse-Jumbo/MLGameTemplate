@@ -51,8 +51,11 @@ class MyGame(PaiaGame):
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
-        for i in range(random.randrange(1, 10)):
-            self._create_mobs(random.randrange(40))
+        for i in range(random.randrange(1, 5)):
+            self._create_mobs(10)
+            #mob = Mob(10)
+            #self.mobs.add(mob)
+
         #for i in range(random.randrange(10)):
         #wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(20,80),random.randint(20,80)))
         for i in range(11):
@@ -64,7 +67,7 @@ class MyGame(PaiaGame):
         # 更新已使用的frame
         self.used_frame += 1
         # 更新遊戲的分數
-        self.score = self.player.score
+        self.score = self.score
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
@@ -100,7 +103,12 @@ class MyGame(PaiaGame):
         for mob, bullets in hits.items():
             if bullets[0].is_player:
                 bullets[0].kill()
+                self.score += 10
                 mob.collide_with_bullets()
+
+            if len(self.mobs) < 5:
+                self._create_mobs(10)
+
         hits = pygame.sprite.groupcollide(self.walls, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for walls, bullets in hits.items():
             if bullets[0].is_player:
@@ -109,6 +117,8 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, collide_hit_rect)
         if hits:
             self.player.collide_with_walls()
+        if self.used_frame <= 0:
+            self.get_game_result
 
         # 判定是否重置遊戲
         if not self.is_running:
