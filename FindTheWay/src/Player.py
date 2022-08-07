@@ -1,5 +1,6 @@
 from enum import auto
 from os import path
+import math
 
 import pygame
 from mlgame.utils.enum import StringEnum
@@ -17,6 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Rect(*pos, 50, 50)
         self._score = 0
         self.live = 100
+        self.angle = 0
 
     def update(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
@@ -24,21 +26,15 @@ class Player(pygame.sprite.Sprite):
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
-            self.move_left()
+            self.angle += math.pi / 2
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
-            self.move_right()
+            self.angle -= math.pi / 2
 
     def move_up(self):
         self.rect.centery -= self._speed
 
     def move_down(self):
         self.rect.centery += self._speed
-
-    def move_left(self):
-        self.rect.centerx -= self._speed
-
-    def move_right(self):
-        self.rect.centerx += self._speed
 
     @property
     def score(self):
@@ -66,7 +62,7 @@ class Player(pygame.sprite.Sprite):
     @property
     def game_object_data(self):
         return create_image_view_data(image_id="player", x=self.rect.x, y=self.rect.y,
-                                      width=self.rect.width, height=self.rect.height, angle=0)
+                                      width=self.rect.width, height=self.rect.height, angle=self.angle)
 
     @property
     def game_init_object_data(self):
