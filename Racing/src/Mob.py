@@ -33,6 +33,9 @@ class Mob(pygame.sprite.Sprite):
         if is_out:
             self._x_speed *= -1
 
+    def collide_with_bullets(self):
+        self.kill()
+
     def reset(self):
         self.__init__(self._play_area_rect)
 

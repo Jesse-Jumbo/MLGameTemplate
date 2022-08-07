@@ -1,50 +1,121 @@
-# A Game Framework For PAIA Games 
-## 框架說明
-![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
-![mlgame](https://img.shields.io/pypi/v/mlgame)
-  
-[![Python 3.9](https://img.shields.io/badge/python->3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![pygame](https://img.shields.io/badge/pygame->2.0.1-blue.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
+# README.md
 
-**這是一個PAIA遊戲的模板，依照此模板所開發的遊戲，可以在PAIA－Desktop透過ＡＩ來玩遊戲，並進行ＡＩ競賽。**
+# Racing
 
-[//]: # (game gif)
+## 遊戲說明
+
+Racing，一款單人競速遊戲，時間內抵達終點獲勝。
+
+賽車遊戲，比速度，車子可朝四個方向移動，每次轉彎會減速，長按向前則加速，每次向後退則快速減速 
 
 ---
-# 使用方式
 
-1. **create a new folder**
-2. **copy and past MyGame**
-3. **refactor MyGame to fit your NewGame**
+## Requirements
 
----
-# PAIA 遊戲相關專案
-
-1. PAIA 線下版 [PAIA-Desktop](https://github.com/PAIA-Playful-AI-Arena/Paia-Desktop)
-2. 範例遊戲 [easy_game](https://github.com/PAIA-Playful-AI-Arena/easy_game)
-3. 打磚塊 [arkanoid](https://github.com/PAIA-Playful-AI-Arena/arkanoid)
-4. 乒乓球 [pingpong](https://github.com/PAIA-Playful-AI-Arena/pingpong)
-5. 賽車 [Racing Car](https://github.com/yen900611/racing_car)
-6. 迷宮自走車 [Maze Car](https://github.com/yen900611/maze_car)
-7. 坦克車 [Tank Man](https://github.com/Jesse-Jumbo/TankMan)
+- Python==3.9
+- mlgame
 
 ---
-# View
 
-1. 認識MLGame遊戲框架 [MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)
-2. 查詢所有Pygame函式 [Pygame](https://www.pygame.org/docs/index.html#)
-3. 開源的素材網站 [OpenGameArt.Org](https://opengameart.org/)
+## 即將更新內容
 
----
-# Future Work
-
-1. [ ] 新增遊戲開發框架
-2. [ ] test case
+- 
 
 ---
-## 圖片來源
-[Treasure](https://opengameart.org/content/treasure-chest-1)
 
-[Wall/Floor](https://opengameart.org/content/wall-grass-rock-stone-wood-and-dirt-480)
+## 遊戲簡介:
+
+單人遊戲，玩家透過方向鍵操控人物。
 
 ---
+
+# 遊戲細節：
+
+---
+
+## 啟動方式:
+
+- 直接啟動`main.py`即可執行。
+- 在命令行輸入命令執行。
+
+---
+
+## 遊戲參數設定
+
+```python
+# main.py
+game = Racing.Racing(map_no=1, time_limit=300, sound="off")
+```
+
+- `Racing`後不輸入參數，則默認使用預設值，即範例參數值。
+
+```bash
+# MLGame.py
+# command line format
+python -m mlgame [options] <game_folder> [game_params]
+# A sample to play the game with manual
+python -m mlgame \
+-f 120 -i ./path/to/ai/ml_play_manual.py \
+./path/to/game/Racing \
+--map_no 1 --time_limit 300 --sound "off"
+# A sample to play the game with AI
+python -m mlgame \
+-f 120 -i ./path/to/ai/ml_play_template.py \
+./path/to/game/Racing \
+ --sound on --time_limit 30 --map_no 1
+```
+
+- `map_no`:  輸入地圖編號，以選擇遊戲的地圖。
+- `time_limit`:  輸入遊戲時間，以規範遊戲進行時間。
+- `sound`:  輸入`on`或`off`，控制是否播放遊戲音效。
+- **如果在`mlgame`後加上`-1`，代表只執行一次遊戲。**
+
+---
+
+## 遊戲操作：
+
+# 遊戲玩法
+
+---
+
+1. 單人闖關 → 時間內通過終點，打破遊戲紀錄。
+
+## 過關條件
+
+1. 單人闖關
+    1. 時間內抵達終點。
+
+---
+
+## 失敗條件
+
+1. 單人闖關
+    1. 時間歸零。
+
+---
+
+## 物件設定：
+
+---
+
+### Player
+
+1. 前進、後退、左轉、右轉速度（8 px）
+2. 加速（1 px / 90 frame）
+3. 減速（1 px / 30 frame）
+
+---
+
+# 地圖說明
+
+---
+
+### 寬1000 pixel；高600 pixel
+
+### 每格50 * 50 pixel，可放置一個物件
+
+## 地圖製作
+
+---
+
+coming soon
