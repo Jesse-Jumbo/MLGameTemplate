@@ -19,7 +19,7 @@ from .Treasure import Treasure
 from .Bomb import Bomb
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
-WIDTH = 800
+WIDTH = 1000
 HEIGHT = 600
 
 # class 類別名稱(繼承的類別):
@@ -50,16 +50,20 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
+        self.player = Player(pos=(WIDTH // 2, HEIGHT - 50), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
-        for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
-            self.walls.add(wall)
+        # for i in range(random.randrange(10)):
+        #     wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
+        #     self.walls.add(wall)
         self._create_treasure(1)
         self._set_bomb(1)
-        wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
-        self.walls.add(wall)
+        # wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
+        # self.walls.add(wall)
+        walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#00ff00")
+        self.walls.add(*walls)
+        walls = self.map.create_init_obj_list(img_no=2, class_name=Wall, color="#21A1F1")
+        self.walls.add(*walls)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):

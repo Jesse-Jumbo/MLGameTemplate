@@ -3,8 +3,10 @@ import random
 from mlgame.view.view_model import create_rect_view_data
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, init_pos: tuple, init_size: tuple):
+    def __init__(self, construction: dict, **kwargs):
         super().__init__()
+        init_pos = (construction["x"], construction["y"])
+        init_size = (construction["width"], construction["height"])
         self.rect = pygame.Rect(*init_pos, *init_size)
         self.color = "#ffff00"
 

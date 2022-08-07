@@ -20,6 +20,14 @@
       "min": 30,
       "default": 3600,
       "help": "set the frame number of game frame limit."
+    },{
+      "name": "map_no",
+      "verbose": "地圖編號(Frame)",
+      "type": "int",
+      "max": 1,
+      "min": 1,
+      "default": 1,
+      "help": "set the frame number of game map number."
     },
     {
       "name": "sound",
