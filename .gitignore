@@ -1,4 +1,4 @@
 *venv/*
 *.idea/*
-*ShmupSharp/__pycache__/*
-*ShmupSharp/src/__pycache__/*
+*MyGame/__pycache__/*
+*MyGame/src/__pycache__/*
