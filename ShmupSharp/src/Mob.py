@@ -15,7 +15,7 @@ class Mob(pygame.sprite.Sprite):
         self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
         self._pos = (random.randrange(0, (540-self._size[1])), random.randrange(60, 120))
         self.rect = pygame.Rect(*self._pos, *self._size)
-        self.img_index = random.randrange(0, 2)
+        self.img_index = random.randrange(0, 3)
         self._image_id = f"mob_{self.img_index}"
         self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
         self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
