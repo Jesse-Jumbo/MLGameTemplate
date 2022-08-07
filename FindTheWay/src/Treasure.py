@@ -9,10 +9,10 @@ from mlgame.view.view_model import create_asset_init_data, create_image_view_dat
 TREASURE_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "treasure.png")
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
+class Treasure(pygame.sprite.Sprite):
+    def __init__(self, pos: tuple, size: tuple):
         super().__init__()
-        self._play_area_rect = play_area_rect
+        # self._play_area_rect = play_area_rect
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, 50, 50)
         self._score = 0

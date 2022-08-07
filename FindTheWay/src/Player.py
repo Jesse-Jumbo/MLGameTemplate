@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
         print(self.live)
 
     def collide_with_treasure(self):
-        pass
+        self._score += 1
 
     @property
     def game_object_data(self):

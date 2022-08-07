@@ -15,6 +15,7 @@ from .SoundController import SoundController
 from .TiledMap import TiledMap
 from .Wall import Wall
 from .Bullet import Bullet
+from .Treasure import Treasure
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 800
@@ -34,6 +35,7 @@ class MyGame(PaiaGame):
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
+        self.treasures = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -52,6 +54,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(10)):
             wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(50, 100), random.randint(50, 100)))
             self.walls.add(wall)
+        self._create_treasure(1)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -65,9 +68,6 @@ class MyGame(PaiaGame):
             action = ai_1p_cmd
             if self.used_frame % 5 == 0:
                 self.cooldown = True
-            if "shoot" in action and self.cooldown == True:
-                self._create_bullets(True, self.player.rect.midtop)
-                self.cooldown = False
         else:
             action = "NONE"
         print(ai_1p_cmd)
@@ -75,6 +75,7 @@ class MyGame(PaiaGame):
         self.player.update(action)
         self.mobs.update()
         self.bullets.update()
+        self.treasures.update()
         # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -87,6 +88,9 @@ class MyGame(PaiaGame):
             if hits[0].is_player == False:
                 hits[0].kill()
                 self.player.collide_with_bullets()
+        hits = pygame.sprite.spritecollide(self.player, self.treasures, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.player.collide_with_treasure()
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for mob, bullets in hits.items():
             if bullets[0].is_player:
@@ -122,6 +126,7 @@ class MyGame(PaiaGame):
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 mobs_data.append({"x": mob.xy[0], "y": mob.xy[1]})
+
         # 將所有要給（AI）玩家1的資料打包起來
         data_to_1p = {
             "used_frame": self.used_frame,
@@ -174,6 +179,9 @@ class MyGame(PaiaGame):
             if isinstance(mob, Mob):
                 scene_init_data["assets"].append(mob.game_init_object_data)
         scene_init_data["assets"].append(self.player.game_init_object_data)
+        for treasure in self.treasures:
+            if isinstance(treasure, Treasure):
+                scene_init_data["assets"].append(treasure.game_init_object_data)
         return scene_init_data
 
     # 獲取所有遊戲畫面的更新資訊
@@ -192,6 +200,9 @@ class MyGame(PaiaGame):
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
+        for treasure in self.treasures:
+            if isinstance(treasure, Treasure):
+                game_obj_list.append(treasure.game_object_data)
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [create_text_view_data(
@@ -253,3 +264,7 @@ class MyGame(PaiaGame):
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
             self.mobs.add(mob)
 
+    def _create_treasure(self, count):
+        for i in range(count):
+            treasure = Treasure((100, 100), (50, 50))
+            self.treasures.add(treasure)
