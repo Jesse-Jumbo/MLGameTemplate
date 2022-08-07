@@ -12,6 +12,7 @@ class Wall(pygame.sprite.Sprite):
     def xy(self):
         return self.rect.topleft
 
+
     @property
     def game_object_data(self):
         return create_rect_view_data(

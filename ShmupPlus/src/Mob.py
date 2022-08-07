@@ -19,6 +19,7 @@ class Mob(pygame.sprite.Sprite):
         self._image_id = f"mob_{self.img_index}"
         self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
         self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
+        self._y_speed = 10
 
     def update(self, *args, **kwargs) -> None:
         self.rect.x += self._x_speed
@@ -31,10 +32,14 @@ class Mob(pygame.sprite.Sprite):
             is_out = False
 
         if is_out:
+            # self.kill()
             self._x_speed *= -1
 
     def reset(self):
         self.__init__(self._play_area_rect)
+
+    def collide_with_bullets(self):
+        self.kill()
 
     @property
     def xy(self):
