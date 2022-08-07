@@ -85,11 +85,11 @@ class Player(pygame.sprite.Sprite):
             self.move_left()
 
     def collide_with_mobs(self):
-        pass
+        self.HP -= 5
 
     def collide_with_bullet(self):
         self.HP -= 2
-        print(self.HP)
+
         # 受到傷害血量減少2
 
     @property

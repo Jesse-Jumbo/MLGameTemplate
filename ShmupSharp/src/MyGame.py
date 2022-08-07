@@ -99,6 +99,11 @@ class MyGame(PaiaGame):
                 hits[0].kill()
                 self.player.collide_with_bullet()
 
+        hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.player.collide_with_mobs()
+            self.score += 10
+
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for mob, bullets in hits.items():
             if bullets[0].is_player:
@@ -117,8 +122,8 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, collide_hit_rect)
         if hits:
             self.player.collide_with_walls()
-        if self.used_frame <= 0:
-            self.get_game_result
+
+
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -176,7 +181,9 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        return self.used_frame < self.frame_to_end
+        if self.player.HP > 0:
+            if self.score < 500:
+                return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
     def get_scene_init_data(self):
