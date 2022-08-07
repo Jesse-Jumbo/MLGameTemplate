@@ -6,6 +6,10 @@ from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "car.png")
+PLAYER_UP = path.join(path.dirname(__file__), "..", "asset", "image", "car_up.png")
+PLAYER_DOWN = path.join(path.dirname(__file__), "..", "asset", "image", "car_down.png")
+PLAYER_RIGHT = path.join(path.dirname(__file__), "..", "asset", "image", "car_right.png")
+PLAYER_LEFT = path.join(path.dirname(__file__), "..", "asset", "image", "car_left.png")
 
 
 class Player(pygame.sprite.Sprite):
@@ -15,17 +19,22 @@ class Player(pygame.sprite.Sprite):
         self._speed = 5
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
+        self._image_id = "car"
         self._score = 0
         self._lives = 100
 
     def update(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
+            self._image_id = "car_up"
             self.rect.centery -= self._speed
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
+            self._image_id = "car_down"
             self.rect.centery += self._speed
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
+            self._image_id = "car_left"
             self.rect.centerx -= self._speed
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
+            self._image_id = "car_right"
             self.rect.centerx += self._speed
 
     @property
@@ -51,12 +60,29 @@ class Player(pygame.sprite.Sprite):
 
     @property
     def game_object_data(self):
-        return create_image_view_data(image_id="car", x=self.rect.x, y=self.rect.y,
+        return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
     @property
     def game_init_object_data(self):
-        return create_asset_init_data(image_id="car",
+        return [create_asset_init_data(image_id="car",
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png")
+                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png"),
+                create_asset_init_data(image_id="car_up",
+                                      width=self.rect.width, height=self.rect.height,
+                                      file_path=PLAYER_UP,
+                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_up.png"),
+                create_asset_init_data(image_id="car_down",
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_DOWN,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_down.png"),
+                create_asset_init_data(image_id="car_right",
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_RIGHT,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_right.png"),
+                create_asset_init_data(image_id="car_left",
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_LEFT,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_left.png"),
+                ]

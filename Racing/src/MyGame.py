@@ -179,7 +179,7 @@ class MyGame(PaiaGame):
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 scene_init_data["assets"].append(mob.game_init_object_data)
-        scene_init_data["assets"].append(self.player.game_init_object_data)
+        scene_init_data["assets"].extend(self.player.game_init_object_data)
         return scene_init_data
 
     # 獲取所有遊戲畫面的更新資訊
