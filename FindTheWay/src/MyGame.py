@@ -16,6 +16,7 @@ from .TiledMap import TiledMap
 from .Wall import Wall
 from .Bullet import Bullet
 from .Treasure import Treasure
+from .Bomb import Bomb
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 800
@@ -36,6 +37,7 @@ class MyGame(PaiaGame):
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.treasures = pygame.sprite.Group()
+        self.bombs = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -55,6 +57,7 @@ class MyGame(PaiaGame):
             wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(50, 100), random.randint(50, 100)))
             self.walls.add(wall)
         self._create_treasure(1)
+        self._set_bomb(1)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -76,6 +79,7 @@ class MyGame(PaiaGame):
         self.mobs.update()
         self.bullets.update()
         self.treasures.update()
+        self.bombs.update()
         # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -100,6 +104,9 @@ class MyGame(PaiaGame):
         # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
+
+        if "set_bomb" in action:
+            self._set_bomb(1)
 
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
     def reset(self):
@@ -182,6 +189,10 @@ class MyGame(PaiaGame):
         for treasure in self.treasures:
             if isinstance(treasure, Treasure):
                 scene_init_data["assets"].append(treasure.game_init_object_data)
+        for bomb in self.bombs:
+            if isinstance(bomb, Bomb):
+                scene_init_data["assets"].append(bomb.game_init_object_data)
+                self.bombs = pygame.sprite.Group()
         return scene_init_data
 
     # 獲取所有遊戲畫面的更新資訊
@@ -203,6 +214,9 @@ class MyGame(PaiaGame):
         for treasure in self.treasures:
             if isinstance(treasure, Treasure):
                 game_obj_list.append(treasure.game_object_data)
+        for bomb in self.bombs:
+            if isinstance(bomb, Bomb):
+                game_obj_list.append(bomb.game_object_data)
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [create_text_view_data(
@@ -268,3 +282,9 @@ class MyGame(PaiaGame):
         for i in range(count):
             treasure = Treasure((100, 100), (50, 50))
             self.treasures.add(treasure)
+
+    def _set_bomb(self, count):
+        for i in range(count):
+            bomb = Bomb(self.player.xy, (50, 50))
+            self.bombs.add(bomb)
+
