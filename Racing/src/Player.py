@@ -23,24 +23,32 @@ class Player(pygame.sprite.Sprite):
         self._image_id = "car"
         self._score = 0
         self._lives = 100
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
 
     def update(self, action: list) -> None:
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
         if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.move_up()
             self.vel[1] += self.speed_up[1]
             self.speed_up[1] -= 1
+            # 我想要他長按上時加速
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
             self.vel[1] += self.speed_up[1]
-            self.speed_up[0] += 1
+            self.speed_up[1] += 1
+            # 我想要向後退時維持減速但不會越來越慢
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.move_left()
-            #self.vel[0] += self.speed_up[0]
-            self.speed_up[0] -= 1
+            # self.vel[0] += self.speed_up[0]
+            self.speed_up[0] += 1
+            # 我想當他右轉時先減速再維持原速度
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.move_right()
-            #self.vel[0] += self.speed_up[0]
-            self.speed_up[0] += 1
+            # self.vel[0] += self.speed_up[0]
+            self.speed_up[0] -= 1
+            # 我想當他左轉時先減速再維持原速度
         else:
             self.vel = [0, 0]
             self.speed_up = [0, 0]
@@ -75,14 +83,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_walls(self):
-        pass
+        self.rect.x = self.last_x
+        self.rect.y = self.last_y
 
     def collide_with_mobs(self):
         pass
 
     def collide_with_bullets(self):
         self._lives -= 10
-
 
     @property
     def game_object_data(self):
@@ -92,13 +100,13 @@ class Player(pygame.sprite.Sprite):
     @property
     def game_init_object_data(self):
         return [create_asset_init_data(image_id="car",
-                                      width=self.rect.width, height=self.rect.height,
-                                      file_path=PLAYER_PATH,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png"),
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_PATH,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png"),
                 create_asset_init_data(image_id="car_up",
-                                      width=self.rect.width, height=self.rect.height,
-                                      file_path=PLAYER_UP,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_up.png"),
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_UP,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_up.png"),
                 create_asset_init_data(image_id="car_down",
                                        width=self.rect.width, height=self.rect.height,
                                        file_path=PLAYER_DOWN,

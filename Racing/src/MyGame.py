@@ -52,8 +52,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(HEIGHT - 50)),
-                        init_size=(random.randint(50, 60), random.randint(50, 60)))
+            wall = Wall((self.player.rect.left, self.player.rect.top - 50), (50, 50))
             self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
@@ -70,15 +69,16 @@ class MyGame(PaiaGame):
                 self._create_bullets(is_player=True, init_pos=self.player.rect.center)
         else:
             action = "NONE"
-        if self.used_frame % 10 == 0:
-            for mob in self.mobs:
-                if isinstance(mob, Mob):
-                    self._create_bullets(is_player=False, init_pos=mob.xy)
+        # if self.used_frame % 10 == 0:
+        #     for mob in self.mobs:
+        #         if isinstance(mob, Mob):
+        #             self._create_bullets(is_player=False, init_pos=mob.xy)
         # print(ai_1p_cmd)
         # 更新物件內部資訊
         self.player.update(action)
         self.mobs.update()
         self.bullets.update()
+        self.walls.update()
         # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -88,11 +88,11 @@ class MyGame(PaiaGame):
         if hits:
             self.player.collide_with_mobs()
         # 玩家和子彈
-        hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
-        for bullet in hits:
-            if not bullet.is_player:
-                bullet.kill()
-                self.player.collide_with_bullets()
+        # hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        # for bullet in hits:
+        #     if not bullet.is_player:
+        #         bullet.kill()
+        #         self.player.collide_with_bullets()
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for mob, bullets in hits.items():
             if bullets[0].is_player:
@@ -252,6 +252,10 @@ class MyGame(PaiaGame):
         """
         pass
 
+    def _create_wall(self):
+        wall = self.wall((self.player.x, self.player.y - 50), (50, 50))
+        self.walls.add(wall)
+
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
     def _create_mobs(self, count: int = 8):
         # 根據傳入的參數，決定建立幾個mob（莫認為8）
@@ -260,6 +264,6 @@ class MyGame(PaiaGame):
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT + 100))
             self.mobs.add(mob)
 
-    def _create_bullets(self, is_player: bool, init_pos: tuple):
-        bullet = Bullet(is_player=is_player, init_pos=init_pos, play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
-        self.bullets.add(bullet)
+    # def _create_bullets(self, is_player: bool, init_pos: tuple):
+    #     bullet = Bullet(is_player=is_player, init_pos=init_pos, play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
+    #     self.bullets.add(bullet)
