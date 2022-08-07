@@ -5,7 +5,7 @@ import pygame
 from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
-PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
+PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "car.png")
 
 
 class Player(pygame.sprite.Sprite):
@@ -51,12 +51,12 @@ class Player(pygame.sprite.Sprite):
 
     @property
     def game_object_data(self):
-        return create_image_view_data(image_id="player", x=self.rect.x, y=self.rect.y,
+        return create_image_view_data(image_id="car", x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
     @property
     def game_init_object_data(self):
-        return create_asset_init_data(image_id="player",
+        return create_asset_init_data(image_id="car",
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/31339747_2-removebg-preview.png")
+                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png")
