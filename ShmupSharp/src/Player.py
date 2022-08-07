@@ -60,3 +60,4 @@ class Player(pygame.sprite.Sprite):
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,
                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
+
