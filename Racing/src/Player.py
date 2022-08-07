@@ -16,20 +16,25 @@ class Player(pygame.sprite.Sprite):
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._score = 0
+        self._HP = 100
 
-    def update(self, action: str) -> None:
-        if action == "UP" and self.rect.top > self._play_area_rect.top:
+    def update(self, action: list) -> None:
+        if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.rect.centery -= self._speed
-        elif action == "DOWN" and self.rect.bottom < self._play_area_rect.bottom:
+        elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.rect.centery += self._speed
-        elif action == "LEFT" and self.rect.left > self._play_area_rect.left:
+        elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.rect.centerx -= self._speed
-        elif action == "RIGHT" and self.rect.right < self._play_area_rect.right:
+        elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.rect.centerx += self._speed
 
     @property
     def score(self):
         return self._score
+
+    @property
+    def HP(self):
+        return self._HP
 
     @property
     def xy(self):
@@ -55,3 +60,6 @@ class Player(pygame.sprite.Sprite):
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,
                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
+
+    def collide_with_bullets(self):
+        self._HP = self._HP - 10

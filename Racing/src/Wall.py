@@ -21,7 +21,7 @@ class Wall(pygame.sprite.Sprite):
             , width=self.rect.width
             , height=self.rect.height
             , color=self.color
-            , angle=0)  #角度
+            , angle=0)  # 角度
 
 
 
