@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self._play_area_rect = play_area_rect
         self._speed = 5
         self._init_pos = pos
-        self.rect = pygame.Rect(*pos, *size)
+        self.rect = pygame.Rect(*pos, 50, 50)
         self._score = 0
         self.live = 100
 
