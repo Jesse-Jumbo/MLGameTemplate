@@ -80,6 +80,9 @@ class Player(pygame.sprite.Sprite):
             self.live = 0
         print(self.live)
 
+    def collide_with_treasure(self):
+        pass
+
     @property
     def game_object_data(self):
         return create_image_view_data(image_id="player", x=self.rect.x, y=self.rect.y,
