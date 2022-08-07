@@ -86,9 +86,6 @@ class MyGame(PaiaGame):
                 if isinstance(mob, Mob):
                     self._create_bullet(is_player=False, init_pos=mob.rect.center)
 
-        if self.player.HP <= 0:
-            return "RESET"
-
         # 更新物件內部資訊
         self.player.update(action)
         self.mobs.update()
@@ -119,6 +116,8 @@ class MyGame(PaiaGame):
             # print(bullet)
         # if hits:        #是玩家子彈
         #     self.mods.collide_with_player()  #怪物碰子彈怪物消失 玩家碰到子彈safe
+        if self.player.HP <= 0:
+            return "RESET"
         # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
@@ -166,15 +165,17 @@ class MyGame(PaiaGame):
 
     # 獲取遊戲狀態的method，在這裡定義遊戲什麼時候是存活、結束、勝利
     def get_game_status(self):
-        if self.is_running:
-            status = GameStatus.GAME_ALIVE
-        else:
+        if not self.is_running or self.player.HP <= 0:
             status = GameStatus.GAME_OVER
+        else:
+            status = GameStatus.GAME_ALIVE
         return status
 
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
+        # if self.player.HP <= 0:
+        #     return False
         return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
