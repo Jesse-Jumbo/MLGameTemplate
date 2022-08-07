@@ -13,7 +13,7 @@ class Mob(pygame.sprite.Sprite):
         super().__init__()
         self._play_area_rect = play_area_rect
         self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
-        self._pos = (random.randrange(0, (800-self._size[1])), random.randrange(60, 120))
+        self._pos = (random.randrange(0, (540-self._size[1])), random.randrange(60, 120))
         self.rect = pygame.Rect(*self._pos, *self._size)
         self.img_index = random.randrange(0, 2)
         self._image_id = f"mob_{self.img_index}"

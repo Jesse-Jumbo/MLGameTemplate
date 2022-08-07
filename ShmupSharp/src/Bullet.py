@@ -9,7 +9,7 @@ class Bullet(pygame.sprite.Sprite):
         self.y_speed = 5
         self.play_area_rect = play_area_rect
         if is_player:
-            self.color = "#ffff00"
+            self.color = "#00ff00"
         else:
             self.color = "#ff0000"
 

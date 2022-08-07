@@ -26,25 +26,25 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, action: list) -> None:
         self.rect.center = self.hit_rect.center
-        if "DOWN" in action and self.rect.top > self._play_area_rect.top:
+        if "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
             self._is_up = False
             self._is_down = True
             self._is_left = False
             self._is_right = False
-        elif "UP" in action and self.rect.bottom < self._play_area_rect.bottom:
+        elif "UP" in action and self.rect.top > self._play_area_rect.top:
             self.move_up()
             self._is_up = True
             self._is_down = False
             self._is_left = False
             self._is_right = False
-        elif "RIGHT" in action and self.rect.left > self._play_area_rect.left:
+        elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.move_right()
             self._is_left = False
             self._is_up = False
             self._is_down = False
             self._is_right = True
-        elif "LEFT" in action and self.rect.right < self._play_area_rect.right:
+        elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.move_left()
             self._is_right = False
             self._is_left = True

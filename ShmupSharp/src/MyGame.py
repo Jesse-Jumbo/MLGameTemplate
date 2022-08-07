@@ -52,11 +52,12 @@ class MyGame(PaiaGame):
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
-            self._create_mobs(random.randrange(50))
+            self._create_mobs(random.randrange(40))
         #for i in range(random.randrange(10)):
         #wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(20,80),random.randint(20,80)))
-        wall = Wall(init_pos=(270, 420), init_size=(40, 40))
-        self.walls.add(wall)
+        for i in range(11):
+            wall = Wall(init_pos=((i*54), 300), init_size=(54, 20))
+            self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -271,7 +272,7 @@ class MyGame(PaiaGame):
         # 根據傳入的參數，決定建立幾個mob（莫認為8）
         for i in range(count):
             # 建立mob物件，並加入到mob的集合裡
-            mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
+            mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT-100))
             self.mobs.add(mob)
 
     def _create_bullet(self, is_player: bool, init_pos: tuple):
