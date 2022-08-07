@@ -2,3 +2,4 @@
 *.idea/*
 *MyGame/__pycache__/*
 *MyGame/src/__pycache__/*
+*MyGame/ml/__pycache__/*
