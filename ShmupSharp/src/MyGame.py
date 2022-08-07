@@ -6,7 +6,7 @@ from mlgame.game.paia_game import PaiaGame, GameResultState, GameStatus
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
-    create_image_view_data
+    create_image_view_data, create_line_view_data
 
 from .Mob import Mob
 from .Player import Player
@@ -20,6 +20,9 @@ ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 540
 HEIGHT = 540
 
+
+def collide_hit_rect(one: pygame.sprite, two: pygame.sprite):
+    return one.hit_rect.colliderect(two.hit_rect)
 
 # class 類別名稱(繼承的類別):
 # 這是遊戲的類別，用於建立遊戲的模板
@@ -50,9 +53,10 @@ class MyGame(PaiaGame):
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
-        for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(20,80),random.randint(20,80)))
-            self.walls.add(wall)
+        #for i in range(random.randrange(10)):
+        #wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(20,80),random.randint(20,80)))
+        wall = Wall(init_pos=(270, 420), init_size=(40, 40))
+        self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -96,8 +100,14 @@ class MyGame(PaiaGame):
             if bullets[0].is_player:
                 bullets[0].kill()
                 mob.collide_with_bullets()
-
-
+        hits = pygame.sprite.groupcollide(self.walls, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
+        for walls, bullets in hits.items():
+            if bullets[0].is_player:
+                bullets[0].kill()
+                walls.collide_with_bullets()
+        hits = pygame.sprite.spritecollide(self.player, self.walls, False, collide_hit_rect)
+        if hits:
+            self.player.collide_with_walls()
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -204,6 +214,9 @@ class MyGame(PaiaGame):
             content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#000000", font_style="24px Arial")]
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#ff0000", "24px Arial BOLD")]
+        toggle_objs.extend(self.draw_rect(self.player))
+        for wall in self.walls:
+            toggle_objs.extend(self.draw_rect(wall))
         MY_HP = create_text_view_data(
             content=f"HP: {self.player.HP}", x=5, y=5, color="#8c8c8c", font_style="24px Arial")
         foregrounds.append(MY_HP)
@@ -269,6 +282,15 @@ class MyGame(PaiaGame):
             mobs_bullet = Bullet(is_player=False, init_pos=init_pos, play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
             self.bullets.add(mobs_bullet)
 
+
+    def draw_rect(self, sprite):
+        all_line = []
+        point = [(sprite.rect.x, sprite.rect.y), sprite.rect.topright, sprite.rect.bottomright, sprite.rect.bottomleft, (sprite.rect.x, sprite.rect.y)]
+        hit_point = [(sprite.hit_rect.x, sprite.hit_rect.y), sprite.hit_rect.topright, sprite.hit_rect.bottomright, sprite.hit_rect.bottomleft, (sprite.hit_rect.x, sprite.hit_rect.y)]
+        for i in range(4):
+            all_line.append(create_line_view_data(f"player", point[i][0], point[i][1], point[i+1][0], point[i+1][1], "#ffff00", 2))
+            all_line.append(create_line_view_data(f"hit_player", hit_point[i][0], hit_point[i][1], hit_point[i+1][0], hit_point[i+1][1], "#ff0000", 2))
+        return all_line
 
 
 
