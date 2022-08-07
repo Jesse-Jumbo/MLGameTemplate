@@ -59,4 +59,4 @@ class Player(pygame.sprite.Sprite):
         return create_asset_init_data(image_id="player",
                                       width=self.rect.width, height=self.rect.height,
                                       file_path=PLAYER_PATH,
-                                      github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/31339747_2-removebg-preview.png")
+                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/31339747_2-removebg-preview.png")
