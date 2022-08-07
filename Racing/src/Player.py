@@ -32,15 +32,15 @@ class Player(pygame.sprite.Sprite):
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
             self.vel[1] += self.speed_up[1]
-            self.speed_up[0] -= 3
+            self.speed_up[0] += 1
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.move_left()
             #self.vel[0] += self.speed_up[0]
-            self.speed_up[0] = 70
+            self.speed_up[0] -= 1
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.move_right()
             #self.vel[0] += self.speed_up[0]
-            self.speed_up[0] = 70
+            self.speed_up[0] += 1
         else:
             self.vel = [0, 0]
             self.speed_up = [0, 0]
