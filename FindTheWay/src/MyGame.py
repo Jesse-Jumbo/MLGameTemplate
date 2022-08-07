@@ -70,11 +70,7 @@ class MyGame(PaiaGame):
                 self.cooldown = False
         else:
             action = "NONE"
-        # print(ai_1p_cmd)
-        if self.used_frame % random.randint(1, 30) == 0:
-            for mob in self.mobs:
-                if isinstance(mob, Mob):
-                    self._create_bullets(is_player=False, init_pos=mob.rect.center)
+        print(ai_1p_cmd)
         # 更新物件內部資訊
         self.player.update(action)
         self.mobs.update()
@@ -257,10 +253,3 @@ class MyGame(PaiaGame):
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
             self.mobs.add(mob)
 
-    def _create_bullets(self, is_player: bool, init_pos: tuple = None):
-        if is_player:
-            player_bullet = Bullet(True, self.player.xy, pygame.Rect(0, 0, WIDTH, HEIGHT))
-            self.bullets.add(player_bullet)
-        else:
-            mob_bullet = Bullet(False, init_pos, pygame.Rect(0, 0, WIDTH, HEIGHT))
-            self.bullets.add(mob_bullet)

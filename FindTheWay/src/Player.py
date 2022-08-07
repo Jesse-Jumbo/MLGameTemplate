@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
         super().__init__()
         self._play_area_rect = play_area_rect
-        self._speed = 5
+        self._speed = 4
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, 50, 50)
         self._score = 0
@@ -21,20 +21,41 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
 
     def update(self, action: list) -> None:
-        if "UP" in action and self.rect.top > self._play_area_rect.top:
-            self.move_up()
-        elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
-            self.move_down()
-        elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
-            self.angle += math.pi / 2
-        elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
-            self.angle -= math.pi / 2
-
+        while(self.angle < 0):
+            self.angle += 360
+        if "LEFT" in action:
+            self.angle += 90
+        if "UP" in action:
+            if self.angle % 360 == 0 and self.rect.top > self._play_area_rect.top:
+                self.move_up()
+            elif self.angle % 360 == 90:
+                self.move_left()
+            elif self.angle % 360 == 180 and self.rect.bottom < self._play_area_rect.bottom:
+                self.move_down()
+            else:
+                self.move_right()
+        if "DOWN" in action:
+            if self.angle % 360 == 0 and self.rect.bottom < self._play_area_rect.bottom:
+                self.move_down()
+            elif self.angle % 360 == 90:
+                self.move_right()
+            elif self.angle % 360 == 180 and self.rect.top > self._play_area_rect.top:
+                self.move_up()
+            else:
+                self.move_left()
+        if "RIGHT" in action:
+            self.angle -= 90
     def move_up(self):
         self.rect.centery -= self._speed
 
     def move_down(self):
         self.rect.centery += self._speed
+
+    def move_right(self):
+        self.rect.centerx += self._speed
+
+    def move_left(self):
+        self.rect.centerx -= self._speed
 
     @property
     def score(self):
@@ -62,7 +83,7 @@ class Player(pygame.sprite.Sprite):
     @property
     def game_object_data(self):
         return create_image_view_data(image_id="player", x=self.rect.x, y=self.rect.y,
-                                      width=self.rect.width, height=self.rect.height, angle=self.angle)
+                                      width=self.rect.width, height=self.rect.height, angle=(self.angle * math.pi) / 180)
 
     @property
     def game_init_object_data(self):

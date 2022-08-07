@@ -15,13 +15,13 @@ class MLPlay:
         # print(scene_info)
         action = []
 
-        if pygame.K_w in keyboard or pygame.K_UP in keyboard:
+        if pygame.K_w in keyboard:
             action.append("UP")
-        elif pygame.K_s in keyboard or pygame.K_DOWN in keyboard:
+        elif pygame.K_s in keyboard:
             action.append("DOWN")
-        elif pygame.K_a in keyboard or pygame.K_LEFT in keyboard:
+        elif pygame.K_a in keyboard:
             action.append("LEFT")
-        elif pygame.K_d in keyboard or pygame.K_RIGHT in keyboard:
+        elif pygame.K_d in keyboard:
             action.append("RIGHT")
 
         if pygame.K_f in keyboard:
