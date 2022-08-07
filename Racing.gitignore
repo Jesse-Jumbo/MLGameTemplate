@@ -1,4 +1,4 @@
 *venv/*
 *.idea/*
-*Racing /__pycache__/*
-*Racing/scr/__pyche__/*
+*Racing/__pycache__/*
+*Racing/src/__pycache__/*
