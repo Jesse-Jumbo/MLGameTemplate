@@ -1,0 +1,4 @@
+*venv/*
+*.idea/*
+*FindTheWay/__pycache__/*
+*FindTheWay/src/__pycache__/*
