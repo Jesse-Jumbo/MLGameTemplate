@@ -57,7 +57,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 3)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(HEIGHT - 50)), init_size=(50, 20))
+            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(HEIGHT - 50)), init_size=(70, 45))
             self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": list}）或檢查程式流程的檢查
@@ -113,12 +113,16 @@ class MyGame(PaiaGame):
             if bullet[0].is_player:
                 mob.kill()
                 bullet[0].kill()
+                self.player.bullets_with_mobs()
+
             # print(bullet)
         # if hits:        #是玩家子彈
         #     self.mods.collide_with_player()  #怪物碰子彈怪物消失 玩家碰到子彈safe
+
         if self.player.HP <= 0:
             return "RESET"
-        # 判定是否重置遊戲
+        if self.score >= 1000:
+            return "RESET"
         if not self.is_running:
             return "RESET"
 
@@ -167,6 +171,8 @@ class MyGame(PaiaGame):
     def get_game_status(self):
         if not self.is_running or self.player.HP <= 0:
             status = GameStatus.GAME_OVER
+        elif self.score >= 1000:
+            status = GameStatus.GAME_PASS
         else:
             status = GameStatus.GAME_ALIVE
         return status

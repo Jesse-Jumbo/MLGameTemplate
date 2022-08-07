@@ -64,3 +64,6 @@ class Player(pygame.sprite.Sprite):
 
     def collide_with_bullets(self):
         self._HP -= 10
+
+    def bullets_with_mobs(self):
+        self._score += 10
