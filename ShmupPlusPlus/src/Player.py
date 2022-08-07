@@ -12,11 +12,11 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
         super().__init__()
         self._play_area_rect = play_area_rect
-        self._speed = 5
+        self._speed = 8
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._score = 0
-        self._HP = 100
+        self._HP = 30
 
     def update(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
@@ -33,6 +33,7 @@ class Player(pygame.sprite.Sprite):
         return self._score
 
     @property
+    # 血量
     def HP(self):
         return self._HP
 
@@ -62,4 +63,4 @@ class Player(pygame.sprite.Sprite):
                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
 
     def collide_with_bullets(self):
-        self._HP = self._HP - 10
+        self._HP -= 10

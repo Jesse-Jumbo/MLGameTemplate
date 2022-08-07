@@ -99,7 +99,7 @@ class MyGame(PaiaGame):
         for hit in hits:
             if not hit.is_player:   # 不是玩家子彈
                 hit.kill()  # 刪除子彈
-                # 血量減少10% 玩家碰到怪物子彈 玩家消失 怪物碰到子彈 safe
+                # 玩家碰到怪物子彈 玩家消失 怪物碰到子彈 safe
                 self.player.collide_with_bullets()
         # 怪物and子彈
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
