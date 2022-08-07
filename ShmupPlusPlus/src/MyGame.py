@@ -17,7 +17,7 @@ from .Wall import Wall
 from .Bullet import Bullet
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
-WIDTH = 800
+WIDTH = 1000
 HEIGHT = 600
 
 
@@ -56,8 +56,8 @@ class MyGame(PaiaGame):
         # self.Bullets = Bullet(is_player=False, init_pos=self.rect.center, play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 3)):
             self._create_mobs(random.randrange(50))
-        for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(HEIGHT - 50)), init_size=(70, 45))
+        for i in range(3):
+            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(190, 230)), init_size=(70, 45))
             self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": list}）或檢查程式流程的檢查
@@ -114,7 +114,10 @@ class MyGame(PaiaGame):
                 mob.kill()
                 bullet[0].kill()
                 self.player.bullets_with_mobs()
-
+        # wall and bullet
+        hits = pygame.sprite.spritecollide(self.walls, self.player, self.mobs, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.player.collide_with_walls()
             # print(bullet)
         # if hits:        #是玩家子彈
         #     self.mods.collide_with_player()  #怪物碰子彈怪物消失 玩家碰到子彈safe
