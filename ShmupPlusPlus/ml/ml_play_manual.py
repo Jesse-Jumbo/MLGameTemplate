@@ -30,8 +30,7 @@ class MLPlay:
 
         return action
         # else:
-        #   action = "NONE"
-
+        #     action = "NONE"
 
 
     def reset(self):

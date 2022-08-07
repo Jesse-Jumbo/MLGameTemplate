@@ -65,7 +65,7 @@ class MyGame(PaiaGame):
         # 更新已使用的frame
         self.used_frame += 1
         # 更新遊戲的分數
-        self.score = self.player.score
+        self.score = self.player._score
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
@@ -101,9 +101,9 @@ class MyGame(PaiaGame):
         if hits:
             self.player.collide_with_mobs()  # 玩家碰到怪物
         # 玩家and子彈
-        hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.spritecollide(self.player,self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
         for hit in hits:
-            if not hit.is_player:  # 不是玩家子彈
+            if not hits[0].is_player:  # 不是玩家子彈
                 hit.kill()  # 刪除子彈
                 # 玩家碰到怪物子彈 玩家消失 怪物碰到子彈 safe
                 self.player.collide_with_bullets()
@@ -111,12 +111,11 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for mob, bullet in hits.items():
             if bullet[0].is_player:
+                self.score += 10
                 mob.kill()
                 bullet[0].kill()
                 self.player.bullets_with_mobs()
         # wall and bullet
-        hits = pygame.sprite.spritecollide(self.walls, self.player, self.mobs, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
             self.player.collide_with_walls()
             # print(bullet)
         # if hits:        #是玩家子彈
@@ -124,7 +123,7 @@ class MyGame(PaiaGame):
 
         if self.player.HP <= 0:
             return "RESET"
-        if self.score >= 1000:
+        if self.player._score > 1000:
             return "RESET"
         if not self.is_running:
             return "RESET"

@@ -15,27 +15,66 @@ class Player(pygame.sprite.Sprite):
         self._speed = 8
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
+        self.hit_rect = pygame.Rect(0, 0, self.rect.width - 2, self.rect.height - 2)
+        self.hit_rect.center = self.rect.center
         self._score = 0
         self._HP = 30
+        self._is_up = False
+        self._is_down = False
+        self._is_left = False
+        self._is_right = False
 
     def update(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.rect.centery -= self._speed
+            self.move_down()
+            self._is_up = True
+            self._is_down = False
+            self._is_left = False
+            self._is_right = False
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.rect.centery += self._speed
+            self.move_down()
+            self._is_up = False
+            self._is_down = True
+            self._is_left = False
+            self._is_right = False
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.rect.centerx -= self._speed
+            self.move_down()
+            self._is_up = False
+            self._is_down = False
+            self._is_left = True
+            self._is_right = False
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.rect.centerx += self._speed
+            self.move_down()
+            self._is_up = False
+            self._is_down = False
+            self._is_left = False
+            self._is_right = True
 
-    @property
-    def score(self):
-        return self._score
+    def move_left(self):
+        self.hit_rect.centerx -= self._speed
+
+    def move_right(self):
+        self.hit_rect.centerx += self._speed
+
+    def move_up(self):
+        self.hit_rect.centerx -= self._speed
+
+    def move_down(self):
+        self.hit_rect.centerx -= self._speed
 
     @property
     # 血量
     def HP(self):
         return self._HP
+
+    # @property
+    # def score(self):
+    #     self._score += 10
+    #     return self._score
 
     @property
     def xy(self):
@@ -45,7 +84,15 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_walls(self):
-        pass
+        if self._is_up:
+            self.move_down()
+        elif self._is_down:
+            self.move_up()
+        elif self._is_left:
+            self.move_right()
+        elif self._is_right:
+            self.move_left()
+
 
     def collide_with_mobs(self):
         pass
@@ -63,7 +110,7 @@ class Player(pygame.sprite.Sprite):
                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
 
     def collide_with_bullets(self):
-        self._HP -= 10
+        self._HP -= 1
 
     def bullets_with_mobs(self):
         self._score += 10
