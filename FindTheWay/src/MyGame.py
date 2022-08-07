@@ -54,7 +54,7 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
         for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(random.randint(50, 100), random.randint(50, 100)))
+            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
             self.walls.add(wall)
         self._create_treasure(1)
         self._set_bomb(1)

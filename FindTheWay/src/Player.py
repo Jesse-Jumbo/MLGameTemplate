@@ -6,6 +6,7 @@ import pygame
 # from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 # from Bomb import Bomb
+from .Wall import Wall
 
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
 
@@ -19,9 +20,12 @@ class Player(pygame.sprite.Sprite):
         self._score = 0
         self.live = 100
         self.angle = 0
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
         # self.bombs = pygame.sprite.Group()
-
     def update(self, action: list) -> None:
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
         while(self.angle < 0):
             self.angle += 360
         if "LEFT" in action:
@@ -71,7 +75,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_walls(self):
-        pass
+        self.rect.x = self.last_x
+        self.rect.y = self.last_y
 
     def collide_with_mobs(self):
         pass

@@ -2,12 +2,11 @@ import pygame
 import random
 from mlgame.view.view_model import create_rect_view_data
 
-ColorList = ["#000000", "#ff0000", "#ffff00", "#00ff00", "#0000ff", "#FF00FF"]
 class Wall(pygame.sprite.Sprite):
     def __init__(self, init_pos: tuple, init_size: tuple):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
-        self.color = ColorList[random.randint(0, 5)]
+        self.color = "#ffff00"
 
     @property
     def xy(self):
