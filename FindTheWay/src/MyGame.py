@@ -58,6 +58,8 @@ class MyGame(PaiaGame):
             self.walls.add(wall)
         self._create_treasure(1)
         self._set_bomb(1)
+        wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
+        self.walls.add(wall)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
