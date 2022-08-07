@@ -11,14 +11,15 @@ MOB_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 class Mob(pygame.sprite.Sprite):
     def __init__(self, play_area_rect: pygame.Rect):
         super().__init__()
-        self._play_area_rect = play_area_rect
-        self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
-        self._pos = (random.randrange(0, (800-self._size[1])), random.randrange(60, 120))
-        self.rect = pygame.Rect(*self._pos, *self._size)
-        self.img_index = random.randrange(0, 2)
-        self._image_id = f"mob_{self.img_index}"
-        self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
-        self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
+        self._play_area_rect = play_area_rect  # 邊界
+        self._size = random.choice([(30, 30), (40, 40), (45, 45), (50, 50), (60, 60)])
+        self._pos = (random.randrange(0, (800-self._size[1])), random.randrange(60, 120))  # 位子
+        self.rect = pygame.Rect(*self._pos, *self._size)  # rect四方形
+        self.img_index = random.randrange(0, 2)  # 只給list使用
+        self._image_id = f"mob_{self.img_index}"  # 圖片來源1
+        self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))  # 圖片來源2
+        # self._x_speed = random.randrange(-4, 5)
+        self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])  # 移動數字
 
     def update(self, *args, **kwargs) -> None:
         self.rect.x += self._x_speed
@@ -28,7 +29,7 @@ class Mob(pygame.sprite.Sprite):
         elif self.rect.right >= self._play_area_rect.right:
             is_out = True
         else:
-            is_out = False
+            is_out = False  # 判斷是否快出界
 
         if is_out:
             self._x_speed *= -1
