@@ -17,8 +17,8 @@ from .TiledMap import TiledMap
 from .Wall import Wall
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
-WIDTH = 800
-HEIGHT = 650
+WIDTH = 1000
+HEIGHT = 600
 
 
 # class 類別名稱(繼承的類別):

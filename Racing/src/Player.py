@@ -16,7 +16,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
         super().__init__()
         self._play_area_rect = play_area_rect
-        self._speed = 5
+        self.vel = [0, 0]
+        self.speed_up = [1, 1]
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._image_id = "car"
@@ -25,17 +26,42 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
-            self._image_id = "car_up"
-            self.rect.centery -= self._speed
+            self.move_up()
+            self.vel[1] += self.speed_up[1]
+            self.speed_up[1] -= 1
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
-            self._image_id = "car_down"
-            self.rect.centery += self._speed
+            self.move_down()
+            self.vel[1] += self.speed_up[1]
+            self.speed_up[0] -= 3
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
-            self._image_id = "car_left"
-            self.rect.centerx -= self._speed
+            self.move_left()
+            #self.vel[0] += self.speed_up[0]
+            self.speed_up[0] = 70
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
-            self._image_id = "car_right"
-            self.rect.centerx += self._speed
+            self.move_right()
+            #self.vel[0] += self.speed_up[0]
+            self.speed_up[0] = 70
+        else:
+            self.vel = [0, 0]
+            self.speed_up = [0, 0]
+        self.rect.centerx += self.vel[0]
+        self.rect.centery += self.vel[1]
+
+    def move_right(self):
+        self._image_id = "car_right"
+        self.vel = [5, 0]
+
+    def move_left(self):
+        self._image_id = "car_left"
+        self.vel = [-5, 0]
+
+    def move_down(self):
+        self._image_id = "car_up"
+        self.vel = [0, 5]
+
+    def move_up(self):
+        self._image_id = "car_up"
+        self.vel = [0, -5]
 
     @property
     def score(self):
