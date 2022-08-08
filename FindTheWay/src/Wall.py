@@ -4,7 +4,7 @@ import pygame
 import random
 from mlgame.view.view_model import create_rect_view_data, create_asset_init_data, create_image_view_data
 
-EXPLOTION_PATH = path.join(path.dirname(__file__), "asset", "image", "explotion.png")
+EXPLOTION_PATH = path.join(path.dirname(__file__), "asset", "image", "explosion.png")
 
 
 class Wall(pygame.sprite.Sprite):

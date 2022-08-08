@@ -9,7 +9,6 @@ from mlgame.view.view_model import create_asset_init_data, create_image_view_dat
 # from Bomb import Bomb
 
 BOMB_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "bomb.png")
-EXPLOTION_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "explotion.png")
 
 
 class Bomb(pygame.sprite.Sprite):
@@ -30,7 +29,7 @@ class Bomb(pygame.sprite.Sprite):
             self.cooldown = False
 
     def collide_with_walls(self, used_frame):
-        self.image_id = "explotion"
+        self.image_id = "explosion"
         # print(self.used_frame, used_frame)
 
     @property
@@ -44,12 +43,7 @@ class Bomb(pygame.sprite.Sprite):
 
     @property
     def game_init_object_data(self):
-        return [create_asset_init_data(image_id="bomb",
+        return create_asset_init_data(image_id="bomb",
                                        width=self.rect.width, height=self.rect.height,
                                        file_path=BOMB_PATH,
-                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/bomb.png"),
-                create_asset_init_data(image_id="explotion",
-                                       width=self.rect.width, height=self.rect.height,
-                                       file_path=EXPLOTION_PATH,
-                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
-                ]
+                                       github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/bomb.png")
