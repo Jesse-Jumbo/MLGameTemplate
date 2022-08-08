@@ -25,7 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.row = False
         self.x = 0
         self.y = 0
-        # self.bombs = pygame.sprite.Group()
+        self.own_bombs = 0
+
     def update(self, action: list) -> None:
         self.used_frame += 1
         self.last_x = self.rect.x
@@ -105,6 +106,9 @@ class Player(pygame.sprite.Sprite):
 
     def collide_with_treasure(self):
         self._score += 1
+
+    def collide_with_bombs(self):
+        self.own_bombs += 1
 
     @property
     def game_object_data(self):

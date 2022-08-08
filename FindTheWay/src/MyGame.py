@@ -20,6 +20,7 @@ ASSET_PATH = path.join(path.dirname(__file__), "../asset")
 WIDTH = 1000
 HEIGHT = 600
 
+
 # class 類別名稱(繼承的類別):
 # 這是遊戲的類別，用於建立遊戲的模板
 class MyGame(PaiaGame):
@@ -47,15 +48,16 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player(pos=(WIDTH // 2, HEIGHT -100), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
+        self.player = Player(pos=(WIDTH // 2, HEIGHT - 100), size=(50, 50),
+                     play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._set_bomb(1)
-        self.bomb = Bomb(pos=(0, 0), size=(50, 50))
-        # wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
-        # self.walls.add(wall)
+        self.bomb = Bomb({"x": 0, "y": 0})
         walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#00ff00")
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=82, class_name=Treasure)
         self.treasures.add(*treasures)
+        bombs = self.map.create_init_obj_list(img_no=83, class_name=Bomb)
+        self.bombs.add(*bombs)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -91,15 +93,20 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.treasures, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_treasure()
-        hits = pygame.sprite.groupcollide(self.bombs, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.groupcollide(self.bombs, self.walls, True, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.bomb.collide_with_walls()
+        hits = pygame.sprite.spritecollide(self.player, self.bombs, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.player.collide_with_bombs()
 
         # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
         if "set_bomb" in action and self.cooldown == True:
-            self._set_bomb(1)
+            if self.player.own_bombs != 0:
+                self._set_bomb(1)
+                self.player.own_bombs -= 1
 
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
     def reset(self):
@@ -164,7 +171,8 @@ class MyGame(PaiaGame):
             , width=WIDTH
             , height=HEIGHT
             , file_path=bg_path
-            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
+            ,
+            github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
         # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典
         # 將所有圖片資訊加入assets裡
         scene_init_data = {"scene": self.scene.__dict__,
@@ -177,7 +185,6 @@ class MyGame(PaiaGame):
         for bomb in self.bombs:
             if isinstance(bomb, Bomb):
                 scene_init_data["assets"].append(bomb.game_init_object_data)
-                self.bombs = pygame.sprite.Group()
         return scene_init_data
 
     # 獲取所有遊戲畫面的更新資訊
@@ -197,10 +204,11 @@ class MyGame(PaiaGame):
             if isinstance(bomb, Bomb):
                 game_obj_list.append(bomb.game_object_data)
         game_obj_list.append(self.player.game_object_data)
-        backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
+        backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH - 50, height=HEIGHT - 50)]
         foregrounds = [create_text_view_data(
             content=f"My_Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="35px Arial")]
-        foregrounds.append(create_text_view_data(content=f"HP: {str(self.player.live)}", x=0, y=5, color="#21A1F1", font_style="35px Arial"))
+        foregrounds.append(create_text_view_data(content=f"HP: {str(self.player.live)}", x=0, y=5, color="#21A1F1",
+                                                 font_style="35px Arial"))
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(
@@ -254,17 +262,14 @@ class MyGame(PaiaGame):
     def _set_bomb(self, count):
         for i in range(count):
             if self.player.angle % 360 == 0:
-                bomb = Bomb((self.player.x, self.player.y-50), (50, 50))
+                bomb = Bomb({"x": self.player.x, "y": self.player.y - 50})
                 self.bombs.add(bomb)
             if self.player.angle % 360 == 90:
-                bomb = Bomb((self.player.x-50, self.player.y), (50, 50))
+                bomb = Bomb({"x": self.player.x - 50, "y": self.player.y})
                 self.bombs.add(bomb)
             if self.player.angle % 360 == 180:
-                bomb = Bomb((self.player.x, self.player.y+50), (50, 50))
+                bomb = Bomb({"x": self.player.x, "y": self.player.y + 50})
                 self.bombs.add(bomb)
             if self.player.angle % 360 == 270:
-                bomb = Bomb((self.player.x+50, self.player.y), (50, 50))
+                bomb = Bomb({"x": self.player.x + 50, "y": self.player.y})
                 self.bombs.add(bomb)
-
-
-

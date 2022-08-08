@@ -10,16 +10,16 @@ from mlgame.view.view_model import create_asset_init_data, create_image_view_dat
 BOMB_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "bomb.png")
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, size: tuple):
+    def __init__(self, construction: dict):
         super().__init__()
-        self._init_pos = pos
-        self.rect = pygame.Rect(*pos, 50, 50)
+        init_pos = (construction["x"], construction["y"])
+        init_size = (50, 50)
+        self.rect = pygame.Rect(*init_pos, *init_size)
         self.cooldown = False
         self.used_frame = 0
 
     def update(self):
         self.used_frame += 1
-
         if self.used_frame % 6 == 0:
             self.cooldown = True
         else:
