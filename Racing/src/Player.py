@@ -17,7 +17,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self._play_area_rect = play_area_rect
         self.vel = [0, 0]
-        self.speed_up = [1, 1]
+        self.speed_up = [0, 0]
+        self.speed_low = -2
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._image_id = "car"
@@ -25,34 +26,41 @@ class Player(pygame.sprite.Sprite):
         self._lives = 100
         self.last_x = self.rect.x
         self.last_y = self.rect.y
+        self._image_id = 'car_up'
 
     def update(self, action: list) -> None:
         self.last_x = self.rect.x
         self.last_y = self.rect.y
         if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.move_up()
-            self.vel[1] += self.speed_up[1]
-            self.speed_up[1] -= 1
-            # 我想要他長按上時加速
+            self.vel[1] -= self.speed_up[1]
+            self.speed_up[1] += 1
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
-            self.vel[1] += self.speed_up[1]
-            self.speed_up[1] += 1
-            # 我想要向後退時維持減速但不會越來越慢
+            self.vel[1] += self.speed_low
+
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.move_left()
-            # self.vel[0] += self.speed_up[0]
+            self.vel[0] -= self.speed_up[0]
             self.speed_up[0] += 1
-            # 我想當他右轉時先減速再維持原速度
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.move_right()
-            # self.vel[0] += self.speed_up[0]
-            self.speed_up[0] -= 1
-            # 我想當他左轉時先減速再維持原速度
+            self.vel[0] += self.speed_up[0]
+            self.speed_up[0] += 1
         else:
             # 這可做慢慢降速
             self.vel = [0, 0]
-            self.speed_up = [0, 0]
+            self.speed_up[0] -= 2
+            self.speed_up[1] -= 2
+
+        if self.speed_up[0] > 15:
+            self.speed_up[0] = 15
+        elif self.speed_up[1] > 15:
+            self.speed_up[1] = 15
+        elif self.speed_up[0] < 0:
+            self.speed_up[0] = 0
+        elif self.speed_up[1] < 0:
+            self.speed_up[1] = 0
         self.rect.centerx += self.vel[0]
         self.rect.centery += self.vel[1]
 

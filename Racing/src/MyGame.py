@@ -89,7 +89,26 @@ class MyGame(PaiaGame):
     def reset(self):
         print("reset MyGame")
         # 重新初始化遊戲
-        self.__init__(frame_limit=self.frame_to_end, is_sound=self.is_sound, map_no=self.map_no)
+        # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
+        self.scene = Scene(width=WIDTH, height=HEIGHT, color="#ffffff", bias_x=0, bias_y=0)
+        # 宣告存放多個同類別物件的集合
+        self.walls = pygame.sprite.Group()
+        self.treasures = pygame.sprite.Group()
+        # 宣告變數儲存遊戲中需紀錄的資訊
+        self.used_frame = 0
+        self.score = 0
+        # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
+        if self.map_no:
+            self.map = TiledMap(self.map_no)
+        if self.is_sound == "on":
+            self.sound_controller = SoundController()
+        # 建立遊戲物件，並加入該物件的集合
+        self.player = Player(pos=(WIDTH // 2, HEIGHT - 50), size=(50, 50),
+                             play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
+        walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#000000")
+        self.walls.add(*walls)
+        treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
+        self.treasures.add(*treasures)
 
     # 在這裡定義要回傳給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
