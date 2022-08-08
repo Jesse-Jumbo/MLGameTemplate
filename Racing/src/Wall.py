@@ -9,10 +9,12 @@ peggy = ["#000000", "#ffffff", "#ff0000", "#ffff00", "#00ff00", "#8c8c8c", "#000
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, init_pos: tuple, init_size: tuple):
+    def __init__(self, construction: dict, **kwargs):
         super().__init__()
+        init_pos = construction["x"], construction["y"]
+        init_size = construction["width"], construction["height"]
         self.rect = pygame.Rect(*init_pos, *init_size)
-        self.color = peggy[random.randint(0, 11)]
+        self.color = kwargs["color"]
 
     @property
     def xy(self):

@@ -14,6 +14,7 @@ from .Player import Player
 from .Prop import Prop
 from .SoundController import SoundController
 from .TiledMap import TiledMap
+from .Treasure import Treasure
 from .Wall import Wall
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
@@ -35,6 +36,7 @@ class MyGame(PaiaGame):
         self.mobs = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.treasures = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -47,13 +49,17 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50),
+        self.player = Player(pos=(WIDTH // 2, HEIGHT - 50), size=(50, 50),
                              play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 10)):
             self._create_mobs(random.randrange(50))
-        for i in range(random.randrange(10)):
-            wall = Wall((self.player.rect.left, self.player.rect.top - 50), (50, 50))
-            self.walls.add(wall)
+        # for i in range(random.randrange(10)):
+        #     wall = Wall((self.player.rect.left, self.player.rect.top - 50), (50, 50))
+        #     self.walls.add(wall)
+        walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#000000")
+        self.walls.add(*walls)
+        treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
+        self.treasures.add(*treasures)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -179,8 +185,14 @@ class MyGame(PaiaGame):
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 scene_init_data["assets"].append(mob.game_init_object_data)
+        for treasure in self.treasures:
+            if isinstance(treasure, Treasure):
+                scene_init_data["assets"].append(treasure.game_init_object_data)
         scene_init_data["assets"].extend(self.player.game_init_object_data)
+
+
         return scene_init_data
+
 
     # 獲取所有遊戲畫面的更新資訊
     @check_game_progress
@@ -198,6 +210,9 @@ class MyGame(PaiaGame):
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
+        for treasure in self.treasures:
+            if isinstance(treasure, Treasure):
+                game_obj_list.append(treasure.game_object_data)
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH - 50, height=HEIGHT - 50)]
         foregrounds = [create_text_view_data(

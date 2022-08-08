@@ -22,6 +22,15 @@
       "help": "set the frame number of game frame limit."
     },
     {
+      "name": "map_no",
+      "verbose": "地圖編號",
+      "type": "int",
+      "max": 1,
+      "min": 1,
+      "default": 1,
+      "help": "set the map number of game map."
+    },
+    {
       "name": "sound",
       "verbose": "遊戲音效",
       "type": "str",
