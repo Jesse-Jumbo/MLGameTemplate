@@ -45,6 +45,10 @@ class Mob(pygame.sprite.Sprite):
         return self.rect.center
 
     @property
+    def size(self):
+        return self._size[0]
+
+    @property
     def game_object_data(self):
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)

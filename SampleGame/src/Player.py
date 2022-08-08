@@ -30,9 +30,6 @@ class Player(pygame.sprite.Sprite):
         if self._lives <= 0:
             self._is_alive = False
 
-        if self._used_frame - self._last_shoot_frame < 30:
-            self._is_shoot = False
-
     def act(self, action: list) -> None:
         if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.move_up()
@@ -58,8 +55,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.centery -= self._speed
 
     def shoot(self):
-        self._last_shoot_frame = self._used_frame
-        self._is_shoot = True
+        if not self._is_shoot and self._used_frame - self._last_shoot_frame > 10:
+            self._last_shoot_frame = self._used_frame
+            self._is_shoot = True
+
+    def shoot_stop(self):
+        self._is_shoot = False
 
     @property
     def score(self):
@@ -101,8 +102,8 @@ class Player(pygame.sprite.Sprite):
     def collide_with_bullets(self):
         self._shield -= 10
 
-    def add_score(self):
-        self._score += 1
+    def add_score(self, score: int):
+        self._score += score
 
     @property
     def game_object_data(self):
@@ -122,3 +123,6 @@ class Player(pygame.sprite.Sprite):
             , height=self.rect.height
             , file_path=PLAYER_PATH
             , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
+
+    def kill_mob(self, score: int):
+        self.add_score(score=score)

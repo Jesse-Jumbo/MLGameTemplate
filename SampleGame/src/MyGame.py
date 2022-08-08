@@ -26,7 +26,7 @@ HEIGHT = 600
 class MyGame(PaiaGame):
     # def 方法名稱(參數: 型態 = 預設值):
     # 定義遊戲的初始化
-    def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", map_no: int = None, *args, **kwargs):
+    def __init__(self, user_num=1, frame_limit: int = 300, target_score: int = 3000, is_sound: str = "off", map_no: int = None, *args, **kwargs):
         # super().要繼承的父類別方法的名字(初始化父類別的參數)
         super().__init__(user_num=user_num, *args, **kwargs)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
@@ -39,6 +39,7 @@ class MyGame(PaiaGame):
         self.used_frame = 0
         self.frame_to_end = frame_limit
         self.score = 0
+        self.target_score = target_score
         self.is_sound = is_sound
         self.map_no = map_no
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
@@ -61,10 +62,13 @@ class MyGame(PaiaGame):
         self.score = self.player.score
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
-        action = ai_1p_cmd
+        if ai_1p_cmd:
+            action = ai_1p_cmd
+        else:
+            action = ["NONE"]
         if self.player.is_shoot:
             self._create_bullets()
-            self.player._is_shoot = False
+            self.player.shoot_stop()
         # print(ai_1p_cmd)
         if self.used_frame % 30 == 0:
             for mob in self.mobs:
@@ -75,17 +79,21 @@ class MyGame(PaiaGame):
         self.mobs.update()
         self.bullets.update()
         # 處理碰撞
+        # 玩家和牆
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
+        # 玩家和敵人
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_mobs()
+        # 玩家和子彈
         hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
         for bullet in hits:
             if isinstance(bullet, Bullet) and not bullet.is_player:
                 bullet.kill()
                 self.player.collide_with_bullets()
+        # 子彈和敵人
         hits = pygame.sprite.groupcollide(self.bullets, self.mobs, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for bullet, mobs in hits.items():
             if isinstance(bullet, Bullet) and bullet.is_player:
@@ -94,7 +102,7 @@ class MyGame(PaiaGame):
                     if isinstance(mob, Mob):
                         mob.collide_with_bullets()
                         self._create_mobs()
-                        self.player.add_score()
+                        self.player.kill_mob(100 - mob.size)
 
         # 判定是否重置遊戲
         if not self.is_running:
