@@ -8,7 +8,6 @@ from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
     create_image_view_data
 
-from .Mob import Mob
 from .Player import Player
 from .Prop import Prop
 from .SoundController import SoundController
@@ -33,7 +32,6 @@ class MyGame(PaiaGame):
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#ffffff", bias_x=0, bias_y=0)
         # 宣告存放多個同類別物件的集合
-        self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.treasures = pygame.sprite.Group()
@@ -50,20 +48,14 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
         # 建立遊戲物件，並加入該物件的集合
-        self.player = Player(pos=(WIDTH // 2, HEIGHT - 50), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
-        for i in range(random.randrange(1, 10)):
-            self._create_mobs(random.randrange(50))
-        # for i in range(random.randrange(10)):
-        #     wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
-        #     self.walls.add(wall)
-        self._create_treasure(1)
+        self.player = Player(pos=(WIDTH // 2, HEIGHT -100), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._set_bomb(1)
         # wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
         # self.walls.add(wall)
         walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#00ff00")
         self.walls.add(*walls)
-        walls = self.map.create_init_obj_list(img_no=2, class_name=Wall, color="#21A1F1")
-        self.walls.add(*walls)
+        treasures = self.map.create_init_obj_list(img_no=82, class_name=Treasure)
+        self.treasures.add(*treasures)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -82,7 +74,6 @@ class MyGame(PaiaGame):
         print(ai_1p_cmd)
         # 更新物件內部資訊
         self.player.update(action)
-        self.mobs.update()
         self.bullets.update()
         self.treasures.update()
         self.bombs.update()
@@ -90,9 +81,6 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
-        hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
-            self.player.collide_with_mobs()
         hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             if hits[0].is_player == False:
@@ -101,11 +89,7 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.treasures, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_treasure()
-        hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
-        for mob, bullets in hits.items():
-            if bullets[0].is_player:
-                bullets[0].kill()
-                mob.collide_with_bullets()
+
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -135,10 +119,6 @@ class MyGame(PaiaGame):
             if isinstance(wall, Wall):
                 # 將wall的座標記錄下來
                 walls_data.append({"x": wall.xy[0], "y": wall.xy[1]})
-        mobs_data = []
-        for mob in self.mobs:
-            if isinstance(mob, Mob):
-                mobs_data.append({"x": mob.xy[0], "y": mob.xy[1]})
 
         # 將所有要給（AI）玩家1的資料打包起來
         data_to_1p = {
@@ -146,7 +126,6 @@ class MyGame(PaiaGame):
             "player_x": self.player.xy[0],
             "player_y": self.player.xy[1],
             "walls": walls_data,
-            "mobs": mobs_data,
             "score": self.score,
             "status": self.get_game_status()
         }
@@ -188,9 +167,6 @@ class MyGame(PaiaGame):
         scene_init_data = {"scene": self.scene.__dict__,
                            "assets": [background],
                            }
-        for mob in self.mobs:
-            if isinstance(mob, Mob):
-                scene_init_data["assets"].append(mob.game_init_object_data)
         scene_init_data["assets"].append(self.player.game_init_object_data)
         for treasure in self.treasures:
             if isinstance(treasure, Treasure):
@@ -214,9 +190,6 @@ class MyGame(PaiaGame):
         for bullet in self.bullets:
             if isinstance(bullet, Bullet):
                 game_obj_list.append(bullet.game_object_data)
-        for mob in self.mobs:
-            if isinstance(mob, Mob):
-                game_obj_list.append(mob.game_object_data)
         for treasure in self.treasures:
             if isinstance(treasure, Treasure):
                 game_obj_list.append(treasure.game_object_data)
@@ -277,17 +250,6 @@ class MyGame(PaiaGame):
         pass
 
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
-    def _create_mobs(self, count: int = 8):
-        # 根據傳入的參數，決定建立幾個mob（莫認為8）
-        for i in range(count):
-            # 建立mob物件，並加入到mob的集合裡
-            mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
-            self.mobs.add(mob)
-
-    def _create_treasure(self, count):
-        for i in range(count):
-            treasure = Treasure((100, 100), (50, 50))
-            self.treasures.add(treasure)
 
     def _set_bomb(self, count):
         for i in range(count):

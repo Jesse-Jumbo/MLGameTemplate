@@ -1,3 +1,4 @@
+import random
 from enum import auto
 from os import path
 import math
@@ -10,12 +11,17 @@ TREASURE_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "treas
 
 
 class Treasure(pygame.sprite.Sprite):
-    def __init__(self, pos: tuple, size: tuple):
+    def __init__(self, construction: dict):
         super().__init__()
         # self._play_area_rect = play_area_rect
-        self._init_pos = pos
-        self.rect = pygame.Rect(*pos, 50, 50)
+        init_pos = (construction["x"], construction["y"])
+        init_size = (construction["width"], construction["height"])
+        self.rect = pygame.Rect(*init_pos, *init_size)
         self._score = 0
+        self.treasures = pygame.sprite.Group()
+
+    def update(self):
+        self.treasures.update()
 
     @property
     def xy(self):
@@ -25,7 +31,8 @@ class Treasure(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_player(self):
-        pass
+        treasure = Treasure((random.randint(0, 1000), random.randint(0, 600)), (50, 50))
+        self.treasures.add(treasure)
 
     @property
     def game_object_data(self):

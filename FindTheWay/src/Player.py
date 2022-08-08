@@ -3,9 +3,7 @@ from os import path
 import math
 
 import pygame
-# from mlgame.utils.enum import StringEnum
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
-# from Bomb import Bomb
 from .Wall import Wall
 
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
@@ -22,13 +20,20 @@ class Player(pygame.sprite.Sprite):
         self.angle = 0
         self.last_x = self.rect.x
         self.last_y = self.rect.y
+        self.used_frame = 0
+        self.row = False
         # self.bombs = pygame.sprite.Group()
     def update(self, action: list) -> None:
+        self.used_frame += 1
         self.last_x = self.rect.x
         self.last_y = self.rect.y
         while(self.angle < 0):
             self.angle += 360
-        if "LEFT" in action:
+        if self.used_frame % 6 == 0:
+            self.row = True
+        else:
+            self.row = False
+        if "LEFT" in action and self.row == True:
             self.angle += 90
         if "UP" in action:
             if self.angle % 360 == 0 and self.rect.top > self._play_area_rect.top:
@@ -48,7 +53,7 @@ class Player(pygame.sprite.Sprite):
                 self.move_up()
             else:
                 self.move_left()
-        if "RIGHT" in action:
+        if "RIGHT" in action and self.row == True:
             self.angle -= 90
 
     def move_up(self):
