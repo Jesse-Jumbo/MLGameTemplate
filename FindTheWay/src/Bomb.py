@@ -25,6 +25,9 @@ class Bomb(pygame.sprite.Sprite):
         else:
             self.cooldown = False
 
+    def collide_with_walls(self):
+        pass
+
     @property
     def xy(self):
         return self.rect.topleft

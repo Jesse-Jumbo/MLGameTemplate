@@ -13,7 +13,6 @@ from .Prop import Prop
 from .SoundController import SoundController
 from .TiledMap import TiledMap
 from .Wall import Wall
-from .Bullet import Bullet
 from .Treasure import Treasure
 from .Bomb import Bomb
 
@@ -92,6 +91,9 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.treasures, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_treasure()
+        hits = pygame.sprite.groupcollide(self.bombs, self.walls, True, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.bomb.collide_with_walls()
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -188,9 +190,6 @@ class MyGame(PaiaGame):
         for wall in self.walls:
             if isinstance(wall, Wall):
                 game_obj_list.append(wall.game_object_data)
-        for bullet in self.bullets:
-            if isinstance(bullet, Bullet):
-                game_obj_list.append(bullet.game_object_data)
         for treasure in self.treasures:
             if isinstance(treasure, Treasure):
                 game_obj_list.append(treasure.game_object_data)
@@ -266,4 +265,6 @@ class MyGame(PaiaGame):
             if self.player.angle % 360 == 270:
                 bomb = Bomb((self.player.x+50, self.player.y), (50, 50))
                 self.bombs.add(bomb)
+
+
 

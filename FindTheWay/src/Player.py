@@ -5,7 +5,7 @@ import math
 import pygame
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 from .Wall import Wall
-from  .Bomb import Bomb
+from .Bomb import Bomb
 
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
 
@@ -43,20 +43,20 @@ class Player(pygame.sprite.Sprite):
         if "LEFT" in action and self.row == True:
             self.angle += 90
         if "UP" in action:
-            if self.angle % 360 == 0 and self.rect.top > self._play_area_rect.top:
+            if self.angle % 360 == 0:
                 self.move_up()
             elif self.angle % 360 == 90:
                 self.move_left()
-            elif self.angle % 360 == 180 and self.rect.bottom < self._play_area_rect.bottom:
+            elif self.angle % 360 == 180:
                 self.move_down()
             else:
                 self.move_right()
         if "DOWN" in action:
-            if self.angle % 360 == 0 and self.rect.bottom < self._play_area_rect.bottom:
+            if self.angle % 360 == 0:
                 self.move_down()
             elif self.angle % 360 == 90:
                 self.move_right()
-            elif self.angle % 360 == 180 and self.rect.top > self._play_area_rect.top:
+            elif self.angle % 360 == 180:
                 self.move_up()
             else:
                 self.move_left()
@@ -64,16 +64,20 @@ class Player(pygame.sprite.Sprite):
             self.angle -= 90
 
     def move_up(self):
-        self.rect.centery -= self._speed
+        if self.rect.top > self._play_area_rect.top:
+            self.rect.centery -= self._speed
 
     def move_down(self):
-        self.rect.centery += self._speed
+        if self.rect.bottom < self._play_area_rect.bottom:
+            self.rect.centery += self._speed
 
     def move_right(self):
-        self.rect.centerx += self._speed
+        if self.rect.right < self._play_area_rect.right:
+            self.rect.centerx += self._speed
 
     def move_left(self):
-        self.rect.centerx -= self._speed
+        if self.rect.left > self._play_area_rect.left:
+            self.rect.centerx -= self._speed
 
     @property
     def score(self):
