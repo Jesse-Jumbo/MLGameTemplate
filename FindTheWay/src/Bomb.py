@@ -14,9 +14,16 @@ class Bomb(pygame.sprite.Sprite):
         super().__init__()
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, 50, 50)
+        self.cooldown = False
+        self.used_frame = 0
 
     def update(self):
-        pass
+        self.used_frame += 1
+
+        if self.used_frame % 6 == 0:
+            self.cooldown = True
+        else:
+            self.cooldown = False
 
     @property
     def xy(self):

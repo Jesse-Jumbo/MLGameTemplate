@@ -50,6 +50,7 @@ class MyGame(PaiaGame):
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT -100), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._set_bomb(1)
+        self.bomb = Bomb(pos=(0, 0), size=(50, 50))
         # wall = Wall(init_pos=(self.player.rect.left, self.player.rect.top - 50), init_size=(50, 50))
         # self.walls.add(wall)
         walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#00ff00")
@@ -67,8 +68,10 @@ class MyGame(PaiaGame):
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
-            if self.used_frame % 5 == 0:
+            if self.used_frame % 15 == 0:
                 self.cooldown = True
+            else:
+                self.cooldown = False
         else:
             action = "NONE"
         print(ai_1p_cmd)
@@ -90,12 +93,10 @@ class MyGame(PaiaGame):
         if hits:
             self.player.collide_with_treasure()
 
-
         # 判定是否重置遊戲
         if not self.is_running:
             return "RESET"
-
-        if "set_bomb" in action:
+        if "set_bomb" in action and self.cooldown == True:
             self._set_bomb(1)
 
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
@@ -253,6 +254,16 @@ class MyGame(PaiaGame):
 
     def _set_bomb(self, count):
         for i in range(count):
-            bomb = Bomb(self.player.xy, (50, 50))
-            self.bombs.add(bomb)
+            if self.player.angle % 360 == 0:
+                bomb = Bomb((self.player.x, self.player.y-50), (50, 50))
+                self.bombs.add(bomb)
+            if self.player.angle % 360 == 90:
+                bomb = Bomb((self.player.x-50, self.player.y), (50, 50))
+                self.bombs.add(bomb)
+            if self.player.angle % 360 == 180:
+                bomb = Bomb((self.player.x, self.player.y+50), (50, 50))
+                self.bombs.add(bomb)
+            if self.player.angle % 360 == 270:
+                bomb = Bomb((self.player.x+50, self.player.y), (50, 50))
+                self.bombs.add(bomb)
 

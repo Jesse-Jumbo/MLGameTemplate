@@ -5,6 +5,7 @@ import math
 import pygame
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 from .Wall import Wall
+from  .Bomb import Bomb
 
 PLAYER_PATH = path.join(path.dirname(__file__), "..", "asset", "image", "player.png")
 
@@ -22,17 +23,23 @@ class Player(pygame.sprite.Sprite):
         self.last_y = self.rect.y
         self.used_frame = 0
         self.row = False
+        self.x = 0
+        self.y = 0
         # self.bombs = pygame.sprite.Group()
     def update(self, action: list) -> None:
         self.used_frame += 1
         self.last_x = self.rect.x
         self.last_y = self.rect.y
+        self.x = self.rect.x
+        self.y = self.rect.y
         while(self.angle < 0):
             self.angle += 360
+
         if self.used_frame % 6 == 0:
             self.row = True
         else:
             self.row = False
+
         if "LEFT" in action and self.row == True:
             self.angle += 90
         if "UP" in action:
