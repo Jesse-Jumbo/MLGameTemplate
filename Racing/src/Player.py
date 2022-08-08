@@ -50,6 +50,7 @@ class Player(pygame.sprite.Sprite):
             self.speed_up[0] -= 1
             # 我想當他左轉時先減速再維持原速度
         else:
+            # 這可做慢慢降速
             self.vel = [0, 0]
             self.speed_up = [0, 0]
         self.rect.centerx += self.vel[0]
