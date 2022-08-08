@@ -30,12 +30,14 @@ class MyGame(PaiaGame):
         # super().要繼承的父類別方法的名字(初始化父類別的參數)
         super().__init__(user_num=user_num, *args, **kwargs)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
+        self.explotion = None
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#ffffff", bias_x=0, bias_y=0)
         # 宣告存放多個同類別物件的集合
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.treasures = pygame.sprite.Group()
         self.bombs = pygame.sprite.Group()
+        # self.explotions = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -51,7 +53,6 @@ class MyGame(PaiaGame):
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 100), size=(50, 50),
                      play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._set_bomb(1)
-        self.bomb = Bomb({"x": 0, "y": 0})
         walls = self.map.create_init_obj_list(img_no=1, class_name=Wall, color="#00ff00")
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=82, class_name=Treasure)
@@ -75,7 +76,7 @@ class MyGame(PaiaGame):
                 self.cooldown = False
         else:
             action = "NONE"
-        print(ai_1p_cmd)
+        # print(ai_1p_cmd)
         # 更新物件內部資訊
         self.player.update(action)
         self.bullets.update()
@@ -94,11 +95,15 @@ class MyGame(PaiaGame):
         if hits:
             self.player.collide_with_treasure()
         hits = pygame.sprite.groupcollide(self.bombs, self.walls, True, True, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
-            self.bomb.collide_with_walls()
+        for bomb, walls in hits.items():
+            if isinstance(bomb, Bomb):
+                bomb.collide_with_walls(self.used_frame)
+                self.explotion = self.create_explotion(bomb.xy)
+                self.last_explotion_frame = self.used_frame
         hits = pygame.sprite.spritecollide(self.player, self.bombs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_bombs()
+
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -184,8 +189,9 @@ class MyGame(PaiaGame):
                 scene_init_data["assets"].append(treasure.game_init_object_data)
         for bomb in self.bombs:
             if isinstance(bomb, Bomb):
-                scene_init_data["assets"].append(bomb.game_init_object_data)
+                scene_init_data["assets"].extend(bomb.game_init_object_data)
         return scene_init_data
+
 
     # 獲取所有遊戲畫面的更新資訊
     @check_game_progress
@@ -203,6 +209,8 @@ class MyGame(PaiaGame):
         for bomb in self.bombs:
             if isinstance(bomb, Bomb):
                 game_obj_list.append(bomb.game_object_data)
+        if self.explotion and self.used_frame - self.last_explotion_frame < 30:
+            game_obj_list.append(self.explotion)
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH - 50, height=HEIGHT - 50)]
         foregrounds = [create_text_view_data(
@@ -273,3 +281,8 @@ class MyGame(PaiaGame):
             if self.player.angle % 360 == 270:
                 bomb = Bomb({"x": self.player.x + 50, "y": self.player.y})
                 self.bombs.add(bomb)
+
+    def create_explotion(self, xy: tuple):
+        return create_image_view_data(image_id="explotion", x=xy[0], y=xy[1],
+                                       width=50, height=50, angle=0)
+
