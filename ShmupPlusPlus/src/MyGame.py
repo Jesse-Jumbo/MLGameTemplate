@@ -96,12 +96,15 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
+        # 子彈和牆
+        hits = pygame.sprite.groupcollide(self.bullets, self.walls, True, False, pygame.sprite.collide_rect_ratio(0.8))
+
         # 玩家and怪物
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_mobs()  # 玩家碰到怪物
         # 玩家and子彈
-        hits = pygame.sprite.spritecollide(self.player,self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
         for hit in hits:
             if not hits[0].is_player:  # 不是玩家子彈
                 hit.kill()  # 刪除子彈
