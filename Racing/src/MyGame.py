@@ -38,7 +38,8 @@ class MyGame(PaiaGame):
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
-        self.score = 0
+        self.record = 0
+        self.best_record = 999999999999999999999999999999999999999999999999999999
         self.is_sound = is_sound
         self.map_no = map_no
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
@@ -58,8 +59,6 @@ class MyGame(PaiaGame):
     def update(self, commands: dict):
         # 更新已使用的frame
         self.used_frame += 1
-        # 更新遊戲的分數
-        self.score = self.player.score
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
@@ -96,7 +95,8 @@ class MyGame(PaiaGame):
         self.treasures = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
-        self.score = 0
+        self.record = self.used_frame
+        self.best_record = min(self.record, self.best_record)
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
         if self.map_no:
             self.map = TiledMap(self.map_no)
@@ -131,7 +131,7 @@ class MyGame(PaiaGame):
             "player_x": self.player.xy[0],
             "player_y": self.player.xy[1],
             "walls": walls_data,
-            "score": self.score,
+            "record": self.record,
             "status": self.get_game_status()
         }
         # to_players_data = {"1P": data_to_1p}
@@ -151,6 +151,7 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
+        if
         return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
@@ -198,9 +199,7 @@ class MyGame(PaiaGame):
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH - 50, height=HEIGHT - 50)]
         foregrounds = [create_text_view_data(
-            content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#000000", font_style="24px Arial"),
-            create_text_view_data(
-                content=f"lives: {str(self.player._lives)}", x=0, y=5, color="#000000", font_style="24px Arial")]
+            content=f"Best Record: {self.best_record}", x=5, y=5, color="#ffffff", font_style="24px Arial")]
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(
@@ -220,7 +219,7 @@ class MyGame(PaiaGame):
             attachment = [
                 {
                     "player": get_ai_name(0),
-                    "score": self.score,
+                    "record": self.record,
                     "used_frame": self.used_frame,
                     "status": GameStatus.GAME_PASS
                 }
@@ -231,7 +230,7 @@ class MyGame(PaiaGame):
             attachment = [
                 {
                     "player": get_ai_name(0),
-                    "score": self.score,
+                    "record": self.record,
                     "used_frame": self.used_frame,
                     "status": GameStatus.GAME_OVER
                 }
