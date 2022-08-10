@@ -4,6 +4,7 @@ import pygame.mixer
 class SoundController:
     def play_music(self, music_path: str, volume: float) -> None:
         pygame.mixer.init()
+        print(music_path)
         pygame.mixer.music.load(music_path)
         pygame.mixer.music.set_volume(volume)
         pygame.mixer.music.play(-1)
