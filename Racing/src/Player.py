@@ -17,33 +17,50 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self._play_area_rect = play_area_rect
         self.vel = [0, 0]
-        self.speed_up = [1, 1]
+        self.speed_up = [0, 0]
+        self.speed_low = -2
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, *size)
         self._image_id = "car"
         self._score = 0
         self._lives = 100
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
+        self._image_id = 'car_up'
 
     def update(self, action: list) -> None:
+        self.last_x = self.rect.x
+        self.last_y = self.rect.y
         if "UP" in action and self.rect.top > self._play_area_rect.top:
             self.move_up()
-            self.vel[1] += self.speed_up[1]
-            self.speed_up[1] -= 1
+            self.vel[1] -= self.speed_up[1]
+            self.speed_up[1] += 1
         elif "DOWN" in action and self.rect.bottom < self._play_area_rect.bottom:
             self.move_down()
-            self.vel[1] += self.speed_up[1]
-            self.speed_up[0] += 1
+            self.vel[1] += self.speed_low
+
         elif "LEFT" in action and self.rect.left > self._play_area_rect.left:
             self.move_left()
-            #self.vel[0] += self.speed_up[0]
-            self.speed_up[0] -= 1
+            self.vel[0] -= self.speed_up[0]
+            self.speed_up[0] += 1
         elif "RIGHT" in action and self.rect.right < self._play_area_rect.right:
             self.move_right()
-            #self.vel[0] += self.speed_up[0]
+            self.vel[0] += self.speed_up[0]
             self.speed_up[0] += 1
         else:
+            # 這可做慢慢降速
             self.vel = [0, 0]
-            self.speed_up = [0, 0]
+            self.speed_up[0] -= 2
+            self.speed_up[1] -= 2
+
+        if self.speed_up[0] > 15:
+            self.speed_up[0] = 15
+        elif self.speed_up[1] > 15:
+            self.speed_up[1] = 15
+        elif self.speed_up[0] < 0:
+            self.speed_up[0] = 0
+        elif self.speed_up[1] < 0:
+            self.speed_up[1] = 0
         self.rect.centerx += self.vel[0]
         self.rect.centery += self.vel[1]
 
@@ -75,14 +92,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_walls(self):
-        pass
+        self.rect.x = self.last_x
+        self.rect.y = self.last_y
 
     def collide_with_mobs(self):
         pass
 
     def collide_with_bullets(self):
         self._lives -= 10
-
 
     @property
     def game_object_data(self):
@@ -92,13 +109,13 @@ class Player(pygame.sprite.Sprite):
     @property
     def game_init_object_data(self):
         return [create_asset_init_data(image_id="car",
-                                      width=self.rect.width, height=self.rect.height,
-                                      file_path=PLAYER_PATH,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png"),
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_PATH,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car.png"),
                 create_asset_init_data(image_id="car_up",
-                                      width=self.rect.width, height=self.rect.height,
-                                      file_path=PLAYER_UP,
-                                      github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_up.png"),
+                                       width=self.rect.width, height=self.rect.height,
+                                       file_path=PLAYER_UP,
+                                       github_raw_url="https://raw.githubusercontent.com/LiPeggy/GameFramework/main/Racing/asset/image/car_up.png"),
                 create_asset_init_data(image_id="car_down",
                                        width=self.rect.width, height=self.rect.height,
                                        file_path=PLAYER_DOWN,
