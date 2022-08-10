@@ -2,3 +2,4 @@
 *.idea/*
 *FindTheWay/__pycache__/*
 *FindTheWay/src/__pycache__/*
+FindTheWay/ml/__pycache__/*
