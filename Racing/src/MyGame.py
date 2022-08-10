@@ -54,9 +54,9 @@ class MyGame(PaiaGame):
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
         self.treasures.add(*treasures)
-        # self.sound_controller.play_music(
-        #    music_path=path.join(ASSET_PATH, "sound/Desert.mp3",volume=1)
-        # hg)
+        self.sound_controller.play_music(
+            music_path=path.join(ASSET_PATH, "sound/Desert Theme.mp3")
+            , volume=1)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -122,11 +122,9 @@ class MyGame(PaiaGame):
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
         self.treasures.add(*treasures)
-        # self.sound_controller.play_music(
-        #    music_path=path.join(ASSET_PATH, "sound/Desert.mp3",volume=1)
-        # hg)
-
-
+        self.sound_controller.play_music(
+            music_path=path.join(ASSET_PATH, "sound/Desert Theme.mp3")
+            , volume=1)
 
     # 在這裡定義要回傳給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
