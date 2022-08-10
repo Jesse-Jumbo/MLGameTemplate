@@ -38,6 +38,7 @@ class MyGame(PaiaGame):
         self.mobs = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
+        self.props = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
         self.frame_to_end = frame_limit
@@ -82,10 +83,14 @@ class MyGame(PaiaGame):
             for mob in self.mobs:
                 if isinstance(mob, Mob):
                     self._create_bullet(is_player=False, init_pos=mob.rect.center)
+                    self._create_props()
+
+
         # 更新物件內部資訊
         self.bullets.update()
         self.player.update(action)
         self.mobs.update()
+        self.props.update()
         # 處理碰撞
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -299,6 +304,12 @@ class MyGame(PaiaGame):
         else:
             mobs_bullet = Bullet(is_player=False, init_pos=init_pos, play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
             self.bullets.add(mobs_bullet)
+    def _create_props(self, count: int = 8):
+        # 根據傳入的參數，決定建立幾個prop（莫認為8）
+        for i in range(count):
+            # 建立prop物件，並加入到prop的集合裡
+            prop = Prop("../asset/image/mob_1.png", (random.randint(0, WIDTH), 500), 40)
+            self.props.add(prop)
 
 
     def draw_rect(self, sprite):
