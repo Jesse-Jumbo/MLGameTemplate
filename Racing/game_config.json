@@ -31,7 +31,7 @@
       "help": "set the map number of game map."
     },
     {
-      "name": "sound",
+      "name": "is_sound",
       "verbose": "遊戲音效",
       "type": "str",
       "choices": [
@@ -44,8 +44,8 @@
           "value": "off"
         }
       ],
-      "help": "'on' can turn on the sound.",
-      "default": "off"
+      "help": "'off' can turn on the sound.",
+      "default": "on"
     }
   ]
 }

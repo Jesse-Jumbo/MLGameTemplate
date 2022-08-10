@@ -54,7 +54,9 @@ class MyGame(PaiaGame):
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
         self.treasures.add(*treasures)
-
+        #self.sound_controller.play_music(
+        #    music_path=path.join(ASSET_PATH, "sound/Desert.mp3",volume=1)
+        #hg)
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
         # 更新已使用的frame
@@ -151,7 +153,7 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        if
+        #if
         return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
