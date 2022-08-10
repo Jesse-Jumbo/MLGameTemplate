@@ -54,7 +54,9 @@ class MyGame(PaiaGame):
         if self.is_sound == "on":
             self.sound_controller = SoundController()
             # 播出聲音
-            self.sound_controller.play_music(music_path=path.join(ASSET_PATH, "sound", "music1.mp3"))
+            self.sound_controller.play_music(
+                music_path=path.join(ASSET_PATH, "sound", "music1.mp3")
+                , volume=0.5)
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50),
                              play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
