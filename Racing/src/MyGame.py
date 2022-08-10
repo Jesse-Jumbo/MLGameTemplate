@@ -39,7 +39,7 @@ class MyGame(PaiaGame):
         self.used_frame = 0
         self.frame_to_end = frame_limit
         self.record = 0
-        self.best_record = 999999999999999999999999999999999999999999999999999999
+        self.best_record = 0
         self.is_sound = is_sound
         self.map_no = map_no
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
@@ -54,9 +54,10 @@ class MyGame(PaiaGame):
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
         self.treasures.add(*treasures)
-        #self.sound_controller.play_music(
-        #    music_path=path.join(ASSET_PATH, "sound/Desert.mp3",volume=1)
-        #hg)
+        self.sound_controller.play_music(
+            music_path=path.join(ASSET_PATH, "sound/Desert Theme.mp3")
+            , volume=1)
+
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
         # 更新已使用的frame
@@ -81,6 +82,14 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
+        # 玩家和寶藏的碰撞
+        hits = pygame.sprite.spritecollide(self.player, self.treasures, False, pygame.sprite.collide_rect_ratio(0.8))
+        if hits:
+            self.record = self.used_frame
+            if self.best_record:
+                self.best_record = min(self.record, self.best_record)
+            else:
+                self.best_record = self.record
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -89,7 +98,7 @@ class MyGame(PaiaGame):
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
     def reset(self):
         print("reset MyGame")
-        # 重新初始化遊戲
+        # super().要繼承的父類別方法的名字(初始化父類別的參數)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
         self.scene = Scene(width=WIDTH, height=HEIGHT, color="#ffffff", bias_x=0, bias_y=0)
         # 宣告存放多個同類別物件的集合
@@ -97,8 +106,10 @@ class MyGame(PaiaGame):
         self.treasures = pygame.sprite.Group()
         # 宣告變數儲存遊戲中需紀錄的資訊
         self.used_frame = 0
-        self.record = self.used_frame
-        self.best_record = min(self.record, self.best_record)
+        self.frame_to_end = self.frame_to_end
+        self.record = 0
+        self.is_sound = self.is_sound
+        self.map_no = self.map_no
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
         if self.map_no:
             self.map = TiledMap(self.map_no)
@@ -111,6 +122,9 @@ class MyGame(PaiaGame):
         self.walls.add(*walls)
         treasures = self.map.create_init_obj_list(img_no=2, class_name=Treasure)
         self.treasures.add(*treasures)
+        self.sound_controller.play_music(
+            music_path=path.join(ASSET_PATH, "sound/Desert Theme.mp3")
+            , volume=1)
 
     # 在這裡定義要回傳給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
@@ -144,7 +158,9 @@ class MyGame(PaiaGame):
 
     # 獲取遊戲狀態的method，在這裡定義遊戲什麼時候是存活、結束、勝利
     def get_game_status(self):
-        if self.is_running:
+        if self.record:
+            status = GameStatus.GAME_PASS
+        elif self.is_running:
             status = GameStatus.GAME_ALIVE
         else:
             status = GameStatus.GAME_OVER
@@ -153,7 +169,8 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        #if
+        if self.record:
+            return False
         return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
@@ -181,9 +198,7 @@ class MyGame(PaiaGame):
                 scene_init_data["assets"].append(treasure.game_init_object_data)
         scene_init_data["assets"].extend(self.player.game_init_object_data)
 
-
         return scene_init_data
-
 
     # 獲取所有遊戲畫面的更新資訊
     @check_game_progress
@@ -223,7 +238,8 @@ class MyGame(PaiaGame):
                     "player": get_ai_name(0),
                     "record": self.record,
                     "used_frame": self.used_frame,
-                    "status": GameStatus.GAME_PASS
+                    "status": GameStatus.GAME_PASS,
+                    "best_record": self.best_record
                 }
             ]
         # 定義失敗的結果
@@ -234,7 +250,8 @@ class MyGame(PaiaGame):
                     "player": get_ai_name(0),
                     "record": self.record,
                     "used_frame": self.used_frame,
-                    "status": GameStatus.GAME_OVER
+                    "status": GameStatus.GAME_OVER,
+                    "best_record": self.best_record
                 }
             ]
 
