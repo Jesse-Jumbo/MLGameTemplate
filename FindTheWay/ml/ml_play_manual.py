@@ -24,7 +24,7 @@ class MLPlay:
         elif pygame.K_d in keyboard:
             action.append("RIGHT")
 
-        if pygame.K_f in keyboard:
+        if pygame.K_UP in keyboard:
             action.append("set_bomb")
 
         return action

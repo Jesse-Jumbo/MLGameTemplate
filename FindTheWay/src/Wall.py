@@ -1,6 +1,11 @@
+from os import path
+
 import pygame
 import random
-from mlgame.view.view_model import create_rect_view_data
+from mlgame.view.view_model import create_rect_view_data, create_asset_init_data, create_image_view_data
+
+EXPLOTION_PATH = path.join(path.dirname(__file__), "asset", "image", "explosion.png")
+
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, construction: dict, **kwargs):
@@ -24,11 +29,3 @@ class Wall(pygame.sprite.Sprite):
             , height=self.rect.height
             , color=self.color
             , angle=0)
-
-
-
-
-
-
-
-
