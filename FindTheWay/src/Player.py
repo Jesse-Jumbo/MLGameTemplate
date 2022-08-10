@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, size: tuple, play_area_rect: pygame.Rect):
         super().__init__()
         self._play_area_rect = play_area_rect
-        self._speed = 4
+        self._speed = 6
         self._init_pos = pos
         self.rect = pygame.Rect(*pos, 50, 50)
         self._score = 0
@@ -28,6 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.own_bombs = 0
 
     def update(self, action: list) -> None:
+        if self.used_frame % 60 == 0:
+            self.live -= 1
         self.used_frame += 1
         self.last_x = self.rect.x
         self.last_y = self.rect.y
@@ -97,12 +99,6 @@ class Player(pygame.sprite.Sprite):
 
     def collide_with_mobs(self):
         pass
-
-    def collide_with_bullets(self):
-        self.live -= 5
-        if self.live <= 0:
-            self.live = 0
-        print(self.live)
 
     def collide_with_treasure(self):
         self._score += 1

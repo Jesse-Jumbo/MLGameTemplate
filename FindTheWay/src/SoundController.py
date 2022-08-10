@@ -11,3 +11,5 @@ class SoundController:
     def play_sound(self, music_path: str, volume: float, maz_time: int) -> None:
         pygame.mixer.init()
         pygame.mixer.Sound(music_path).play(maxtime=maz_time).set_volume(volume)
+
+

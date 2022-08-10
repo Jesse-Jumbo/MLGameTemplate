@@ -50,6 +50,7 @@ class MyGame(PaiaGame):
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
+            print(self.sound_controller)
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 100), size=(50, 50),
                              play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
@@ -60,6 +61,8 @@ class MyGame(PaiaGame):
         self.treasures.add(*treasures)
         bombs = self.map.create_init_obj_list(img_no=83, class_name=Bomb)
         self.bombs.add(*bombs)
+        self.sound_controller.play_music(music_path=path.join(ASSET_PATH, "sound", "BGM.ogg"), volume=0.5)
+        self.all_treasures = 8
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": List}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -94,6 +97,7 @@ class MyGame(PaiaGame):
                 self.player.collide_with_bullets()
         hits = pygame.sprite.spritecollide(self.player, self.treasures, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
+            self.all_treasures -= 1
             self.player.collide_with_treasure()
         hits = pygame.sprite.groupcollide(self.bombs, self.walls, True, True, pygame.sprite.collide_rect_ratio(0.8))
         for bomb, walls in hits.items():
@@ -101,6 +105,7 @@ class MyGame(PaiaGame):
                 bomb.collide_with_walls(self.used_frame)
                 self.explosion = self.create_explosion(bomb.xy)
                 self.last_explosion_frame = self.used_frame
+                self.sound_controller.play_sound(music_path=path.join(ASSET_PATH, "sound", "bomb.wav"), volume=0.5, maz_time=100)
         hits = pygame.sprite.spritecollide(self.player, self.bombs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_bombs()
@@ -114,6 +119,7 @@ class MyGame(PaiaGame):
                 self.player.own_bombs -= 1
 
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
+    # TODO 新增結尾"Game Over"
     def reset(self):
         print("reset MyGame")
         # 重新初始化遊戲
@@ -155,13 +161,19 @@ class MyGame(PaiaGame):
         if self.is_running:
             status = GameStatus.GAME_ALIVE
         else:
-            status = GameStatus.GAME_OVER
+            if self.all_treasures != 0:
+                status = GameStatus.GAME_OVER
+            else:
+                status = GameStatus.GAME_PASS
         return status
 
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        return self.used_frame < self.frame_to_end
+        if self.all_treasures != 0:
+            return self.used_frame < self.frame_to_end
+        else:
+            return False
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊
     def get_scene_init_data(self):

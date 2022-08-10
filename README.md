@@ -146,4 +146,7 @@ python -m mlgame \
 
 ---
 
+### 使用物件連結:
+### 爆炸音效:https://opengameart.org/content/bombexplosion8bit
+
 coming soon
