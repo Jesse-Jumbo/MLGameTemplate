@@ -1,3 +1,4 @@
+import random
 from os import path
 
 import pygame
@@ -11,6 +12,7 @@ class Prop(pygame.sprite.Sprite):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
         self._image_id = image_id
+        self._pos = (random.randrange(0, (540 - self._size[1])), random.randrange(60, 120))
 
     @property
     def xy(self):
@@ -20,6 +22,7 @@ class Prop(pygame.sprite.Sprite):
     def game_object_data(self):
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
+
 
     @property
     def game_init_object_data(self):
