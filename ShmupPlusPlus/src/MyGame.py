@@ -21,6 +21,8 @@ WIDTH = 1000
 HEIGHT = 600
 
 
+def collide_hit_rect(one: pygame.sprite, two: pygame.sprite):
+    return one.rect.colliderect(two.hit_rect)
 # class 類別名稱(繼承的類別):
 # 這是遊戲的類別，用於建立遊戲的模板
 # def bullet(pos, size, play_area_rect):
@@ -30,7 +32,7 @@ HEIGHT = 600
 class MyGame(PaiaGame):
     # def 方法名稱(參數: 型態 = 預設值):
     # 定義遊戲的初始化
-    def __init__(self, user_num=1, frame_limit: int = 300, is_sound: str = "off", map_no: int = None, *args, **kwargs):
+    def __init__(self, user_num=1, frame_limit: int = 300, target_score: int = 500, is_sound: str = "off", map_no: int = None, *args, **kwargs):
         # super().要繼承的父類別方法的名字(初始化父類別的參數)
         super().__init__(user_num=user_num, *args, **kwargs)
         # 初始化場景(寬, 高, 背景顏色, x軸起始點, y軸起始點)
@@ -43,6 +45,7 @@ class MyGame(PaiaGame):
         self.used_frame = 0
         self.frame_to_end = frame_limit
         self.score = 0
+        self.target_score = target_score
         self.is_sound = is_sound
         self.map_no = map_no
         # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
@@ -50,6 +53,10 @@ class MyGame(PaiaGame):
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
+            # 播出聲音
+            self.sound_controller.play_music(
+                music_path=path.join(ASSET_PATH, "sound", "music1.mp3")
+                , volume=0.5)
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50),
                              play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
@@ -57,15 +64,16 @@ class MyGame(PaiaGame):
         for i in range(random.randrange(1, 3)):
             self._create_mobs(random.randrange(50))
         for i in range(3):
-            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(190, 230)), init_size=(70, 45))
+            wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(190, 230)), init_size=(90, 45))
             self.walls.add(wall)
+
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": list}）或檢查程式流程的檢查
     def update(self, commands: dict):  # update 更新
         # 更新已使用的frame
         self.used_frame += 1
         # 更新遊戲的分數
-        self.score = self.player.score
+        self.score = self.player._score
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
@@ -73,14 +81,15 @@ class MyGame(PaiaGame):
             if "Shoot" in ai_1p_cmd:
                 self._create_bullet(is_player=True, init_pos=self.player.rect.center)
         else:
-            action = "NONE"
+            action = ["NONE"]
         # print(ai_1p_cmd)
 
         # 讓mob不會只出現在開局
-        self._create_mobs(1)
+        if len(self.mobs) < 20:
+            self._create_mobs(10)
 
         # 每秒子彈速度
-        if self.used_frame % 30 == 0:
+        if self.used_frame % 50 == 0:
             # 怪物的子彈
             for mob in self.mobs:
                 if isinstance(mob, Mob):
@@ -96,6 +105,9 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
             self.player.collide_with_walls()
+        # 子彈和牆
+        hits = pygame.sprite.groupcollide(self.bullets, self.walls, True, False, pygame.sprite.collide_rect_ratio(0.8))
+
         # 玩家and怪物
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -103,7 +115,7 @@ class MyGame(PaiaGame):
         # 玩家and子彈
         hits = pygame.sprite.spritecollide(self.player, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
         for hit in hits:
-            if not hit.is_player:  # 不是玩家子彈
+            if not hits[0].is_player:  # 不是玩家子彈
                 hit.kill()  # 刪除子彈
                 # 玩家碰到怪物子彈 玩家消失 怪物碰到子彈 safe
                 self.player.collide_with_bullets()
@@ -111,21 +123,18 @@ class MyGame(PaiaGame):
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, False, False, pygame.sprite.collide_rect_ratio(0.8))
         for mob, bullet in hits.items():
             if bullet[0].is_player:
+                self.score += 10
                 mob.kill()
                 bullet[0].kill()
                 self.player.bullets_with_mobs()
         # wall and bullet
-        hits = pygame.sprite.spritecollide(self.walls, self.player, self.mobs, self.bullets, False, pygame.sprite.collide_rect_ratio(0.8))
+        hits = pygame.sprite.spritecollide(self.player, self.walls, False, collide_hit_rect)
         if hits:
             self.player.collide_with_walls()
             # print(bullet)
         # if hits:        #是玩家子彈
         #     self.mods.collide_with_player()  #怪物碰子彈怪物消失 玩家碰到子彈safe
 
-        if self.player.HP <= 0:
-            return "RESET"
-        if self.score >= 1000:
-            return "RESET"
         if not self.is_running:
             return "RESET"
 
@@ -172,9 +181,9 @@ class MyGame(PaiaGame):
 
     # 獲取遊戲狀態的method，在這裡定義遊戲什麼時候是存活、結束、勝利
     def get_game_status(self):
-        if not self.is_running or self.player.HP <= 0:
+        if self.player.HP <= 0:
             status = GameStatus.GAME_OVER
-        elif self.score >= 1000:
+        elif self.score >= self.target_score:
             status = GameStatus.GAME_PASS
         else:
             status = GameStatus.GAME_ALIVE
@@ -183,8 +192,10 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        # if self.player.HP <= 0:
-        #     return False
+        if self.player.HP <= 0:
+            return False
+        elif self.player.score > self.target_score:
+            return False
         return self.used_frame < self.frame_to_end
 
     # 獲取所有遊戲圖片的資訊，在這裡紀錄所有遊戲內圖片的資訊

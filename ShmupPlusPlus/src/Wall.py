@@ -7,6 +7,8 @@ class Wall(pygame.sprite.Sprite):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
         self.color = "#0000ff"
+        self.hit_rect = pygame.Rect(0, 0, self.rect.width - 2, self.rect.height - 2)
+        self.hit_rect.center = self.rect.center
 
     @property
     def xy(self):
