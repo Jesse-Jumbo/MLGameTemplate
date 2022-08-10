@@ -53,6 +53,8 @@ class MyGame(PaiaGame):
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
+            # 播出聲音
+            self.sound_controller.play_music(music_path=path.join(ASSET_PATH, "sound", "music1.mp3"))
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50),
                              play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
@@ -62,6 +64,7 @@ class MyGame(PaiaGame):
         for i in range(3):
             wall = Wall(init_pos=(random.randrange(WIDTH - 50), random.randrange(190, 230)), init_size=(90, 45))
             self.walls.add(wall)
+
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": list}）或檢查程式流程的檢查
     def update(self, commands: dict):  # update 更新

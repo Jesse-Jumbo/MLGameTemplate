@@ -7,7 +7,10 @@ Shmup（shoot-em-up）PlusPlus，一款主角可無限殺敵的遊戲。
 玩家要躲避怪物下的炸彈，擊殺在天上移動的怪物，獲取更高的積分
 
 ---
+## 圖片來源
 
+## 聲音來源
+https://opengameart.org/content/fantastic-japanese-style-shoot-em-up-game-music
 ## Requirements
 
 - Python==3.9
