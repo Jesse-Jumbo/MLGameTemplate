@@ -50,6 +50,8 @@ class MyGame(PaiaGame):
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
             self.sound_controller = SoundController()
+            print(self.sound_controller)
+
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         for i in range(random.randrange(1, 5)):
@@ -62,6 +64,7 @@ class MyGame(PaiaGame):
         for i in range(11):
             wall = Wall(init_pos=((i*54), 300), init_size=(54, 20))
             self.walls.add(wall)
+        self.sound_controller.play_music(music_path=path.join(ASSET_PATH, "sound", "彩虹貓.mp3"), volume=0.2)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": str}）或檢查程式流程的檢查
     def update(self, commands: dict):
@@ -83,7 +86,7 @@ class MyGame(PaiaGame):
             for mob in self.mobs:
                 if isinstance(mob, Mob):
                     self._create_bullet(is_player=False, init_pos=mob.rect.center)
-                    self._create_props()
+            self._create_props(10)
 
 
         # 更新物件內部資訊
@@ -308,7 +311,7 @@ class MyGame(PaiaGame):
         # 根據傳入的參數，決定建立幾個prop（莫認為8）
         for i in range(count):
             # 建立prop物件，並加入到prop的集合裡
-            prop = Prop("../asset/image/mob_1.png", (random.randint(0, WIDTH), 500), 40)
+            prop = Prop("../asset/image/prop.jpg", (random.randint(0, WIDTH), 500), (40, 40))
             self.props.add(prop)
 
 
