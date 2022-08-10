@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self._used_frame = 0
         self._last_shoot_frame = 0
         self._shield = 100
-        self._lives = 3
+        self._lives = 1
         self._is_alive = True
         self._is_shoot = False
 

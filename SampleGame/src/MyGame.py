@@ -6,7 +6,7 @@ from mlgame.game.paia_game import PaiaGame, GameResultState, GameStatus
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
-    create_image_view_data
+    create_image_view_data, create_rect_view_data
 
 from .Bullet import Bullet
 from .Mob import Mob
@@ -212,7 +212,15 @@ class MyGame(PaiaGame):
             create_text_view_data(
                 content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="24px Arial")
             , create_text_view_data(
-                content=f"Lives: {str(self.player.lives)}", x=5, y=5, color="#21A1F1", font_style="24px Arial")]
+                content=f"Lives: {str(self.player.lives)}", x=5, y=5, color="#22390A", font_style="24px Arial")
+            , create_text_view_data(
+                content=f"Shield: {self.player.shield}", x=5, y=HEIGHT-30, color="#ff0000", font_style="24px Arial")
+            ]
+        _x = 110
+        for i in range(self.player.shield // 10):
+            foregrounds.append(create_rect_view_data(
+                name="Shield", x=_x, y=HEIGHT-25, width= 5, height= 20, color="#ff0000", angle=0))
+            _x += 7
         toggle_objs = [create_text_view_data(
             f"Timer: {str(self.frame_to_end - self.used_frame)} s", WIDTH - 150, 5, "#FFA500", "24px Arial BOLD")]
         scene_progress = create_scene_progress_data(
