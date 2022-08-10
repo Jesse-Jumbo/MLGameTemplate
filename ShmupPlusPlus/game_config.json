@@ -22,6 +22,15 @@
       "help": "set the frame number of game frame limit."
     },
     {
+      "name": "target_score",
+      "verbose": "目標分數",
+      "type": "int",
+      "max": 30000,
+      "min": 30,
+      "default": 500,
+      "help": "set the target score to game win."
+    },
+    {
       "name": "sound",
       "verbose": "遊戲音效",
       "type": "str",

@@ -25,13 +25,10 @@ class MLPlay:
         elif pygame.K_d in keyboard or pygame.K_RIGHT in keyboard:
             action.append("RIGHT")
 
-        if pygame.K_f in keyboard or pygame.K_RIGHT in keyboard:
+        if pygame.K_f in keyboard:
             action.append("Shoot")
 
         return action
-        # else:
-        #     action = "NONE"
-
 
     def reset(self):
         """
