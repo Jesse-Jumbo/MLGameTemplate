@@ -22,7 +22,16 @@
       "help": "set the frame number of game frame limit."
     },
     {
-      "name": "sound",
+      "name": "map_no",
+      "verbose": "地圖編號",
+      "type": "int",
+      "max": 1,
+      "min": 1,
+      "default": 1,
+      "help": "set the map number of game map."
+    },
+    {
+      "name": "is_sound",
       "verbose": "遊戲音效",
       "type": "str",
       "choices": [
@@ -35,8 +44,8 @@
           "value": "off"
         }
       ],
-      "help": "'on' can turn on the sound.",
-      "default": "off"
+      "help": "'off' can turn on the sound.",
+      "default": "on"
     }
   ]
 }

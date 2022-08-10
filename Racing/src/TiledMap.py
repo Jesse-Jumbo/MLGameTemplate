@@ -2,6 +2,7 @@ from os import path
 
 import pytmx
 
+
 class TiledMap:
     def __init__(self, map_no):
         map_path = path.join(path.dirname(__file__), f"../asset/map/map_0{map_no}.tmx")
