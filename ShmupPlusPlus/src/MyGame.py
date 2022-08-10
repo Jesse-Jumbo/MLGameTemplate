@@ -89,7 +89,7 @@ class MyGame(PaiaGame):
             self._create_mobs(10)
 
         # 每秒子彈速度
-        if self.used_frame % 30 == 0:
+        if self.used_frame % 50 == 0:
             # 怪物的子彈
             for mob in self.mobs:
                 if isinstance(mob, Mob):

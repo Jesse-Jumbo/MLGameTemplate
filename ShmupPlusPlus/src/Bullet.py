@@ -14,7 +14,7 @@ class Bullet(pygame.sprite.Sprite):
             self.color = "#000000"
 
     def update(self, *args, **kwargs) -> None:
-        if self.is_player:
+        if self.is_player:  # player bullet
             self.rect.y -= 10
         else:
             self.rect.y += 10

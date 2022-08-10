@@ -11,6 +11,7 @@ Shmup（shoot-em-up）PlusPlus，一款主角可無限殺敵的遊戲。
 
 ## 聲音來源
 https://opengameart.org/content/fantastic-japanese-style-shoot-em-up-game-music
+https://opengameart.org/content/gunloop-8bit
 ## Requirements
 
 - Python==3.9
