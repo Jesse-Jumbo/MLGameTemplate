@@ -47,7 +47,15 @@ class Mob(pygame.sprite.Sprite):
 
     @property
     def game_init_object_data(self):
-        return create_asset_init_data(image_id=self._image_id,
-                                      width=self.rect.width, height=self.rect.height,
-                                      file_path=path.join(MOB_PATH, f"{self._image_id}.png"),
-                                      github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/{self._image_id}.png")
+        return [create_asset_init_data(
+            image_id="mob_0"
+            , width=self.rect.width
+            , height=self.rect.height
+            , file_path=path.join(MOB_PATH, "mob_0.png")
+            , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/mob_0.png")
+            , create_asset_init_data(
+            image_id="mob_1"
+            , width=self.rect.width
+            , height=self.rect.height
+            , file_path=path.join(MOB_PATH, "mob_1.png")
+            , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/mob_1.png")]
