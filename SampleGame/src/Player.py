@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self._used_frame = 0
         self._last_shoot_frame = 0
         self._shield = 100
-        self._lives = 1
+        self._lives = 3
         self._is_alive = True
         self._is_shoot = False
 
@@ -93,11 +93,8 @@ class Player(pygame.sprite.Sprite):
     def reset(self):
         self.rect.topleft = self._init_pos
 
-    def collide_with_walls(self):
-        pass
-
     def collide_with_mobs(self):
-        pass
+        self._is_alive = False
 
     def collide_with_bullets(self):
         self._shield -= 10

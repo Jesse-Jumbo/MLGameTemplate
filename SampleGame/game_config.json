@@ -1,8 +1,8 @@
 {
-  "game_name": "MyGame",
-  "version": "0.0.1",
-  "url": "https://github.com/Jesse-Jumbo/GameFramework",
-  "description": "一個打造PAIAGame的簡易模板",
+  "game_name": "SampleGame",
+  "version": "0.1.0",
+  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/feature/SampleGame",
+  "description": "一個簡易完整的遊戲",
   "logo": [
     "./asset/image/TreasureChest.svg",
     "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/TreasureChest.svg"
@@ -27,7 +27,7 @@
       "type": "int",
       "max": 30000,
       "min": 30,
-      "default": 3000,
+      "default": 300,
       "help": "set the target score of game to win."
     },
     {

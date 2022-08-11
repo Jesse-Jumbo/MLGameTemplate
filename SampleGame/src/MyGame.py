@@ -51,7 +51,7 @@ class MyGame(PaiaGame):
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._create_mobs(8)
         for i in range(random.randrange(10)):
-            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
+            wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-100)), init_size=(50, 50))
             self.walls.add(wall)
         # 撥放音樂
         self.sound_controller.play_music(
@@ -82,11 +82,8 @@ class MyGame(PaiaGame):
         self.player.update(action)
         self.mobs.update()
         self.bullets.update()
+        self.walls.update()
         # 處理碰撞
-        # 玩家和牆
-        hits = pygame.sprite.spritecollide(self.player, self.walls, False, pygame.sprite.collide_rect_ratio(0.8))
-        if hits:
-            self.player.collide_with_walls()
         # 玩家和敵人
         hits = pygame.sprite.spritecollide(self.player, self.mobs, True, pygame.sprite.collide_rect_ratio(0.8))
         if hits:
@@ -107,6 +104,13 @@ class MyGame(PaiaGame):
                         mob.collide_with_bullets()
                         self._create_mobs()
                         self.player.kill_mob(100 - mob.size)
+        # 牆和子彈
+        hits = pygame.sprite.groupcollide(self.bullets, self.walls, False, False, pygame.sprite.collide_rect_ratio(0.8))
+        for bullet, walls in hits.items():
+            if isinstance(walls[0], Wall):
+                if walls[0].shield:
+                    bullet.kill()
+                    walls[0].collide_with_bullet()
 
         # 判定是否重置遊戲
         if not self.is_running:
@@ -155,7 +159,9 @@ class MyGame(PaiaGame):
 
     # 獲取遊戲狀態的method，在這裡定義遊戲什麼時候是存活、結束、勝利
     def get_game_status(self):
-        if self.is_running:
+        if self.score >= self.target_score:
+            status = GameStatus.GAME_PASS
+        elif self.is_running:
             status = GameStatus.GAME_ALIVE
         else:
             status = GameStatus.GAME_OVER
@@ -164,7 +170,7 @@ class MyGame(PaiaGame):
     # 若is_running == False, 重置或結束遊戲
     @property
     def is_running(self):
-        if self.player.is_alive:
+        if self.player.is_alive and self.score < self.target_score:
             return self.used_frame < self.frame_to_end
         else:
             return False
@@ -190,7 +196,8 @@ class MyGame(PaiaGame):
                            }
         for mob in self.mobs:
             if isinstance(mob, Mob):
-                scene_init_data["assets"].append(mob.game_init_object_data)
+                scene_init_data["assets"].extend(mob.game_init_object_data)
+                break
         scene_init_data["assets"].append(self.player.game_init_object_data)
         return scene_init_data
 
@@ -201,12 +208,12 @@ class MyGame(PaiaGame):
         Get the position of MyGame objects for drawing on the web
         """
         game_obj_list = []
-        for wall in self.walls:
-            if isinstance(wall, Wall):
-               game_obj_list.append(wall.game_object_data)
         for bullet in self.bullets:
             if isinstance(bullet, Bullet):
                 game_obj_list.append(bullet.game_object_data)
+        for wall in self.walls:
+            if isinstance(wall, Wall):
+                game_obj_list.append(wall.game_object_data)
         for mob in self.mobs:
             if isinstance(mob, Mob):
                 game_obj_list.append(mob.game_object_data)
@@ -219,7 +226,7 @@ class MyGame(PaiaGame):
                 content=f"Lives: {str(self.player.lives)}", x=5, y=5, color="#22390A", font_style="24px Arial")
             , create_text_view_data(
                 content=f"Shield: {self.player.shield}", x=5, y=HEIGHT-30, color="#ff0000", font_style="24px Arial")
-            ]
+        ]
         _x = 110
         for i in range(self.player.shield // 10):
             foregrounds.append(create_rect_view_data(
