@@ -228,7 +228,7 @@ class MyGame(PaiaGame):
 
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
     def _create_mobs(self, count: int = 1):
-        # 根據傳入的參數，決定建立幾個mob（莫認為8）
+        # 根據傳入的參數，決定建立幾個mob（莫認為1）
         for i in range(count):
             # 建立mob物件，並加入到mob的集合裡
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
