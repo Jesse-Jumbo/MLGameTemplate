@@ -1,5 +1,0 @@
-*venv/*
-*.idea/*
-*ShmupSharp/__pycache__/*
-*ShmupSharp/src/__pycache__/*
-*ShmupSharp/ml/__pycache__/*
