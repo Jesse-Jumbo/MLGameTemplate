@@ -27,8 +27,6 @@ class Player(pygame.sprite.Sprite):
             self.act(action)
         if self._shield <= 0:
             self._lives -= 1
-            self._shield = 100
-            self.reset()
         if self._lives <= 0:
             self._is_alive = False
 

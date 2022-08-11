@@ -1,7 +1,7 @@
 {
-  "game_name": "SampleGame",
-  "version": "0.1.3",
-  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/feature/SampleGame",
+  "game_name": "TutorialGame",
+  "version": "0.1.2",
+  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/feature/TutorialGame",
   "description": "一個簡易完整的遊戲",
   "logo": [
     "./asset/image/TreasureChest.svg",
