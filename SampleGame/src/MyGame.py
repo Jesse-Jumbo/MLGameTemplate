@@ -54,22 +54,14 @@ class MyGame(PaiaGame):
             wall = Wall(init_pos=(random.randrange(WIDTH-50), random.randrange(HEIGHT-50)), init_size=(50, 50))
             self.walls.add(wall)
         # 撥放音樂
-        # print(path.join(ASSET_PATH, "sound/cauliflower.wav"))
-        # TODO 改音樂
-        # self.sound_controller.play_music(
-        #     music_path=path.join(ASSET_PATH, "sound/Mahjongg BGM 01 N163.ogg")
-        #     , volume=0.4)
+        self.sound_controller.play_music(
+            music_path=path.join(ASSET_PATH, "sound/bgm.ogg")
+            , volume=0.4)
 
     # 在這裡將遊戲內所有的物件進行或檢查是否更新（commands={"1P": list}）或檢查程式流程的檢查
     def update(self, commands: dict):
         # 更新已使用的frame
         self.used_frame += 1
-        # TEST
-        if self.used_frame % 30 == 0:
-            self.sound_controller.play_sound(
-            music_path=path.join(ASSET_PATH, "sound/Mahjongg BGM 01 N163.ogg")
-            , volume=0.4, maz_time=100)
-
         # 更新遊戲的分數
         self.score = self.player.score
         # 更新ＡＩ輸入的指令(command)動作
