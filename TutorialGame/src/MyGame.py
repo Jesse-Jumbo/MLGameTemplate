@@ -37,11 +37,11 @@ class MyGame(PaiaGame):
         self.target_score = target_score
         self.is_sound = is_sound
         self.map_no = map_no
-        # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
+        # 若有傳入地圖編號，則建立地圖
         if self.map_no:
             self.map = TiledMap(self.map_no)
         if self.is_sound == "on":
-            self.sound_controller = SoundController()
+            self.sound_controller = SoundController(is_sound=True)
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._create_mobs(8)
@@ -228,7 +228,7 @@ class MyGame(PaiaGame):
 
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
     def _create_mobs(self, count: int = 1):
-        # 根據傳入的參數，決定建立幾個mob（莫認為8）
+        # 根據傳入的參數，決定建立幾個mob（莫認為1）
         for i in range(count):
             # 建立mob物件，並加入到mob的集合裡
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
