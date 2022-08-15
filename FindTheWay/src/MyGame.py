@@ -74,7 +74,7 @@ class MyGame(PaiaGame):
         ai_1p_cmd = commands[get_ai_name(0)]
         if ai_1p_cmd is not None:
             action = ai_1p_cmd
-            if self.used_frame % 15 == 0:
+            if self.used_frame % 6 == 0:
                 self.cooldown = True
             else:
                 self.cooldown = False
@@ -225,7 +225,7 @@ class MyGame(PaiaGame):
         for bomb in self.bombs:
             if isinstance(bomb, Bomb):
                 game_obj_list.append(bomb.game_object_data)
-        if self.explosion and self.used_frame - self.last_explosion_frame < 300:
+        if self.explosion and self.used_frame - self.last_explosion_frame < 30:
             game_obj_list.append(self.explosion)
         game_obj_list.append(self.player.game_object_data)
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH - 50, height=HEIGHT - 50)]
