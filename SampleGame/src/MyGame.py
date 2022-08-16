@@ -12,7 +12,6 @@ from GameFramework.SoundController import SoundController, create_music_data
 from .Bullet import Bullet
 from .Mob import Mob
 from .Player import Player
-from .Prop import Prop
 from .TiledMap import TiledMap
 from .Wall import Wall
 
