@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self._init_pos
 
     def collide_with_mobs(self):
-        self._lives -= 1
+        self._is_alive = False
 
     def collide_with_bullets(self):
         self._shield -= 10

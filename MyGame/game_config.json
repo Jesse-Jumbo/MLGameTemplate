@@ -1,6 +1,6 @@
 {
   "game_name": "MyGame",
-  "version": "0.1.3",
+  "version": "0.1.2",
   "url": "https://github.com/Jesse-Jumbo/GameFramework",
   "description": "一個打造PAIAGame的簡易模板",
   "logo": [
@@ -22,7 +22,7 @@
       "help": "set the frame number of game frame limit."
     },
     {
-      "name": "sound",
+      "name": "is_sound",
       "verbose": "遊戲音效",
       "type": "str",
       "choices": [
