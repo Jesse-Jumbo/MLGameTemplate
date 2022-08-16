@@ -8,9 +8,9 @@ from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
     create_image_view_data, create_rect_view_data
 
+from GameFramework.SoundController import SoundController, create_music_data
 from .Mob import Mob
 from .Player import Player
-from .SoundController import SoundController
 from .TiledMap import TiledMap
 
 ASSET_PATH = path.join(path.dirname(__file__), "../asset")
@@ -37,11 +37,13 @@ class MyGame(PaiaGame):
         self.target_score = target_score
         self.is_sound = is_sound
         self.map_no = map_no
-        # 若有傳入地圖編號和開啟聲音的參數，則建立地圖和音效物件
+        # 若有傳入地圖編號，則建立地圖
         if self.map_no:
             self.map = TiledMap(self.map_no)
-        if self.is_sound == "on":
-            self.sound_controller = SoundController()
+        if is_sound == "on":
+            self.is_sound = True
+        # 建立聲音物件
+        self.sound_controller = SoundController(self.is_sound, self.get_music_data())
         # 建立遊戲物件，並加入該物件的集合
         self.player = Player(pos=(WIDTH // 2, HEIGHT - 80), size=(50, 50), play_area_rect=pygame.Rect(0, 0, WIDTH, HEIGHT))
         self._create_mobs(8)
@@ -79,8 +81,12 @@ class MyGame(PaiaGame):
     # update回傳"RESET"時執行，在這裡定義遊戲重置會執行的內容
     def reset(self):
         print("reset MyGame")
+        if self.is_sound:
+            is_sound = "on"
+        else:
+            is_sound = "off"
         # 重新初始化遊戲
-        self.__init__(frame_limit=self.frame_to_end, is_sound=self.is_sound, map_no=self.map_no)
+        self.__init__(frame_limit=self.frame_to_end, is_sound=is_sound, map_no=self.map_no)
 
     # 在這裡定義要回傳給ＡＩ哪些資料
     def get_data_from_game_to_player(self):
@@ -233,3 +239,6 @@ class MyGame(PaiaGame):
             # 建立mob物件，並加入到mob的集合裡
             mob = Mob(pygame.Rect(0, -100, WIDTH, HEIGHT+100))
             self.mobs.add(mob)
+
+    def get_music_data(self):
+        return [create_music_data(music_id="test", music_path=path.join(ASSET_PATH, "sound/bgm.ogg"))]
