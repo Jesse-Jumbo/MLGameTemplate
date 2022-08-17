@@ -1,26 +1,21 @@
 import random
 from os import path
 
-import pygame
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
+
+from GameFramework.game_role.Mob import Mob
 
 MOB_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 
 
-class Mob(pygame.sprite.Sprite):
-    def __init__(self, play_area_rect: pygame.Rect):
-        super().__init__()
-        self._play_area_rect = play_area_rect
-        self._size = random.choice([(30, 30), (35, 35), (40, 40), (45, 45), (50, 50), (55, 55), (60, 60)])
-        self._pos = (random.randrange(0, (800 - self._size[1])), random.randrange(60, 120))
-        self.rect = pygame.Rect(*self._pos, *self._size)
-        self.img_index = random.randrange(0, 2)
-        self._image_id = f"mob_{self.img_index}"
-        self.image = pygame.image.load(path.join(MOB_PATH, f"{self._image_id}.png"))
-        self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
+class SampleMob(Mob):
+    def __init__(self, construction: dict, **kwargs):
+        super().__init__(construction, **kwargs)
+        self._play_area_rect = kwargs["play_area_rect"]
+        self._vel.x = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
 
     def update(self, *args, **kwargs) -> None:
-        self.rect.x += self._x_speed
+        self.rect.x += self._vel.x
 
         if self.rect.left < self._play_area_rect.left:
             is_out = True
@@ -30,32 +25,18 @@ class Mob(pygame.sprite.Sprite):
             is_out = False
 
         if is_out:
-            self._x_speed *= -1
-            self.rect.x += self._x_speed
-            self._x_speed = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
+            self._vel.x *= -1
+            self.rect.x += self._vel.x
+            self._vel.x = random.choice([random.randrange(-4, 0), random.randrange(1, 5)])
 
-    def reset(self):
-        self.__init__(self._play_area_rect)
+    def collide_with_bullets(self) -> None:
+        self.kill()
 
-    @property
-    def xy(self):
-        return self.rect.topleft
-
-    @property
-    def center(self):
-        return self.rect.center
-
-    @property
-    def size(self):
-        return self._size[0]
-
-    @property
-    def game_object_data(self):
+    def get_obj_progress_data(self) -> dict or list:
         return create_image_view_data(image_id=self._image_id, x=self.rect.x, y=self.rect.y,
                                       width=self.rect.width, height=self.rect.height, angle=0)
 
-    @property
-    def game_init_object_data(self):
+    def get_obj_init_data(self) -> dict or list:
         return [
             create_asset_init_data(
                 image_id="mob_0"
@@ -71,5 +52,5 @@ class Mob(pygame.sprite.Sprite):
                 , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/mob_1.png")
         ]
 
-    def collide_with_bullets(self):
-        self.kill()
+    def get_data_from_obj_to_game(self) -> dict:
+        return {"x": self.rect.x, "y": self.rect.y}

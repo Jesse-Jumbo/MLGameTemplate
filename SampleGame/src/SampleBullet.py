@@ -1,14 +1,15 @@
-import pygame
 from mlgame.view.view_model import create_rect_view_data
 
+from GameFramework.Prop import Prop
 
-class Bullet(pygame.sprite.Sprite):
-    def __init__(self, is_player: bool, init_pos: tuple, play_rect_area: pygame.Rect):
-        super().__init__()
-        self.rect = pygame.Rect(*init_pos, 8, 8)
-        self.play_rect_area = play_rect_area
-        self.is_player = is_player
-        if is_player:
+
+class SampleBullet(Prop):
+    def __init__(self, construction: dict, **kwargs):
+        super().__init__(construction, **kwargs)
+        self.rect.center = construction["_init_pos"]
+        self.play_rect_area = kwargs["play_rect_area"]
+        self.is_player = kwargs["is_player"]
+        if self.is_player:
             self.color = "#21A1F1"
         else:
             self.color = "#FFA500"
@@ -24,19 +25,17 @@ class Bullet(pygame.sprite.Sprite):
         elif self.rect.top >= self.play_rect_area.bottom:
             is_out = True
         else:
-            is_out= False
+            is_out = False
 
         if is_out:
             self.kill()
 
-    @property
-    def xy(self):
-        return self.rect.topleft
+    def get_data_from_obj_to_game(self) -> dict:
+        return {"x": self.rect.x, "y": self.rect.y}
 
-    @property
-    def game_object_data(self):
+    def get_obj_progress_data(self):
         return create_rect_view_data(
-            name="bullet"
+            name=self._image_id
             , x=self.rect.x
             , y=self.rect.y
             , width=self.rect.width
@@ -44,10 +43,5 @@ class Bullet(pygame.sprite.Sprite):
             , color=self.color
             , angle=0)
 
-
-
-
-
-
-
-
+    def get_obj_init_data(self) -> dict or list:
+        pass

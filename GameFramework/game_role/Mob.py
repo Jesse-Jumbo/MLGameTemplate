@@ -13,7 +13,7 @@ class Mob(pygame.sprite.Sprite):
         :param kwargs:
         """
         super().__init__()
-        self.image_id = "mob"
+        self._image_id = f"mob_{construction['_id']}"
         self.angle = 0
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
         self._origin_center = self.rect.center
@@ -43,62 +43,106 @@ class Mob(pygame.sprite.Sprite):
         raise Exception("Please overwrite update")
 
     def reset(self) -> None:
+        """
+        Reset Mob center = origin_center
+        :return:
+        """
         self.rect.center = self._origin_center
 
-    def act(self) -> None:
-        pass
+    def act(self, action: list) -> None:
+        raise Exception("Please overwrite act")
 
     def move_right(self) -> None:
-        pass
+        raise Exception("Please overwrite move_right")
 
     def move_left(self) -> None:
-        pass
+        raise Exception("Please overwrite move_left")
 
     def move_down(self) -> None:
-        pass
+        raise Exception("Please overwrite move_down")
 
     def move_up(self) -> None:
-        pass
+        raise Exception("Please overwrite move_up")
 
     def shoot(self) -> None:
+        """
+        _is_shoot = True
+        :return:
+        """
         if not self._is_shoot and self._used_frame - self._last_shoot_frame > 10:
             self._last_shoot_frame = self._used_frame
             self._is_shoot = True
 
     def stop_shoot(self) -> None:
+        """
+        _is_shoot = False
+        :return:
+        """
         self._is_shoot = False
 
     def collide_with_walls(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_walls")
 
     def collide_with_bullets(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_bullets")
 
     def collide_with_players(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_players")
+
+    def collide_with_prop(self) -> None:
+        raise Exception("Please overwrite collide_with_prop")
 
     def get_lives(self) -> int:
+        """
+        :return: _lives
+        """
         return self._lives
 
     def get_shield(self) -> int:
+        """
+        :return: _shield
+        """
         return self._shield
 
     def get_is_alive(self) -> bool:
+        """
+        :return: _is_alive
+        """
         return self._is_alive
 
     def get_is_shoot(self) -> bool:
+        """
+        :return: _is_shoot
+        """
         return self._is_shoot
 
     def set_is_shoot(self, is_shoot: bool) -> None:
+        """
+        _is_shoot = is_shoot
+        :param is_shoot:
+        :return:
+        """
         if type(is_shoot) == bool:
             self._is_shoot = is_shoot
         else:
             raise TypeError('is_shoot need bool')
 
     def get_xy(self) -> tuple:
+        """
+        :return: topleft
+        """
         return self.rect.topleft
 
+    def get_size(self) -> tuple:
+        """
+        :return: width, height
+        """
+        return self.rect.width, self.rect.height
+
     def get_center(self) -> tuple:
+        """
+        :return: center
+        """
         return self.rect.center
 
     def get_data_from_obj_to_game(self) -> dict:
@@ -124,4 +168,5 @@ class Mob(pygame.sprite.Sprite):
         使用view_model函式，建立符合mlgame物件初始資料格式的資料，在遊戲主程式初始畫面資訊時被調用
         :return:
         """
-        raise Exception("Please overwrite get_obj_init_data")
+        raise Exception("Please overwrite get_obj_progress_data")
+

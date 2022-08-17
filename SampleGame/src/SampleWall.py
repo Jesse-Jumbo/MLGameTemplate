@@ -1,35 +1,27 @@
 import random
 
-import pygame
 from mlgame.view.view_model import create_rect_view_data
+from GameFramework.Prop import Prop
 
 
-class Wall(pygame.sprite.Sprite):
-    def __init__(self, init_pos: tuple, init_size: tuple):
-        super().__init__()
-        self.rect = pygame.Rect(*init_pos, *init_size)
+class SampleWall(Prop):
+    def __init__(self, construction: dict, **kwargs):
+        super().__init__(construction, **kwargs)
         self.color = "#ff0000"
-        self._shield = 100
 
     def update(self, *args, **kwargs) -> None:
         if self._shield <= 0:
             self.kill()
 
-    def collide_with_bullet(self):
+    def collide_with_bullets(self):
         self._shield -= random.randrange(100)
 
-    @property
-    def shield(self):
-        return self._shield
+    def get_data_from_obj_to_game(self) -> dict:
+        return {"x": self.rect.x, "y": self.rect.y}
 
-    @property
-    def xy(self):
-        return self.rect.topleft
-
-    @property
-    def game_object_data(self):
+    def get_obj_progress_data(self) -> dict or list:
         return create_rect_view_data(
-            name="wall"
+            name=self._image_id
             , x=self.rect.x
             , y=self.rect.y
             , width=self.rect.width
@@ -37,10 +29,5 @@ class Wall(pygame.sprite.Sprite):
             , color=self.color
             , angle=0)
 
-
-
-
-
-
-
-
+    def get_obj_init_data(self) -> dict or list:
+        pass

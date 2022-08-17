@@ -1,6 +1,15 @@
 import pytmx
 
 
+def create_construction(_id: int, _no: int, _init_pos: tuple, _init_size: tuple):
+    return {
+        "_id": _id,
+        "_no": _no,
+        "_init_pos": _init_pos,
+        "_init_size": _init_size
+    }
+
+
 class TiledMap:
     def __init__(self, map_path):
         self.tmx_data = pytmx.TiledMap(map_path)

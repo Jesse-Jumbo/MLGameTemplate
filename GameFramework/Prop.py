@@ -13,7 +13,7 @@ class Prop(pygame.sprite.Sprite):
         :param kwargs:
         """
         super().__init__()
-        self.image_id = kwargs["image_id"]
+        self._image_id = kwargs["image_id"]
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
         self._origin_center = self.rect.center
         self.angle = 0
@@ -41,22 +41,59 @@ class Prop(pygame.sprite.Sprite):
         raise Exception("Please overwrite update")
 
     def reset(self) -> None:
+        """
+        Reset Prop center = origin_center
+        :return:
+        """
         self.rect.center = self._origin_center
 
     def collide_with_walls(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_walls")
 
     def collide_with_bullets(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_bullets")
+
+    def collide_with_players(self) -> None:
+        raise Exception("Please overwrite collide_with_players")
 
     def collide_with_mobs(self) -> None:
-        pass
+        raise Exception("Please overwrite collide_with_mobs")
 
-    def get_xy(self):
+    def get_xy(self) -> tuple:
+        """
+        :return: topleft
+        """
         return self.rect.topleft
 
+    def get_size(self) -> tuple:
+        """
+        :return: width, height
+        """
+        return self.rect.width, self.rect.height
+
     def get_center(self) -> tuple:
+        """
+        :return: center
+        """
         return self.rect.center
+
+    def get_lives(self) -> int:
+        """
+        :return: _lives
+        """
+        return self._lives
+
+    def get_shield(self) -> int:
+        """
+        :return: _shield
+        """
+        return self._shield
+
+    def get_is_alive(self) -> bool:
+        """
+        :return: _is_alive
+        """
+        return self._is_alive
 
     def get_data_from_obj_to_game(self) -> dict:
         """

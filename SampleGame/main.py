@@ -5,13 +5,13 @@ from mlgame.game.generic import quit_or_esc
 sys.path.append(r"../..")
 
 
-from src.MyGame import MyGame
+from src.SampleGame import SampleGame
 from mlgame.view.view import PygameView
 
 FPS = 30
 if __name__ == '__main__':
     pygame.init()
-    game = MyGame(time_limit=300, sound="off")
+    game = SampleGame()
     scene_init_info_dict = game.get_scene_init_data()
     game_view = PygameView(scene_init_info_dict)
     frame_count = 0
