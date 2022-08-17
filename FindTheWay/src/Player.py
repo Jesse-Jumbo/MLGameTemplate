@@ -35,10 +35,11 @@ class Player(pygame.sprite.Sprite):
         self.last_y = self.rect.y
         self.x = self.rect.x
         self.y = self.rect.y
+
         while(self.angle < 0):
             self.angle += 360
 
-        if self.used_frame % 6 == 0:
+        if self.used_frame % 5 == 0:
             self.row = True
         else:
             self.row = False
