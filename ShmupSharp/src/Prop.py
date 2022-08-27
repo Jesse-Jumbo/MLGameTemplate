@@ -12,7 +12,7 @@ class Prop(pygame.sprite.Sprite):
         super().__init__()
         self.rect = pygame.Rect(*init_pos, *init_size)
         self._image_id = image_id
-        self._pos = (random.randrange(0, (540 - self._size[1])), random.randrange(60, 120))
+        self._pos = (random.randrange(0, (540 - self.rect[1])), random.randrange(60, 120))
 
     @property
     def xy(self):
