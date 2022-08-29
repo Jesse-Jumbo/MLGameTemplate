@@ -27,6 +27,9 @@ class MLPlay:
         if pygame.K_f in keyboard:
             action.append("SHOOT")
 
+        if not action:
+            action.append("NONE")
+
         return action
 
     def reset(self):
