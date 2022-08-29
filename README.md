@@ -30,7 +30,7 @@
 - 請看MLGame ＡＩ遊戲框架說明[README.md](https://github.com/PAIA-Playful-AI-Arena/MLGame/blob/master/README.md)
 
 ---
-# View
+## View
 
 1. 認識MLGame遊戲框架 [MLGame](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 2. 查詢所有Pygame函式 [Pygame](https://www.pygame.org/docs/index.html#)
@@ -38,7 +38,7 @@
 4. 地圖製作說明 [坦克大作戰地圖製作教學](https://github.com/Jesse-Jumbo/TankMan/blob/main/Mapping.md)
 
 ---
-# Future Work
+## Future Work
 
 1. [ ] 新增不同遊戲模式的框架
 2. [ ] test case

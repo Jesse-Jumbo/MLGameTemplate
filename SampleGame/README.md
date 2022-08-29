@@ -3,41 +3,14 @@
 
 ![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
-
-
 [![Python 3.9](https://img.shields.io/badge/python->3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![pygame](https://img.shields.io/badge/pygame->2.0.1-blue.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
----
+- 這是一款簡單的射擊遊戲，也是GameFramework的遊戲教學範例。
 
 [//]:# (game gif)
 
-## 玩法
-- 使用鍵盤 上、下、左、右 控制主角（PAIA）。
-
-## 目標
-- 在遊戲時間截止前，盡可能愈早的達到過關分數吧！
-
-### 通關條件
-- 時間結束前，`target_score`小於零，即可過關。
-
-### 失敗條件
-- 時間結束前，`target_score`大於零，即算失敗。
-
-## 遊戲系統
-
-1. 行動機制
-   - 上下左右的行動，每次移動`10 px`
-    
-2. 座標系統
-    - 螢幕大小 800 x 600 px
-    - 主角 50 x 50 px
-    - 怪物 30+(x*c) x 30+(y*c) px, x=5 px, y=5 px, c=1~6
-    - 牆壁 50 px x 50 px
-    - 子彈 5 x 8 px
-
 ---
-
 ## 啟動方式
 
 1. 在命令行輸入命令執行。
@@ -76,6 +49,34 @@ python -m mlgame \
     - `frame_limit`： 輸入遊戲時間，以規範遊戲進行時間。
     - `is_sound`： 輸入`on`或`off`，控制是否播放遊戲音效。
 
+---
+## 玩法
+- 使用鍵盤 上、下、左、右 控制主角（PAIA）。
+
+---
+## 目標
+- 在遊戲時間截止前，盡可能愈早的達到過關分數吧！
+
+### 通關條件
+- 時間結束前，`target_score`小於零，即可過關。
+
+### 失敗條件
+- 時間結束前，`target_score`大於零，即算失敗。
+
+---
+## 遊戲系統
+
+1. 行動機制
+   - 上下左右的行動，每次移動`10 px`
+    
+2. 座標系統
+    - 螢幕大小 800 x 600 px
+    - 主角 50 x 50 px
+    - 怪物 30+(x*c) x 30+(y*c) px, x=5 px, y=5 px, c=1~6
+    - 牆壁 50 px x 50 px
+    - 子彈 5 x 8 px
+
+---
 ## ＡＩ範例
 - 手動可參考 `ml/ml_play_manual.py`
 - 自動可參考 `ml/ml_play_template.py`
@@ -118,8 +119,8 @@ python -m mlgame \
     - `GAME_PASS`：遊戲通關
     - `GAME_OVER`：遊戲結束
 
+---
 ## 動作指令
-
 - 在 update() 最後要回傳一個字串清單，主角PAIA即會依照對應的字串，依序行動。
     - `UP`：向上移動
     - `DOWN`：向下移動
@@ -129,7 +130,6 @@ python -m mlgame \
     - `NONE`：原地不動
 
 ## 遊戲結果
-
 - 最後結果會顯示在console介面中。
 
 ```json
@@ -149,13 +149,6 @@ python -m mlgame \
   - `GAME_PASS`：遊戲通關
 
 ---
-## Game Sours
-- 尋寶遊戲 [FindTheWay](https://github.com/CodeMaker0314/GameFramework)
-- 射擊遊戲 [ShmupSharp](https://github.com/Charlotte20061023/GameFramework)
-- 競速遊戲 [Racing](https://github.com/LiPeggy/GameFramework)
-- 射擊遊戲 [ShmupPlusPlus](https://github.com/jia211023/GameFramework)
-- 射擊遊戲 [ShmupPlus](https://github.com/Nov20Firth/GameFramework)
-
 ## Image Sours
 - [Treasure](https://opengameart.org/content/treasure-chest-1)
 - [SampleWall／Floor](https://opengameart.org/content/wall-grass-rock-stone-wood-and-dirt-480)
