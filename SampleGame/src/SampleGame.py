@@ -79,10 +79,6 @@ class SampleGame(PaiaGame):
         self.score = self.player.get_score()
         # 更新ＡＩ輸入的指令(command)動作
         ai_1p_cmd = commands[get_ai_name(0)]
-        if ai_1p_cmd:
-            action = ai_1p_cmd
-        else:
-            action = ["NONE"]
         if self.player.get_is_shoot():
             self.sound_controller.play_sound(music_id="test", maz_time=100, volume=0.4)
             self._create_bullets()
@@ -93,7 +89,7 @@ class SampleGame(PaiaGame):
                 if isinstance(mob, SampleMob):
                     self._create_bullets(init_pos=mob.get_center())
         # 更新物件內部資訊
-        self.player.update(action)
+        self.player.update(ai_1p_cmd)
         self.mobs.update()
         self.bullets.update()
         self.walls.update()
@@ -167,7 +163,7 @@ class SampleGame(PaiaGame):
             "player_y": self.player.get_xy()[1],
             "walls": walls_data,
             "mobs": mobs_data,
-            "score": self.score,
+            "target_score": self.target_score - self.score,
             "status": self.get_game_status()
         }
         # to_players_data = {"1P": data_to_1p}
@@ -240,7 +236,7 @@ class SampleGame(PaiaGame):
         backgrounds = [create_image_view_data(image_id="background", x=25, y=50, width=WIDTH-50, height=HEIGHT-50)]
         foregrounds = [
             create_text_view_data(
-                content=f"Score: {str(self.score)}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="24px Arial")
+                content=f"Target Score: {self.target_score - self.score}", x=WIDTH // 2 - 50, y=5, color="#21A1F1", font_style="24px Arial")
             , create_text_view_data(
                 content=f"Lives: {str(self.player.get_lives())}", x=5, y=5, color="#22390A", font_style="24px Arial")
             , create_text_view_data(

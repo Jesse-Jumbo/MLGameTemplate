@@ -3,9 +3,9 @@ import sys
 
 from mlgame.game.generic import quit_or_esc
 
-from Racing.src.MyGame import MyGame
+from src.MyGame import MyGame
 
-sys.path.append(r"../..")
+sys.path.append(r"../../..")
 from mlgame.view.view import PygameView
 
 FPS = 30
