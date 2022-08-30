@@ -52,3 +52,9 @@
 - 射擊遊戲 [ShmupPlus](https://github.com/Nov20Firth/GameFramework)
 
 ---
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
