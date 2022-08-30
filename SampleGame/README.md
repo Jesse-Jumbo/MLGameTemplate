@@ -3,8 +3,8 @@
 
 ![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
-[![Python 3.9](https://img.shields.io/badge/python->3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![pygame](https://img.shields.io/badge/pygame->2.0.1-blue.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
 - 這是一款簡單的射擊遊戲，也是GameFramework的遊戲教學範例。
 
@@ -18,7 +18,7 @@
 ## 遊戲參數設定
 
 - `SampleGame`後不輸入參數，則默認使用預設值，即game_config.json內參數default值。
-- 在SampleGame打開終端機，複製貼上即可以預設參數啟動遊戲。
+- 在SampleGame打開終端機，複製貼上即可 以預設參數啟動遊戲。
   ```bash
   python -m mlgame -f 30 -i ./ml/ml_play_manual.py .
   ```
@@ -50,10 +50,11 @@ python -m mlgame \
     - `is_sound`： 輸入`on`或`off`，控制是否播放遊戲音效。
 
 ---
-## 玩法
-- 使用鍵盤 上、下、左、右 控制主角（PAIA）。
+## 遊戲玩法：
+1. 使用鍵盤控制角色，可在命令行用`ml_player_manual.py`啟動遊戲。
+2. 撰寫規則控制角色，可藉由遊戲資訊在`ml_play_template.py`撰寫規則。
+3. 訓練ＡＩ控制角色，可匯入訓練資料在`ml_play.py`判斷來回傳命令。
 
----
 ## 目標
 - 在遊戲時間截止前，盡可能愈早的達到過關分數吧！
 
@@ -67,9 +68,16 @@ python -m mlgame \
 ## 遊戲系統
 
 1. 行動機制
-   - 上下左右的行動，每次移動`10 px`
+   - 主角PAIA 上下左右的行動，每次移動`10 px`
+   - 子彈的速度，每次移動`10 px`
+   - 敵人的速度，初始化隨機為`1~4 px`，每次碰到邊界之後，再隨機`1~4 px`之間，並朝反向移動
+
+2. 血量設定
+   - 主角PAIA 每次被敵人子彈打到`-10` 點護盾值，每`-100`則生命`-1`
+   - 怪物被主角PAIA的子彈打到，即死亡
+   - 牆每次被子彈打到會隨機扣護盾值`0~100`之間
     
-2. 座標系統
+3. 座標系統
     - 螢幕大小 800 x 600 px
     - 主角 50 x 50 px
     - 怪物 30+(x*c) x 30+(y*c) px, x=5 px, y=5 px, c=1~6
@@ -80,11 +88,6 @@ python -m mlgame \
 ## ＡＩ範例
 - 手動可參考 `ml/ml_play_manual.py`
 - 自動可參考 `ml/ml_play_template.py`
-
-## 遊戲操作：
-1. 使用鍵盤控制角色，可在命令行用`ml_player_manual.py`啟動遊戲。
-2. 撰寫規則控制角色，可藉由遊戲資訊在`ml_play_template.py`撰寫規則。
-3. 訓練ＡＩ控制角色，可匯入訓練資料在`ml_play.py`判斷來回傳命令。
 
 ## 遊戲資訊
 - scene_info 的資料格式如下
@@ -119,7 +122,6 @@ python -m mlgame \
     - `GAME_PASS`：遊戲通關
     - `GAME_OVER`：遊戲結束
 
----
 ## 動作指令
 - 在 update() 最後要回傳一個字串清單，主角PAIA即會依照對應的字串，依序行動。
     - `UP`：向上移動
@@ -129,6 +131,7 @@ python -m mlgame \
     - `SHOOT`：射擊
     - `NONE`：原地不動
 
+---
 ## 遊戲結果
 - 最後結果會顯示在console介面中。
 
@@ -155,6 +158,3 @@ python -m mlgame \
 
 ## Sound Sours
 - [BGM／ShootSound](https://opengameart.org/content/rins-theme-loopable-chiptune-adventurebattle-bgm)
-
-
----

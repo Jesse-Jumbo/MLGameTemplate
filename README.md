@@ -6,7 +6,7 @@
 
 
 [![Python 3.9](https://img.shields.io/badge/python->3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![pygame](https://img.shields.io/badge/pygame->2.0.1-blue.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
+[![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
 ---
 # !Notice！
