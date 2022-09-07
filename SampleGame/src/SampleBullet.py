@@ -9,6 +9,7 @@ class SampleBullet(Props):
         self.rect.center = construction["_init_pos"]
         self.play_rect_area = kwargs["play_rect_area"]
         self.is_player = kwargs["is_player"]
+        self._image_id = kwargs["image_id"]
         if self.is_player:
             self.color = "#21A1F1"
         else:

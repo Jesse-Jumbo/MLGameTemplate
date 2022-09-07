@@ -8,6 +8,7 @@ class SampleWall(Props):
     def __init__(self, construction: dict, **kwargs):
         super().__init__(construction, **kwargs)
         self.color = "#ff0000"
+        self._image_id = kwargs["image_id"]
 
     def update(self, *args, **kwargs) -> None:
         if self._shield <= 0:
