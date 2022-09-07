@@ -1,8 +1,7 @@
-from os import path
-
 import pygame
-from mlgame.game.paia_game import GameResultState, GameStatus
 
+from os import path
+from mlgame.game.paia_game import GameResultState, GameStatus
 from GameFramework.SoundController import SoundController
 from GameFramework.TiledMap import TiledMap
 
@@ -11,41 +10,49 @@ class BattleMode:
     def __init__(self, map_path: str, sound_path: str):
         pygame.init()
         self._user_num = 2
+        self.sound_path = sound_path
         self.map_path = map_path
         self.map = TiledMap(self.map_path)
         self.map_width = self.map.map_width
         self.map_height = self.map.map_height
         self.is_paused = False
         self.is_debug = False
-        self.sound_path = sound_path
         self.all_sprites = pygame.sprite.Group()
+        self.players = pygame.sprite.Group()
         self.used_frame = 0
         self.state = GameResultState.FAIL
         self.status = GameStatus.GAME_ALIVE
-        self.players = pygame.sprite.Group()
         self.sound_controller = SoundController(sound_path, self.get_music_data())
         self.sound_controller.play_music("BGM.ogg", 0.1)
         self.WIDTH_CENTER = self.map.map_width // 2
         self.HEIGHT_CENTER = self.map.map_height // 2
 
+    def update(self, command: dict):
+        if command["1P"] and "DEBUG" in list(command.values())[0]:
+            self.is_debug = not self.is_debug
+        self.update_game(command)
+
+    def update_game(self, command):
+        raise Exception("Please overwrite update_game")
 
     def get_background_view_data(self):
-        return []
+        raise Exception("Please overwrite get_background_view_data")
 
     def get_obj_progress_data(self):
-        return []
+        raise Exception("Please overwrite get_obj_progress_data")
 
     def get_bias_toggle_progress_data(self):
-        return []
+        raise Exception("Please overwrite get_bias_toggle_progress_data")
 
     def get_toggle_progress_data(self):
-        return []
+        raise Exception("Please overwrite get_toggle_progress_data")
 
     def get_foreground_progress_data(self):
-        return []
+        raise Exception("Please overwrite get_foreground_progress_data")
 
     def get_user_info_data(self):
-        return []
+        raise Exception("Please overwrite get_user_info_data")
 
     def get_game_sys_info_data(self):
-        return {}
+        raise Exception("Please overwrite get_game_sys_info_data")
+

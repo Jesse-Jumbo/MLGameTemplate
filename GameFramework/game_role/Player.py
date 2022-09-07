@@ -163,6 +163,12 @@ class Player(pygame.sprite.Sprite):
         """
         return self.rect.center
 
+    def get_id(self) -> int:
+        """
+        :return: center
+        """
+        return self._id
+
     def get_result(self):
         """
         add all player information

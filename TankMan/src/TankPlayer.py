@@ -62,10 +62,6 @@ class TankPlayer(Player):
         self.rect = new_sur.get_rect()
         self.rect.center = origin_center
 
-    def create_shoot_info(self) -> dict:
-        shoot_info = {"id": self._id, "init_pos": self.rect.center, "rot": self.rot}
-        return shoot_info
-
     def act(self, commands: list):
         if not commands:
             return None
@@ -182,6 +178,11 @@ class TankPlayer(Player):
             self.oil = 100
         elif self.oil < 0:
             self.oil = 0
+
+    def get_rot(self):
+        if self._id == 2:
+            return self.rot + 180
+        return self.rot
 
     def get_data_from_obj_to_game(self) -> dict:
         rot = self.rot

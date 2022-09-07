@@ -71,24 +71,24 @@ class TankBattleMode(BattleMode):
             self.floor_image_data_list.append(
                 create_image_view_data(f"floor_{no}", pos[0], pos[1], 50, 50, 0))
 
-    def update(self, command: dict):
-        if command["1P"] and "DEBUG" in command["1P"]:
-            self.is_debug = not self.is_debug
+    def update_game(self, command: dict):
         self.walls.update()
-        self.update_game_mode(command)
         self.oil_stations.update()
         self.bullet_stations.update()
         self.bullets.update()
-        if self.player_1P._is_shoot:
-            shoot_info = self.player_1P.create_shoot_info()
-            self.create_bullet(shoot_info)
-            self.player_1P._is_shoot = False
-
-        if self.player_2P._is_shoot:
-            shoot_info = self.player_2P.create_shoot_info()
-            shoot_info["rot"] -= 180
-            self.create_bullet(shoot_info)
-            self.player_2P._is_shoot = False
+        for player in self.players:
+            self.create_bullet(player)
+        self.set_result(GameResultState.FAIL, GameStatus.GAME_ALIVE)
+        if not self.is_paused:
+            self.used_frame += 1
+            number = 1
+            for player in self.players:
+                player.update(command[f"{number}P"])
+                number += 1
+                # TODO refactor reset method
+                if not player.get_is_alive() or self.used_frame >= self.frame_limit:
+                    self.reset()
+            self.check_collisions()
 
     # TODO refactor result info and position
     def get_result(self) -> list:
@@ -105,19 +105,6 @@ class TankBattleMode(BattleMode):
     def get_other_result(self, origin_result):
         """You can overwrite or append new result to origin result, when you finished, return origin_result"""
         return origin_result
-
-    def update_game_mode(self, command: dict):
-        self.set_result(GameResultState.FAIL, GameStatus.GAME_ALIVE)
-        if not self.is_paused:
-            self.used_frame += 1
-            number = 1
-            for player in self.players:
-                player.update(command[f"{number}P"])
-                number += 1
-                # TODO refactor reset method
-                if not player.get_is_alive() or self.used_frame >= self.frame_limit:
-                    self.reset()
-            self.check_collisions()
 
     def calculate_score(self) -> tuple:
         score_1P = (3 - self.player_2P._lives) * 20
@@ -272,12 +259,15 @@ class TankBattleMode(BattleMode):
                 new_pos = self.empty_quadrant_4_pos.pop(random.randrange(len(self.empty_quadrant_4_pos)))
                 station.change_pos(new_pos)
 
-    def create_bullet(self, shoot_info):
+    def create_bullet(self, player):
+        if isinstance(player, TankPlayer) and not player.get_is_shoot():
+            return
         self.sound_controller.play_sound("shoot", 0.03, -1)
-        init_data = create_construction(shoot_info["id"], 0, shoot_info["init_pos"], (13, 13))
-        bullet = TankBullet(init_data, rot=shoot_info["rot"], margin=2, spacing=2)
+        init_data = create_construction(player.get_id(), 0, player.get_center(), (13, 13))
+        bullet = TankBullet(init_data, rot=player.get_rot(), margin=2, spacing=2)
         self.bullets.add(bullet)
         self.all_sprites.add(bullet)
+        player.set_is_shoot(False)
 
     def draw_players(self):
         player_data = []
@@ -285,6 +275,9 @@ class TankBattleMode(BattleMode):
             player_data.append(player.get_obj_progress_data())
 
         return player_data
+
+    def get_background_view_data(self):
+        return []
 
     def get_obj_progress_data(self):
         all_sprite_data = self.floor_image_data_list.copy()
@@ -315,10 +308,8 @@ class TankBattleMode(BattleMode):
 
         return all_sprite_data
 
-    def get_foreground_progress_data(self):
-        all_foreground_data = []
-
-        return all_foreground_data
+    def get_bias_toggle_progress_data(self):
+        return []
 
     def get_toggle_progress_data(self):
         all_toggle_data = []
@@ -401,6 +392,17 @@ class TankBattleMode(BattleMode):
 
         return all_toggle_data
 
+    def get_foreground_progress_data(self):
+        all_foreground_data = []
+
+        return all_foreground_data
+
+    def get_user_info_data(self):
+        return []
+
+    def get_game_sys_info_data(self):
+        return {}
+
     def get_init_image_data(self):
         all_init_image_data = []
         for i in range(3):
@@ -464,7 +466,7 @@ class TankBattleMode(BattleMode):
 
     def get_music_data(self):
         return [create_music_data("shoot", "shoot.wav")
-                , create_music_data("touch", "touch.wav")]
+            , create_music_data("touch", "touch.wav")]
 
     def draw_rect(self, sprite):
         all_line = []

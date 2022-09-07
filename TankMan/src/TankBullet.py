@@ -54,9 +54,8 @@ class TankBullet(Props):
             self.rect.center += self.move["left_down"]
 
     def get_obj_init_data(self):
-        img_data = {"bullet": "https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/bullet.png"}
-        id, url = img_data.items()
-        image_init_data = create_asset_init_data(id, self.rect.width, self.rect.height, path.join(IMAGE_DIR, f"{id}.png"), url)
+        url = "https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/bullet.png"
+        image_init_data = create_asset_init_data("bullet", self.rect.width, self.rect.height, path.join(IMAGE_DIR, "bullet.png"), url)
         return image_init_data
 
     def get_obj_progress_data(self):
