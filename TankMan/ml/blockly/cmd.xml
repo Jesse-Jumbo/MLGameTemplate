@@ -1,0 +1,213 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</variable>
+    <variable id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</variable>
+    <variable id="R:P3x9rFhhJn3r!c)$]+">move_1P</variable>
+    <variable id="?M5Iy-OBl_dbq,Q_y26#">move_2P</variable>
+  </variables>
+  <block type="mlplay_class" id="kT4*=I#)Jm$C=[8p0q4r" x="-937" y="-1712">
+    <statement name="INIT">
+      <block type="variables_set" id="421^z]sV^enY}zg$Kd/i">
+        <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+        <value name="VALUE">
+          <block type="math_number" id="`TNM0yRv-/$#d0#Q=ugQ">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <next>
+          <block type="variables_set" id="8R1`/W5;ofyn/iZk3%LQ">
+            <field name="VAR" id="R:P3x9rFhhJn3r!c)$]+">move_1P</field>
+            <value name="VALUE">
+              <block type="math_number" id="u/VHC=fZXKv8jP.!j:T5">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="uuZSDl$zVO?B([j.2{S{">
+                <field name="VAR" id="?M5Iy-OBl_dbq,Q_y26#">move_2P</field>
+                <value name="VALUE">
+                  <block type="math_number" id="fHehsN3jME;[0R.4)p#Y">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="UPDATE">
+      <block type="variables_set" id="HP#{UFRBLfkiV.!~%UO]">
+        <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+        <value name="VALUE">
+          <block type="mlplay_get_info" id="qLu]j_q,gXAy0VLH$B6Z">
+            <field name="FIELD">scene_info['id']</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id="eW5Cj*74TXph?RinvVue">
+            <mutation else="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="l*0r2MJPVoOd9_Bl7PbE">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="hq/zm@L7NiuS+~orJG1^">
+                    <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="text" id="wI7o3osOo3v4Ux]0e*j_">
+                    <field name="TEXT">1P</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="math_change" id="%@Kx^=;3Rk-nC`ANWc=6">
+                <field name="VAR" id="R:P3x9rFhhJn3r!c)$]+">move_1P</field>
+                <value name="DELTA">
+                  <shadow type="math_number" id="]=DNE=.(!!h^+A6l0(x5">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="math_number" id="MYQewdTwx{%tRXKTS3IH">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="controls_if" id="}d@s^w4VLe0yarM6^xo5">
+                    <mutation else="1"></mutation>
+                    <value name="IF0">
+                      <block type="math_number_property" id="`4CFIPUK*Lj5KyQI;ms5">
+                        <mutation divisor_input="false"></mutation>
+                        <field name="PROPERTY">EVEN</field>
+                        <value name="NUMBER_TO_CHECK">
+                          <shadow type="math_number" id="Uj)Z!QpR_ccjN$)(r)?*">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="variables_get" id="+}5Te?{m2/Qzq7}aXN:x">
+                            <field name="VAR" id="R:P3x9rFhhJn3r!c)$]+">move_1P</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="mlplay_return_action" id="@U_lvbXxsT@b?H3,BbJU">
+                        <field name="ACTION">['TURN_RIGHT', 'SHOOT']</field>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="mlplay_return_action" id="Kuht^3V^7TG5DDk[NX}7">
+                        <field name="ACTION">['TURN_LEFT', 'SHOOT']</field>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="math_change" id="(3;%v.GT:A#K.6Yz~e=s">
+                <field name="VAR" id="?M5Iy-OBl_dbq,Q_y26#">move_2P</field>
+                <value name="DELTA">
+                  <shadow type="math_number" id="+S7g~#E~O6|ftEjm|bwl">
+                    <field name="NUM">1</field>
+                  </shadow>
+                  <block type="math_number" id="MVks-cF|=:K3`h#lVC_.">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="controls_if" id="t_K1#Oa%I%k%u}a4G$S*">
+                    <mutation else="1"></mutation>
+                    <value name="IF0">
+                      <block type="math_number_property" id="izkhnoU{h$KQ8gqJ(A)B">
+                        <mutation divisor_input="false"></mutation>
+                        <field name="PROPERTY">EVEN</field>
+                        <value name="NUMBER_TO_CHECK">
+                          <shadow type="math_number">
+                            <field name="NUM">0</field>
+                          </shadow>
+                          <block type="variables_get" id="?E_N,YZ2jgLC|yG.K)Xk">
+                            <field name="VAR" id="?M5Iy-OBl_dbq,Q_y26#">move_2P</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="mlplay_return_action" id="G*n]|EN$n@-K$z1i6]T^">
+                        <field name="ACTION">['FORWARD', 'SHOOT']</field>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="mlplay_return_action" id="gP+v7qTT?Vci4-W@.+CU">
+                        <field name="ACTION">['BACKWARD', 'SHOOT']</field>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="RESET">
+      <block type="controls_if" id="SG-=)rh8]#(QW)UQ4-,f">
+        <value name="IF0">
+          <block type="logic_compare" id="qx[mgkcibfX`A)kd[Mm/">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id=",JnZ#$A2#f5/|O/c(eH*">
+                <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="text" id="B:(u54@h8u*6630[](l]">
+                <field name="TEXT">1P</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="math_change" id="%y@op,]uAK5L9/GS2/(i">
+            <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+            <value name="DELTA">
+              <shadow type="math_number" id=",3LH5TQ85fEo+fM/03tn">
+                <field name="NUM">1</field>
+              </shadow>
+              <block type="math_number" id="QXNt$E[0L~0oS$/KJ9!A">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <next>
+              <block type="text_print" id="/()DhF=+LTmwwB2xJN]g">
+                <value name="TEXT">
+                  <shadow type="text" id="1sL}8=Lw%w0uA1:VLwx!">
+                    <field name="TEXT">abc</field>
+                  </shadow>
+                  <block type="text_join" id="3,-%iTU6v!Oe8[@h}Svz">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="text" id="Nn!~{~N5fe,pJV9IX;U8">
+                        <field name="TEXT">第 </field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="variables_get" id="T@:sd_tU_UQqp^1F%@~m">
+                        <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text" id="*d$z/|sT~SZQMyYP0Iq,">
+                        <field name="TEXT"> 次遊玩結果：</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

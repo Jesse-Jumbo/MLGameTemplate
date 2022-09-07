@@ -17,6 +17,7 @@ class SoundController:
         self._music_obj = {}
         for music_data in music_data_list:
             self._music_obj[music_data["music_id"]] = pygame.mixer.Sound(music_data["music_path"])
+        print(self._music_obj)
 
     def play_music(self, music_path: str, volume: float) -> None:
         if not self._is_sound:
@@ -29,4 +30,6 @@ class SoundController:
     def play_sound(self, music_id: str, volume: float, maz_time: int) -> None:
         if not self._is_sound:
             return
-        self._music_obj[music_id].play(maxtime=maz_time).set_volume(volume)
+        sound_obj = self._music_obj[music_id]
+        sound_obj.set_volume(volume)
+        sound_obj.play(maxtime=maz_time)

@@ -1,0 +1,227 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</variable>
+    <variable id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</variable>
+  </variables>
+  <block type="mlplay_class" id="kT4*=I#)Jm$C=[8p0q4r" x="-912" y="-1612">
+    <statement name="INIT">
+      <block type="variables_set" id="421^z]sV^enY}zg$Kd/i">
+        <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+        <value name="VALUE">
+          <block type="math_number" id="`TNM0yRv-/$#d0#Q=ugQ">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+    <statement name="UPDATE">
+      <block type="variables_set" id="HP#{UFRBLfkiV.!~%UO]">
+        <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+        <value name="VALUE">
+          <block type="mlplay_get_info" id="qLu]j_q,gXAy0VLH$B6Z">
+            <field name="FIELD">scene_info['id']</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id="eW5Cj*74TXph?RinvVue">
+            <mutation else="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="l*0r2MJPVoOd9_Bl7PbE">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="hq/zm@L7NiuS+~orJG1^">
+                    <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="text" id="wI7o3osOo3v4Ux]0e*j_">
+                    <field name="TEXT">1P</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="controls_if" id="E+(MQ`ZENXcw;0pY_?As">
+                <mutation elseif="4"></mutation>
+                <value name="IF0">
+                  <block type="mlplay_is_key_pressed" id="TdbR[D3MuW5~rH}a#%d]">
+                    <field name="TYPE">arrow</field>
+                    <field name="KEY">RIGHT</field>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="mlplay_return_action" id="=y;t4L#dok[ix?I+UM+]">
+                    <field name="ACTION">['TURN_RIGHT']</field>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="mlplay_is_key_pressed" id="^Cd;728~rw#JYes$bN2;">
+                    <field name="TYPE">arrow</field>
+                    <field name="KEY">LEFT</field>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="mlplay_return_action" id="qV%73]ugB%ccB5JUQJB?">
+                    <field name="ACTION">['TURN_LEFT']</field>
+                  </block>
+                </statement>
+                <value name="IF2">
+                  <block type="mlplay_is_key_pressed" id="Ij{=:Hc@y%@}(^ts@1iD">
+                    <field name="TYPE">arrow</field>
+                    <field name="KEY">UP</field>
+                  </block>
+                </value>
+                <statement name="DO2">
+                  <block type="mlplay_return_action" id="Kuht^3V^7TG5DDk[NX}7">
+                    <field name="ACTION">['FORWARD']</field>
+                  </block>
+                </statement>
+                <value name="IF3">
+                  <block type="mlplay_is_key_pressed" id=",kZ5c+*)MPZh|-s6dAWp">
+                    <field name="TYPE">arrow</field>
+                    <field name="KEY">DOWN</field>
+                  </block>
+                </value>
+                <statement name="DO3">
+                  <block type="mlplay_return_action" id="LuG93wyyGyP([SW)GC}X">
+                    <field name="ACTION">['BACKWARD']</field>
+                  </block>
+                </statement>
+                <value name="IF4">
+                  <block type="mlplay_is_key_pressed" id="+c~l~6I{xp#7/XX=kTN`">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">p</field>
+                  </block>
+                </value>
+                <statement name="DO4">
+                  <block type="mlplay_return_action" id=")Atchv{RV7e.alIgTsr1">
+                    <field name="ACTION">['SHOOT']</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="controls_if" id=",C@*[vjlHhMm/H!:0VSN">
+                <mutation elseif="4"></mutation>
+                <value name="IF0">
+                  <block type="mlplay_is_key_pressed" id="Jmh1Xj[;knC])T$ngDb5">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">d</field>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="mlplay_return_action" id="o1AI(CgaQ,!1~;HIzPD*">
+                    <field name="ACTION">['TURN_RIGHT']</field>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="mlplay_is_key_pressed" id="$GqzYw%ofy(92P#FG)$G">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">a</field>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="mlplay_return_action" id="py=jtXp;vK3SN^{je;_g">
+                    <field name="ACTION">['TURN_LEFT']</field>
+                  </block>
+                </statement>
+                <value name="IF2">
+                  <block type="mlplay_is_key_pressed" id="ZBbXrW-?;dN],o(7#T=U">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">w</field>
+                  </block>
+                </value>
+                <statement name="DO2">
+                  <block type="mlplay_return_action" id="%5A^tGVC=s;O!OUJ3mB#">
+                    <field name="ACTION">['FORWARD']</field>
+                  </block>
+                </statement>
+                <value name="IF3">
+                  <block type="mlplay_is_key_pressed" id="(`*Q,?qJ}!(Zm2z@z~ME">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">s</field>
+                  </block>
+                </value>
+                <statement name="DO3">
+                  <block type="mlplay_return_action" id="oDKw;JN?aNIS%w?`!a,D">
+                    <field name="ACTION">['BACKWARD']</field>
+                  </block>
+                </statement>
+                <value name="IF4">
+                  <block type="mlplay_is_key_pressed" id="0klrpo|}y-|`]@sv.-kf">
+                    <field name="TYPE">alpha</field>
+                    <field name="KEY">f</field>
+                  </block>
+                </value>
+                <statement name="DO4">
+                  <block type="mlplay_return_action" id="GWB+Ikt)5{^]@|.daMzP">
+                    <field name="ACTION">['SHOOT']</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <statement name="RESET">
+      <block type="controls_if" id="SG-=)rh8]#(QW)UQ4-,f">
+        <value name="IF0">
+          <block type="logic_compare" id="qx[mgkcibfX`A)kd[Mm/">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="variables_get" id=",JnZ#$A2#f5/|O/c(eH*">
+                <field name="VAR" id="pOY$_k7}^}@b2EVBF*Iz">玩家ID</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="text" id="B:(u54@h8u*6630[](l]">
+                <field name="TEXT">1P</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="math_change" id="%y@op,]uAK5L9/GS2/(i">
+            <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+            <value name="DELTA">
+              <shadow type="math_number" id=",3LH5TQ85fEo+fM/03tn">
+                <field name="NUM">1</field>
+              </shadow>
+              <block type="math_number" id="QXNt$E[0L~0oS$/KJ9!A">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <next>
+              <block type="text_print" id="/()DhF=+LTmwwB2xJN]g">
+                <value name="TEXT">
+                  <shadow type="text" id="1sL}8=Lw%w0uA1:VLwx!">
+                    <field name="TEXT">abc</field>
+                  </shadow>
+                  <block type="text_join" id="3,-%iTU6v!Oe8[@h}Svz">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="text" id="Nn!~{~N5fe,pJV9IX;U8">
+                        <field name="TEXT">第 </field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="variables_get" id="T@:sd_tU_UQqp^1F%@~m">
+                        <field name="VAR" id="bZ+|PJdVbiuFw3KO=ry7">遊戲次數</field>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text" id="*d$z/|sT~SZQMyYP0Iq,">
+                        <field name="TEXT"> 次遊玩結果：</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

@@ -1,9 +1,9 @@
 from mlgame.view.view_model import create_rect_view_data
 
-from GameFramework.Prop import Prop
+from GameFramework.Props import Props
 
 
-class SampleBullet(Prop):
+class SampleBullet(Props):
     def __init__(self, construction: dict, **kwargs):
         super().__init__(construction, **kwargs)
         self.rect.center = construction["_init_pos"]

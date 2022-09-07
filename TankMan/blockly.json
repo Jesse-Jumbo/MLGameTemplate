@@ -1,0 +1,52 @@
+{
+    "INIT_INFO": [
+        ["ai_name", "player number", "玩家編號"]
+    ],
+    "PLAYER_STATUS":[
+        ["1P", "1P", "1P"],
+        ["2P", "2P", "2P"]
+    ],
+    "GAME_STATUS": [
+        ["GAME_ALIVE", "alive", "存活"],
+        ["GAME_OVER", "over", "失敗"],
+        ["GAME_1P_WIN", "1P wins", "1P 獲勝"],
+        ["GAME_2P_WIN", "2P wins", "2P 獲勝"]
+    ],
+    "SCENE_INFO": [
+        ["scene_info['id']", "player number", "玩家編號"],
+        ["scene_info['x']", "x coordinate of player", "玩家的 x 座標"],
+        ["scene_info['y']", "y coordinate of player", "玩家的 y 座標"],
+        ["scene_info['speed']", "player speed", "玩家速度"],
+        ["scene_info['score']", "score of player", "玩家分數"],
+        ["scene_info['power']", "power of player", "玩家子彈數"],
+        ["scene_info['oil']", "oil of player", "玩家油量"],
+        ["scene_info['shield']", "shield of player", "玩家的生命值"],
+        ["scene_info['lives']", "lives of player", "玩家的生命次數"],
+        ["scene_info['used_frame']", "# frame", "# 幀數"],
+        ["scene_info['status']", "game status", "遊戲狀態"],
+        ["scene_info['walls_info']", "coordinate of all walls", "所有牆的所有資訊"],
+        ["scene_info['bullet_stations_info']", "information of all walls", "所有彈藥庫的所有資訊"],
+        ["scene_info['oil_stations_info']", "information of all walls", "所有加油站的所有資訊"]
+    ],
+    "CONSTANT": [
+        [0, "left boundary", "左邊界"],
+        [1320, "right boundary", "右邊界"],
+        [0, "top boundary", "上邊界"],
+        [660, "bottom boundary", "下邊界"],
+        [60, "tank width", "坦克寬度"],
+        [60, "tank height", "坦克高度"]
+    ],
+    "ACTION": [
+        ["['FORWARD']", "forward", "前進"],
+        ["['BACKWARD']", "backward", "後退"],
+        ["['TURN_LEFT']", "turn left", "左轉"],
+        ["['TURN_RIGHT']", "turn right", "右轉"],
+        ["['SHOOT']","shoot", "射擊"],
+        ["['FORWARD', 'SHOOT']", "forward shoot", "前進並射擊"],
+        ["['BACKWARD', 'SHOOT']", "backward shoot", "後退並射擊"],
+        ["['TURN_LEFT', 'SHOOT']", "turn left shoot", "左轉並射擊"],
+        ["['TURN_RIGHT', 'SHOOT']", "turn right shoot", "右轉並射擊"],
+        ["['NONE']","doing nothing", "不動作"],
+        ["RESET", "reset", "重置遊戲"]
+    ]
+}

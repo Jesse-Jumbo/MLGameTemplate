@@ -13,6 +13,8 @@ class Mob(pygame.sprite.Sprite):
         :param kwargs:
         """
         super().__init__()
+        self._id = construction["_id"]
+        self._no = construction["_no"]
         self._image_id = f"mob_{construction['_id']}"
         self.angle = 0
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
@@ -37,7 +39,7 @@ class Mob(pygame.sprite.Sprite):
             self.reset()
         if self._lives <= 0:
             self._is_alive = False
-        :param action:
+        :param actions:
         :return:
         """
         raise Exception("Please overwrite update")

@@ -309,7 +309,7 @@ class SampleGame(PaiaGame):
         if keyboard[pygame.K_f]:
             action.append("SHOOT")
 
-        # print({get_ai_name(0): action})
+        # print({get_ai_name(0): actions})
         return {get_ai_name(0): action}
 
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用

@@ -1,6 +1,6 @@
 import pygame
 
-vec = pygame.math.Vector2
+Vec = pygame.math.Vector2
 
 
 class Player(pygame.sprite.Sprite):
@@ -13,19 +13,23 @@ class Player(pygame.sprite.Sprite):
         """
         super().__init__()
         self.image_id = "1P"
+        self._id = construction["_id"]
+        self._no = construction["_no"]
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
+        self._origin_xy = self.rect.topleft
         self._origin_center = self.rect.center
-        self.angle = 0
+        self._angle = 0
         self._score = 0
         self._used_frame = 0
         self._last_shoot_frame = 0
         self._shield = 100
         self._lives = 3
-        self._vel = vec(0, 0)
+        self._power = 10
+        self._vel = Vec(0, 0)
         self._is_alive = True
         self._is_shoot = False
 
-    def update(self, action: list) -> None:
+    def update(self, actions: list) -> None:
         """
         更新玩家資料
         self._used_frame += 1
@@ -37,7 +41,7 @@ class Player(pygame.sprite.Sprite):
             self.reset()
         if self._lives <= 0:
             self._is_alive = False
-        :param action:
+        :param actions:
         :return:
         """
         raise Exception("Please overwrite update")
@@ -47,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         Reset Player center = origin_center
         :return:
         """
-        self.rect.center = self._origin_center
+        self.rect.topleft = self._origin_xy
 
     def act(self, action: list) -> None:
         raise Exception("Please overwrite act")
@@ -158,6 +162,14 @@ class Player(pygame.sprite.Sprite):
         :return: center
         """
         return self.rect.center
+
+    def get_result(self):
+        """
+        add all player information
+
+        info = {"id": "", "x": 0, "y": 0}
+        """
+        print("please overwrite 'self.get_result' method")
 
     def get_data_from_obj_to_game(self) -> dict:
         """
