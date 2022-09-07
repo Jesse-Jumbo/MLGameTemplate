@@ -5,7 +5,7 @@ from mlgame.view.view_model import Scene
 from GameFramework.game_mode.Game import Game
 
 from .TankBattleMode import TankBattleMode
-from .env import MAP_DIR, IMAGE_DIR
+from .env import MAP_DIR, IMAGE_DIR, SOUND_DIR
 
 
 class TankMan(Game):
@@ -28,5 +28,8 @@ class TankMan(Game):
 
     def set_game_mode(self):
         map_path = path.join(MAP_DIR, self.map_name)
-        game_mode = TankBattleMode(self.user_num, self.is_manual, map_path, self.frame_limit, self.is_sound)
+        sound_path = []
+        if self.is_sound:
+            sound_path = SOUND_DIR
+        game_mode = TankBattleMode(self.is_manual, map_path, self.frame_limit, sound_path)
         return game_mode

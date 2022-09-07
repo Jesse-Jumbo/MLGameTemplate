@@ -341,4 +341,4 @@ class SampleGame(PaiaGame):
         self.bullets.add(bullet)
 
     def get_music_data(self):
-        return [create_music_data(music_id="test", music_path=path.join(ASSET_PATH, "sound/bgm.ogg"))]
+        return [create_music_data(music_id="test", music_name=path.join(ASSET_PATH, "sound/bgm.ogg"))]

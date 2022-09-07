@@ -1,6 +1,6 @@
 import pygame
 from os import path
-from mlgame.view.view_model import create_asset_init_data
+from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
 from GameFramework.Props import Props
 from .env import WINDOW_HEIGHT, WINDOW_WIDTH, IMAGE_DIR
@@ -60,9 +60,7 @@ class TankBullet(Props):
         return image_init_data
 
     def get_obj_progress_data(self):
-        image_data = {"id": "bullet", "x": self.rect.x, "y": self.rect.y,
-                      "width": self.rect.width, "height": self.rect.height, "angle": self._angle}
-        return image_data
+        return create_image_view_data("bullet", self.rect.x, self.rect.y, self.rect.width, self.rect.height, self._angle)
 
     def get_data_from_obj_to_game(self) -> dict:
         info = {"id": f"{self._id}P_bullet",

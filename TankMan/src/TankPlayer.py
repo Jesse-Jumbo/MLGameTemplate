@@ -1,6 +1,6 @@
 import pygame.draw
 from os import path
-from mlgame.view.view_model import create_asset_init_data
+from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 from .env import WINDOW_WIDTH, WINDOW_HEIGHT, LEFT_CMD, RIGHT_CMD, FORWARD_CMD, BACKWARD_CMD, SHOOT, SHOOT_COOLDOWN, \
     IMAGE_DIR
 from GameFramework.game_role.Player import Player
@@ -211,8 +211,8 @@ class TankPlayer(Player):
         return info
 
     def get_obj_progress_data(self) -> dict:
-        image_data = {ID: f"{self._id}P", X: self.rect.x, Y: self.rect.y,
-                      WIDTH: self.origin_size[0], HEIGHT: self.origin_size[1], ANGLE: self._angle}
+        image_data = create_image_view_data(f"{self._id}P", self.rect.x, self.rect.y
+                                            , self.origin_size[0], self.origin_size[1], self._angle)
         return image_data
 
     def get_obj_init_data(self) -> list:

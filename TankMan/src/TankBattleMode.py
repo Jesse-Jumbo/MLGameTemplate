@@ -9,12 +9,10 @@ from mlgame.view.view_model import create_asset_init_data, create_text_view_data
 from mlgame.view.view_model import create_image_view_data
 
 from GameFramework.SoundController import create_music_data
-from GameFramework.TiledMap import TiledMap, create_construction
-from GameFramework.constants import ID, X, Y, WIDTH, HEIGHT, ANGLE
+from GameFramework.TiledMap import create_construction
 from GameFramework.game_mode.BattleMode import BattleMode
 from .TankBullet import TankBullet
 from .TankPlayer import TankPlayer
-from .TankSoundController import TankSoundController
 from .TankStation import TankStation
 from .TankWall import TankWall
 from .collide_hit_rect import *
@@ -23,35 +21,10 @@ from .env import *
 
 # TODO refactor attribute to method
 class TankBattleMode(BattleMode):
-    _ID = ID
-    _X = X
-    _Y = Y
-    _WIDTH = WIDTH
-    _HEIGHT = HEIGHT
-    _ANGLE = ANGLE
-
-    def __init__(self, user_num: int, is_manual: bool, map_path: str, frame_limit: int, is_sound: bool):
-        self._user_num = user_num
-        self.map_path = map_path
+    def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str):
+        super().__init__(map_path, sound_path)
         self.frame_limit = frame_limit
-        self.is_paused = False
-        self.is_debug = False
-        self.all_sprites = pygame.sprite.Group()
-        self.map = TiledMap(self.map_path)
-        self.used_frame = 0
-        self.state = GameResultState.FAIL
-        self.status = GameStatus.GAME_ALIVE
-        self.players = pygame.sprite.Group()
-        self.map_width = self.map.map_width
-        self.map_height = self.map.map_height
-
-        pygame.init()
-        self.is_sound = is_sound
         self.is_manual = is_manual
-        self.sound_controller = TankSoundController(is_sound, self.get_music_data())
-        self.sound_controller.play_music(path.join(SOUND_DIR, "BGM.ogg"), 0.1)
-        self.WIDTH_CENTER = self.map.map_width // 2
-        self.HEIGHT_CENTER = self.map.map_height // 2
         # control variables
         self.is_invincible = False
         self.is_through_wall = False
@@ -171,7 +144,7 @@ class TankBattleMode(BattleMode):
 
     def reset_game(self):
         # reset init game
-        self.__init__(2, self.is_manual, self.map_path, self.frame_limit, self.is_sound)
+        self.__init__(self.is_manual, self.map_path, self.frame_limit, self.sound_path)
         # reset player pos
         self.empty_quadrant_1_pos.append(self.player_1P._origin_xy)
         self.empty_quadrant_2_pos.append(self.player_2P._origin_xy)
@@ -300,7 +273,7 @@ class TankBattleMode(BattleMode):
                 station.change_pos(new_pos)
 
     def create_bullet(self, shoot_info):
-        self.sound_controller.play_shoot_sound()
+        self.sound_controller.play_sound("shoot", 0.03, -1)
         init_data = create_construction(shoot_info["id"], 0, shoot_info["init_pos"], (13, 13))
         bullet = TankBullet(init_data, rot=shoot_info["rot"], margin=2, spacing=2)
         self.bullets.add(bullet)
@@ -309,10 +282,7 @@ class TankBattleMode(BattleMode):
     def draw_players(self):
         player_data = []
         for player in self.players:
-            data = player.get_obj_progress_data()
-            player_data.append(create_image_view_data(data[self._ID], data[self._X], data[self._Y],
-                                                      data[self._WIDTH], data[self._HEIGHT],
-                                                      data[self._ANGLE]))
+            player_data.append(player.get_obj_progress_data())
 
         return player_data
 
@@ -320,35 +290,22 @@ class TankBattleMode(BattleMode):
         all_sprite_data = self.floor_image_data_list.copy()
         for oil_station in self.oil_stations:
             if isinstance(oil_station, TankStation):
-                data = oil_station.get_obj_progress_data()
-                all_sprite_data.append(create_image_view_data(data[self._ID], data[self._X], data[self._Y],
-                                                              data[self._WIDTH], data[self._HEIGHT],
-                                                              data[self._ANGLE]))
+                all_sprite_data.append(oil_station.get_obj_progress_data())
 
         for bullet_station in self.bullet_stations:
             if isinstance(bullet_station, TankStation):
-                data = bullet_station.get_obj_progress_data()
-                all_sprite_data.append(create_image_view_data(data[self._ID], data[self._X], data[self._Y],
-                                                              data[self._WIDTH], data[self._HEIGHT],
-                                                              data[self._ANGLE]))
+                all_sprite_data.append(bullet_station.get_obj_progress_data())
 
         for bullet in self.bullets:
             if isinstance(bullet, TankBullet):
-                data = bullet.get_obj_progress_data()
-                all_sprite_data.append(create_image_view_data(data[self._ID], data[self._X], data[self._Y],
-                                                              data[self._WIDTH], data[self._HEIGHT],
-                                                              data[self._ANGLE]))
+                all_sprite_data.append(bullet.get_obj_progress_data())
 
         for player in self.draw_players():
             all_sprite_data.append(player)
 
         for wall in self.walls:
             if isinstance(wall, TankWall):
-                data = wall.get_obj_progress_data()
-                if data:
-                    all_sprite_data.append(create_image_view_data(data[self._ID], data[self._X], data[self._Y],
-                                                                  data[self._WIDTH], data[self._HEIGHT],
-                                                                  data[self._ANGLE]))
+                all_sprite_data.append(wall.get_obj_progress_data())
 
         if self.is_debug:
             for sprite in self.all_sprites:
@@ -506,8 +463,8 @@ class TankBattleMode(BattleMode):
         return origin_result
 
     def get_music_data(self):
-        return [create_music_data("shoot", path.join(SOUND_DIR, "shoot.wav"))
-                , create_music_data("touch", path.join(SOUND_DIR, "touch.wav"))]
+        return [create_music_data("shoot", "shoot.wav")
+                , create_music_data("touch", "touch.wav")]
 
     def draw_rect(self, sprite):
         all_line = []

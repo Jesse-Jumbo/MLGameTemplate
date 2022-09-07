@@ -1,35 +1,37 @@
+from os import path
+
 import pygame.mixer
 
 
-def create_music_data(music_id: str, music_path: str):
+def create_music_data(id: str, name: str):
     return {
-        "music_id": music_id
-        , "music_path": music_path
+        "_id": id
+        , "_name": name
     }
 
 
 class SoundController:
-    def __init__(self, is_sound: bool, music_data_list: list):
-        self._is_sound = is_sound
-        if not self._is_sound:
+    def __init__(self, sound_path: str, music_data_list: list):
+        self._sound_path = sound_path
+        if not self._sound_path:
             return
-        pygame.mixer.init()
         self._music_obj = {}
+        pygame.mixer.init()
         for music_data in music_data_list:
-            self._music_obj[music_data["music_id"]] = pygame.mixer.Sound(music_data["music_path"])
-        print(self._music_obj)
+            sound_data = path.join(self._sound_path, music_data["_name"])
+            self._music_obj[music_data["_id"]] = pygame.mixer.Sound(sound_data)
 
-    def play_music(self, music_path: str, volume: float) -> None:
-        if not self._is_sound:
+    def play_music(self, bgm_path: str, volume: float) -> None:
+        if not self._sound_path:
             return
         pygame.mixer.init()
-        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.load(path.join(self._sound_path, bgm_path))
         pygame.mixer.music.set_volume(volume)
         pygame.mixer.music.play(-1)
 
-    def play_sound(self, music_id: str, volume: float, maz_time: int) -> None:
-        if not self._is_sound:
+    def play_sound(self, id: str, volume: float, maz_time: int) -> None:
+        if not self._sound_path:
             return
-        sound_obj = self._music_obj[music_id]
+        sound_obj = self._music_obj[id]
         sound_obj.set_volume(volume)
         sound_obj.play(maxtime=maz_time)

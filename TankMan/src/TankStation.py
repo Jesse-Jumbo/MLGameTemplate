@@ -2,7 +2,7 @@ import random
 from os import path
 
 import pygame
-from mlgame.view.view_model import create_asset_init_data
+from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
 from GameFramework.Props import Props
 from .env import IMAGE_DIR, WINDOW_HEIGHT, WINDOW_WIDTH
@@ -46,12 +46,11 @@ class TankStation(Props):
 
     def get_obj_progress_data(self):
         if 5 == self._id:
-            image_data = {"id": f"oil", "x": self.rect.x, "y": self.rect.y, "width": self.rect.width,
-                          "height": self.rect.height, "angle": 0}
+            return create_image_view_data(f"oil", self.rect.x, self.rect.y
+                                          , self.rect.width, self.rect.height, 0)
         else:
-            image_data = {"id": f"bullets", "x": self.rect.x, "y": self.rect.y, "width": self.rect.width,
-                          "height": self.rect.height, "angle": 0}
-        return image_data
+            return create_image_view_data(f"bullets", self.rect.x, self.rect.y
+                                          , self.rect.width, self.rect.height, 0)
 
     def get_obj_init_data(self):
         bullets_id = "bullets"
