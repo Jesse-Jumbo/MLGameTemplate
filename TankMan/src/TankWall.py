@@ -35,9 +35,8 @@ class TankWall(Props):
         return info
 
     def get_obj_progress_data(self):
-        if self._lives > 0:
-            return create_image_view_data(f"wall_{self._lives}", self.rect.x, self.rect.y,
-                                          self.rect.width, self.rect.height, 0)
+        return create_image_view_data(f"wall_{self._lives}", self.rect.x, self.rect.y
+                                      , self.rect.width, self.rect.height, 0)
 
     def get_obj_init_data(self):
         image_init_data = []

@@ -22,8 +22,8 @@ class BattleMode:
         self.used_frame = 0
         self.state = GameResultState.FAIL
         self.status = GameStatus.GAME_ALIVE
-        self.sound_controller = SoundController(sound_path, self.get_music_data())
-        self.sound_controller.play_music("BGM.ogg", 0.1)
+        self.sound_controller = SoundController(sound_path, self.get_sound_data())
+        self.sound_controller.play_music(self.get_bgm_data())
         self.WIDTH_CENTER = self.map.map_width // 2
         self.HEIGHT_CENTER = self.map.map_height // 2
 
@@ -56,3 +56,10 @@ class BattleMode:
     def get_game_sys_info_data(self):
         raise Exception("Please overwrite get_game_sys_info_data")
 
+    def get_sound_data(self):
+        if self.sound_path:
+            raise Exception("Please overwrite get_music_data")
+
+    def get_bgm_data(self):
+        if self.sound_path:
+            raise Exception("Please overwrite get_bgm_data")

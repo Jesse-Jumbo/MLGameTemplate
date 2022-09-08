@@ -8,7 +8,7 @@ from mlgame.view.view_model import create_asset_init_data, create_text_view_data
     create_rect_view_data, create_line_view_data
 from mlgame.view.view_model import create_image_view_data
 
-from GameFramework.SoundController import create_music_data
+from GameFramework.SoundController import create_sounds_data, create_bgm_data
 from GameFramework.TiledMap import create_construction
 from GameFramework.game_mode.BattleMode import BattleMode
 from .TankBullet import TankBullet
@@ -72,6 +72,7 @@ class TankBattleMode(BattleMode):
                 create_image_view_data(f"floor_{no}", pos[0], pos[1], 50, 50, 0))
 
     def update_game(self, command: dict):
+        self.check_collisions()
         self.walls.update()
         self.oil_stations.update()
         self.bullet_stations.update()
@@ -88,7 +89,6 @@ class TankBattleMode(BattleMode):
                 # TODO refactor reset method
                 if not player.get_is_alive() or self.used_frame >= self.frame_limit:
                     self.reset()
-            self.check_collisions()
 
     # TODO refactor result info and position
     def get_result(self) -> list:
@@ -313,8 +313,9 @@ class TankBattleMode(BattleMode):
 
     def get_toggle_progress_data(self):
         all_toggle_data = []
-        # hourglass_index = self.used_frame // 10 % 15
-        hourglass_index = 1
+        hourglass_index = 0
+        if self.is_manual:
+            hourglass_index = self.used_frame // 10 % 15
         all_toggle_data.append(
             create_image_view_data(image_id=f"hourglass_{hourglass_index}", x=0, y=2, width=20, height=20, angle=0))
         x = 23
@@ -409,7 +410,7 @@ class TankBattleMode(BattleMode):
             all_init_image_data.append(create_asset_init_data(f"floor_{i}", 50, 50
                                                               , path.join(IMAGE_DIR, f"grass_{i}.png"),
                                                               f"https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/grass_{i}.png"))
-        for i in range(1, 2):
+        for i in range(15):
             all_init_image_data.append(create_asset_init_data(f"hourglass_{i}", 42, 42
                                                               , path.join(IMAGE_DIR, f"hourglass_{i}.png"),
                                                               f"https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/hourglass_{i}.png"))
@@ -464,9 +465,12 @@ class TankBattleMode(BattleMode):
             origin_result["score"] = self.player_2P._score + self.calculate_score()[1]
         return origin_result
 
-    def get_music_data(self):
-        return [create_music_data("shoot", "shoot.wav")
-            , create_music_data("touch", "touch.wav")]
+    def get_sound_data(self):
+        return [create_sounds_data("shoot", "shoot.wav")
+                , create_sounds_data("touch", "touch.wav")]
+
+    def get_bgm_data(self):
+        return create_bgm_data("BGM.ogg", 0.1)
 
     def draw_rect(self, sprite):
         all_line = []

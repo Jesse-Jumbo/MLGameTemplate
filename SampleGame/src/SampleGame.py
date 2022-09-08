@@ -8,7 +8,7 @@ from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
     create_image_view_data, create_rect_view_data
 
-from GameFramework.SoundController import SoundController, create_music_data
+from GameFramework.SoundController import SoundController, create_sounds_data
 from GameFramework.TiledMap import TiledMap, create_construction
 from .SampleBullet import SampleBullet
 from .SampleMob import SampleMob
@@ -341,4 +341,4 @@ class SampleGame(PaiaGame):
         self.bullets.add(bullet)
 
     def get_music_data(self):
-        return [create_music_data(music_id="test", music_name=path.join(ASSET_PATH, "sound/bgm.ogg"))]
+        return [create_sounds_data(music_id="test", music_name=path.join(ASSET_PATH, "sound/bgm.ogg"))]
