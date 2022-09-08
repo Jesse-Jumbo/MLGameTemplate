@@ -4,6 +4,7 @@ from os import path
 from mlgame.game.paia_game import GameResultState, GameStatus
 from GameFramework.SoundController import SoundController
 from GameFramework.TiledMap import TiledMap
+from GameFramework.game_role.Player import Player
 
 
 class BattleMode:
@@ -15,8 +16,6 @@ class BattleMode:
         self.map = TiledMap(self.map_path)
         self.map_width = self.map.map_width
         self.map_height = self.map.map_height
-        self.is_paused = False
-        self.is_debug = False
         self.all_sprites = pygame.sprite.Group()
         self.players = pygame.sprite.Group()
         self.used_frame = 0
@@ -27,48 +26,52 @@ class BattleMode:
         self.WIDTH_CENTER = self.map.map_width // 2
         self.HEIGHT_CENTER = self.map.map_height // 2
 
-    def update(self, command: dict):
-        if command["1P"] and "DEBUG" in list(command.values())[0]:
-            self.is_debug = not self.is_debug
-        if not self.is_paused:
-            self.update_game(command)
-            if not self.is_running():
-                self.reset()
+    def update(self, command: dict) -> None:
+        raise Exception("Please overwrite update")
 
-    def update_game(self, command):
-        raise Exception("Please overwrite update_game")
-
-    def reset(self):
+    def reset(self) -> None:
         raise Exception("Please overwrite reset")
 
-    def is_running(self):
-        return self.status == GameStatus.GAME_ALIVE
-
-    def get_background_view_data(self):
+    def get_background_view_data(self) -> list:
         raise Exception("Please overwrite get_background_view_data")
 
-    def get_obj_progress_data(self):
+    def get_obj_progress_data(self) -> list:
         raise Exception("Please overwrite get_obj_progress_data")
 
-    def get_bias_toggle_progress_data(self):
+    def get_bias_toggle_progress_data(self) -> list:
         raise Exception("Please overwrite get_bias_toggle_progress_data")
 
-    def get_toggle_progress_data(self):
+    def get_toggle_progress_data(self) -> list:
         raise Exception("Please overwrite get_toggle_progress_data")
 
-    def get_foreground_progress_data(self):
+    def get_foreground_progress_data(self) -> list:
         raise Exception("Please overwrite get_foreground_progress_data")
 
-    def get_user_info_data(self):
+    def get_user_info_data(self) -> list:
         raise Exception("Please overwrite get_user_info_data")
 
-    def get_game_sys_info_data(self):
+    def get_game_sys_info_data(self) -> dict:
         raise Exception("Please overwrite get_game_sys_info_data")
 
-    def get_sound_data(self):
+    def get_sound_data(self) -> list:
         if self.sound_path:
             raise Exception("Please overwrite get_music_data")
+        return []
 
-    def get_bgm_data(self):
+    def get_bgm_data(self) -> dict:
         if self.sound_path:
             raise Exception("Please overwrite get_bgm_data")
+        return {}
+
+    def draw_players(self) -> list:
+        player_data = []
+        for player in self.players:
+            if isinstance(player, Player):
+                player_data.append(player.get_obj_progress_data())
+
+        return player_data
+
+    def debugging(self, is_debug: bool) -> list:
+        if is_debug:
+            raise Exception("Please over writing debugging")
+        return []

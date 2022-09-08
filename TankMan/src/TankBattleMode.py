@@ -5,7 +5,7 @@ import pygame.event
 from mlgame.game.paia_game import GameResultState, GameStatus
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import create_asset_init_data, create_text_view_data, \
-    create_rect_view_data, create_line_view_data
+    create_rect_view_data, create_line_view_data, create_polygon_view_data
 from mlgame.view.view_model import create_image_view_data
 
 from GameFramework.SoundController import create_sounds_data, create_bgm_data
@@ -23,6 +23,7 @@ from .env import *
 class TankBattleMode(BattleMode):
     def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str):
         super().__init__(map_path, sound_path)
+        self.obj_rect_list = []
         self.frame_limit = frame_limit
         self.is_manual = is_manual
         # control variables
@@ -68,7 +69,7 @@ class TankBattleMode(BattleMode):
             self.floor_image_data_list.append(
                 create_image_view_data(f"floor_{no}", pos[0], pos[1], 50, 50, 0))
 
-    def update_game(self, command: dict):
+    def update(self, command: dict):
         self.used_frame += 1
         self.check_collisions()
         self.walls.update()
@@ -119,7 +120,7 @@ class TankBattleMode(BattleMode):
         elif score_1P < score_2P:
             self.set_result(GameResultState.FINISH, GameStatus.GAME_2P_WIN)
         else:
-            self.set_result(GameResultState.FAIL, GameStatus.GAME_DRAW)
+            self.set_result(GameResultState.FINISH, GameStatus.GAME_DRAW)
 
     def set_result(self, state: str, status: str):
         self.state = state
@@ -166,44 +167,36 @@ class TankBattleMode(BattleMode):
         self.all_sprites.add(bullet)
         player.set_is_shoot(False)
 
-    def draw_players(self):
-        player_data = []
-        for player in self.players:
-            player_data.append(player.get_obj_progress_data())
-
-        return player_data
-
     def get_background_view_data(self):
-        return []
+        background_view_data = []
+        return background_view_data
 
     def get_obj_progress_data(self):
-        all_sprite_data = self.floor_image_data_list.copy()
+        obj_progress_data = self.floor_image_data_list.copy()
         for oil_station in self.oil_stations:
             if isinstance(oil_station, TankStation):
-                all_sprite_data.append(oil_station.get_obj_progress_data())
+                obj_progress_data.append(oil_station.get_obj_progress_data())
 
         for bullet_station in self.bullet_stations:
             if isinstance(bullet_station, TankStation):
-                all_sprite_data.append(bullet_station.get_obj_progress_data())
+                obj_progress_data.append(bullet_station.get_obj_progress_data())
 
         for bullet in self.bullets:
             if isinstance(bullet, TankBullet):
-                all_sprite_data.append(bullet.get_obj_progress_data())
+                obj_progress_data.append(bullet.get_obj_progress_data())
 
         for player in self.draw_players():
-            all_sprite_data.append(player)
+            obj_progress_data.append(player)
 
         for wall in self.walls:
             if isinstance(wall, TankWall):
-                all_sprite_data.append(wall.get_obj_progress_data())
+                obj_progress_data.append(wall.get_obj_progress_data())
 
-        if self.is_debug:
-            for sprite in self.all_sprites:
-                all_sprite_data.extend(self.draw_rect(sprite))
+        obj_progress_data.extend(self.obj_rect_list)
 
-        all_sprite_data.append(create_image_view_data("border", 0, -50, self.map.map_width, WINDOW_HEIGHT, 0))
+        obj_progress_data.append(create_image_view_data("border", 0, -50, self.map.map_width, WINDOW_HEIGHT, 0))
 
-        return all_sprite_data
+        return obj_progress_data
 
     def get_bias_toggle_progress_data(self):
         return []
@@ -369,22 +362,6 @@ class TankBattleMode(BattleMode):
     def get_bgm_data(self):
         return create_bgm_data("BGM.ogg", 0.1)
 
-    def draw_rect(self, sprite):
-        all_line = []
-        point = [(sprite.rect.x, sprite.rect.y), sprite.rect.topright, sprite.rect.bottomright, sprite.rect.bottomleft,
-                 (sprite.rect.x, sprite.rect.y)]
-        hit_point = [(sprite.hit_rect.x, sprite.hit_rect.y), sprite.hit_rect.topright, sprite.hit_rect.bottomright,
-                     sprite.hit_rect.bottomleft, (sprite.hit_rect.x, sprite.hit_rect.y)]
-        for i in range(4):
-            all_line.append(
-                create_line_view_data(f"{sprite.get_data_from_obj_to_game()['id']}", point[i][0], point[i][1],
-                                      point[i + 1][0],
-                                      point[i + 1][1], YELLOW, 2))
-            all_line.append(create_line_view_data(f"hit_{sprite.get_data_from_obj_to_game()['id']}", hit_point[i][0],
-                                                  hit_point[i][1],
-                                                  hit_point[i + 1][0], hit_point[i + 1][1], RED, 2))
-        return all_line
-
     def add_player_score(self, player_id: int):
         if not player_id:
             return
@@ -392,3 +369,17 @@ class TankBattleMode(BattleMode):
             self.player_1P.add_score(20)
         else:
             self.player_2P.add_score(20)
+
+    def debugging(self, is_debug: bool):
+        self.obj_rect_list = []
+        if not is_debug:
+            return
+        for sprite in self.all_sprites:
+            if isinstance(sprite, pygame.sprite.Sprite):
+                points = [sprite.rect.topleft, sprite.rect.topright, sprite.rect.bottomright
+                          , sprite.rect.bottomleft, sprite.rect.topleft]
+                hit_points = [sprite.hit_rect.topleft, sprite.hit_rect.topright, sprite.hit_rect.bottomright
+                              , sprite.hit_rect.bottomleft, sprite.rect.topleft]
+                for index in range(len(points)-1):
+                    self.obj_rect_list.append(create_line_view_data("rect", *points[index], *points[index+1], WHITE))
+                    self.obj_rect_list.append(create_line_view_data("hit_rect", *hit_points[index], *hit_points[index+1], RED))

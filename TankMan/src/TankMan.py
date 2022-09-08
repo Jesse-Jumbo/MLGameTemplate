@@ -24,7 +24,7 @@ class TankMan(Game):
         pygame.display.set_icon(pygame.image.load(path.join(IMAGE_DIR, "logo.png")))
 
     def update_game(self, commands: dict):
-        pass
+        self.game_mode.update(commands)
 
     def set_game_mode(self):
         map_path = path.join(MAP_DIR, self.map_name)

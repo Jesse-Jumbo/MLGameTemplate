@@ -1,3 +1,4 @@
+import pygame.key
 from mlgame.game.paia_game import PaiaGame, GameStatus
 from mlgame.utils.enum import get_ai_name
 
@@ -6,6 +7,8 @@ class Game(PaiaGame):
     def __init__(self, user_num, map_no: int, sound: str):
         super().__init__(user_num)
         self.map_name = f"map_0{map_no}.tmx"
+        self.is_paused = False
+        self.is_debug = False
         self.is_sound = False
         if sound == "on":
             self.is_sound = True
@@ -17,18 +20,20 @@ class Game(PaiaGame):
         return to_players_data
 
     def update(self, commands: dict):
-        self.frame_count += 1
-        self.update_game(commands)
-        self.game_mode.update(commands)
-        if not self.is_running():
-            return "RESET"
+        self.handle_event()
+        self.game_mode.debugging(self.is_debug)
+        if not self.is_paused:
+            self.frame_count += 1
+            self.update_game(commands)
+            if not self.is_running():
+                return "RESET"
 
     def update_game(self, commands: dict):
         raise Exception("Please over writing update_game")
 
     def reset(self):
         self.frame_count = 0
-        self.game_mode.reset_game()
+        self.game_mode.reset()
         self.rank()
 
     def get_scene_init_data(self) -> dict:
@@ -65,10 +70,7 @@ class Game(PaiaGame):
                 }
 
     def is_running(self):
-        if self.game_mode.status == GameStatus.GAME_ALIVE:
-            return True
-        else:
-            return False
+        return self.game_mode.status == GameStatus.GAME_ALIVE
 
     def set_game_mode(self):
         raise Exception("Please over writing set_game_mode")
@@ -77,3 +79,10 @@ class Game(PaiaGame):
         self.game_result_state = self.game_mode.state
         self.attachements = self.game_mode.get_player_result()
         return self.attachements
+
+    def handle_event(self):
+        key_board_list = pygame.key.get_pressed()
+        if key_board_list[pygame.K_b]:
+            self.is_debug = not self.is_debug
+        if key_board_list[pygame.K_SPACE]:
+            self.is_paused = not self.is_paused
