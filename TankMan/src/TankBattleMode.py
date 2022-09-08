@@ -61,10 +61,7 @@ class TankBattleMode(BattleMode):
         self.all_sprites.add(*self.oil_stations)
         # init pos list
         self.all_pos_list = self.map.all_pos_list
-        self.empty_quadrant_1_pos = self.map.empty_quadrant_1_pos_list
-        self.empty_quadrant_2_pos = self.map.empty_quadrant_2_pos_list
-        self.empty_quadrant_3_pos = self.map.empty_quadrant_3_pos_list
-        self.empty_quadrant_4_pos = self.map.empty_quadrant_4_pos_list
+        self.empty_quadrant_pos_dict = self.map.empty_quadrant_pos_dict
         self.floor_image_data_list = []
         for pos in self.all_pos_list:
             no = random.randrange(3)
@@ -92,10 +89,10 @@ class TankBattleMode(BattleMode):
         # reset init game
         self.__init__(self.is_manual, self.map_path, self.frame_limit, self.sound_path)
         # reset player pos
-        self.empty_quadrant_1_pos.append(self.player_1P._origin_xy)
-        self.empty_quadrant_2_pos.append(self.player_2P._origin_xy)
-        self.player_1P.reset_xy(self.empty_quadrant_1_pos.pop(random.randrange(len(self.empty_quadrant_1_pos))))
-        self.player_2P.reset_xy(self.empty_quadrant_2_pos.pop(random.randrange(len(self.empty_quadrant_2_pos))))
+        self.empty_quadrant_pos_dict[1].append(self.player_1P._origin_xy)
+        self.empty_quadrant_pos_dict[2].append(self.player_2P._origin_xy)
+        self.player_1P.reset_xy(self.empty_quadrant_pos_dict[1].pop(random.randrange(len(self.empty_quadrant_pos_dict[1]))))
+        self.player_2P.reset_xy(self.empty_quadrant_pos_dict[2].pop(random.randrange(len(self.empty_quadrant_pos_dict[2]))))
 
     def get_player_result(self) -> list:
         """Define the end of game will return the player's info for user"""
@@ -144,36 +141,20 @@ class TankBattleMode(BattleMode):
         elif player_id == 2:
             self.player_2P.add_score(score)
 
-    def change_obj_pos(self, stations=None):
-        if stations is None:
+    def change_obj_pos(self, objs=None):
+        if objs is None:
             return
-        for station in stations:
-            if station.get_quadrant() == 1:
-                self.empty_quadrant_1_pos.append(station.get_xy())
-            elif station.get_quadrant() == 2:
-                self.empty_quadrant_2_pos.append(station.get_xy())
-            elif station.get_quadrant() == 3:
-                self.empty_quadrant_3_pos.append(station.get_xy())
-            else:
-                self.empty_quadrant_4_pos.append(station.get_xy())
-            if station.get_quadrant() == 2 or station.get_quadrant() == 3:
-                quadrant = random.choice([2, 3])
-                station.set_quadrant(quadrant)
-            else:
-                quadrant = random.choice([1, 4])
-                station.set_quadrant(quadrant)
-            if quadrant == 1:
-                new_pos = self.empty_quadrant_1_pos.pop(random.randrange(len(self.empty_quadrant_1_pos)))
-                station.reset_xy(new_pos)
-            elif quadrant == 2:
-                new_pos = self.empty_quadrant_2_pos.pop(random.randrange(len(self.empty_quadrant_2_pos)))
-                station.reset_xy(new_pos)
-            elif quadrant == 3:
-                new_pos = self.empty_quadrant_3_pos.pop(random.randrange(len(self.empty_quadrant_3_pos)))
-                station.reset_xy(new_pos)
-            else:
-                new_pos = self.empty_quadrant_4_pos.pop(random.randrange(len(self.empty_quadrant_4_pos)))
-                station.reset_xy(new_pos)
+        for obj in objs:
+            if isinstance(obj, TankStation):
+                quadrant = obj.get_quadrant()
+                self.empty_quadrant_pos_dict[quadrant].append(obj.get_xy())
+                if quadrant == 2 or quadrant == 3:
+                    obj.set_quadrant(random.choice([2, 3]))
+                else:
+                    obj.set_quadrant(random.choice([1, 4]))
+                quadrant = obj.get_quadrant()
+                new_pos = self.empty_quadrant_pos_dict[quadrant].pop(random.randrange(len(self.empty_quadrant_pos_dict[quadrant])))
+                obj.reset_xy(new_pos)
 
     def create_bullet(self, player):
         if isinstance(player, TankPlayer) and not player.get_is_shoot():

@@ -177,7 +177,7 @@ class TankPlayer(Player):
 
     def get_rot(self):
         if self._id == 2:
-            return self.rot + 180
+            return (self.rot + 180) % 360
         return self.rot
 
     def get_data_from_obj_to_game(self) -> dict:

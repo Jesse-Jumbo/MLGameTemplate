@@ -22,12 +22,9 @@ class TiledMap:
         self.map_height = self.tile_height * self.height
         self.tmx_data = tm
         self._is_record = False
-        self.empty_pos_list = []
         self.all_pos_list = []
-        self.empty_quadrant_1_pos_list = []
-        self.empty_quadrant_2_pos_list = []
-        self.empty_quadrant_3_pos_list = []
-        self.empty_quadrant_4_pos_list = []
+        self.empty_pos_list = []
+        self.empty_quadrant_pos_dict = {1: [], 2: [], 3: [], 4: []}
         self.all_obj_data_dict = {}
         # TODO refactor
         self.all_obj = {}
@@ -51,13 +48,13 @@ class TiledMap:
                     if not self._is_record and not gid:  # 0代表空格，無圖塊
                         self.empty_pos_list.append(pos)
                         if pos[0] >= self.map_width // 2 and pos[1] < self.map_height // 2:
-                            self.empty_quadrant_1_pos_list.append(pos)
+                            self.empty_quadrant_pos_dict[1].append(pos)
                         elif pos[0] < self.map_width // 2 and pos[1] < self.map_height // 2:
-                            self.empty_quadrant_2_pos_list.append(pos)
+                            self.empty_quadrant_pos_dict[2].append(pos)
                         elif pos[0] < self.map_width // 2 and pos[1] >= self.map_height // 2:
-                            self.empty_quadrant_3_pos_list.append(pos)
+                            self.empty_quadrant_pos_dict[3].append(pos)
                         else:
-                            self.empty_quadrant_4_pos_list.append(pos)
+                            self.empty_quadrant_pos_dict[4].append(pos)
                     elif gid:
                         img_id = layer.parent.tiledgidmap[gid]
                         try:
