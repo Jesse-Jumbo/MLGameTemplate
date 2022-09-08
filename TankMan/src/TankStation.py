@@ -26,7 +26,7 @@ class TankStation(Props):
             self.quadrant = 4
 
     def update(self):
-        self.rect.center = self.hit_rect.center
+        self.hit_rect.center = self.rect.center
 
     def get_supply(self):
         return self.power
@@ -62,7 +62,3 @@ class TankStation(Props):
                            , create_asset_init_data(oil_id, self.rect.width, self.rect.height,
                                                     path.join(IMAGE_DIR, f"{oil_id}.png"), oil_url)]
         return image_init_data
-
-    def change_pos(self, pos: tuple):
-        self.rect.topleft = pos
-        self.hit_rect.center = self.rect.center

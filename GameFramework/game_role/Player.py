@@ -145,6 +145,16 @@ class Player(pygame.sprite.Sprite):
         else:
             raise TypeError('is_shoot need bool')
 
+    def reset_xy(self, new_pos=()) -> None:
+        """
+        :param new_pos:
+        :return:
+        """
+        if new_pos:
+            self.rect.topleft = new_pos
+        else:
+            self.rect.topleft = self._origin_xy
+
     def get_xy(self) -> tuple:
         """
         :return: topleft
@@ -169,7 +179,7 @@ class Player(pygame.sprite.Sprite):
         """
         return self._id
 
-    def get_result(self):
+    def get_info_to_game_result(self):
         """
         add all player information
 

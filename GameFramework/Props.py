@@ -16,6 +16,7 @@ class Props(pygame.sprite.Sprite):
         self._id = construction["_id"]
         self._no = construction["_no"]
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
+        self._origin_xy = self.rect.topleft
         self._origin_center = self.rect.center
         self._angle = 0
         self._used_frame = 0
@@ -120,3 +121,14 @@ class Props(pygame.sprite.Sprite):
         :return:
         """
         raise Exception("Please overwrite get_obj_progress_data")
+
+    def reset_xy(self, new_pos=()) -> None:
+        """
+        :param new_pos:
+        :return:
+        """
+        if new_pos:
+            self.rect.topleft = new_pos
+        else:
+            self.rect.topleft = self._origin_xy
+

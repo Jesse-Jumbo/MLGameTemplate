@@ -72,151 +72,67 @@ class TankBattleMode(BattleMode):
                 create_image_view_data(f"floor_{no}", pos[0], pos[1], 50, 50, 0))
 
     def update_game(self, command: dict):
+        self.used_frame += 1
         self.check_collisions()
         self.walls.update()
         self.oil_stations.update()
         self.bullet_stations.update()
         self.bullets.update()
+        number = 0
         for player in self.players:
             self.create_bullet(player)
-        self.set_result(GameResultState.FAIL, GameStatus.GAME_ALIVE)
-        if not self.is_paused:
-            self.used_frame += 1
-            number = 1
-            for player in self.players:
-                player.update(command[f"{number}P"])
-                number += 1
-                # TODO refactor reset method
-                if not player.get_is_alive() or self.used_frame >= self.frame_limit:
-                    self.reset()
-
-    # TODO refactor result info and position
-    def get_result(self) -> list:
-        """Define the end of game will return the player's info for user"""
-        res = []
-        for player in self.players:
-            get_res = player.get_result()
-            get_res = self.get_other_result(get_res)
-            get_res["state"] = self.state
-            get_res["status"] = self.status
-            res.append(get_res)
-        return res
-
-    def get_other_result(self, origin_result):
-        """You can overwrite or append new result to origin result, when you finished, return origin_result"""
-        return origin_result
-
-    def calculate_score(self) -> tuple:
-        score_1P = (3 - self.player_2P._lives) * 20
-        score_2P = (3 - self.player_1P._lives) * 20
-        return score_1P, score_2P
+            player.update(command[get_ai_name(number)])
+            if not player.get_is_alive():
+                self.get_player_end()
+            number += 1
+        if self.used_frame >= self.frame_limit:
+            self.get_game_end()
 
     def reset(self):
-        if self.player_1P._is_alive and not self.player_2P._is_alive:
-            self.set_result(GameResultState.FINISH, GameStatus.GAME_1P_WIN)
-        elif not self.player_1P._is_alive and self.player_2P._is_alive:
-            self.set_result(GameResultState.FINISH, GameStatus.GAME_2P_WIN)
-        self.reset_2()
-
-    def reset_2(self):
-        if self.status == GameStatus.GAME_ALIVE:
-            score_1P = self.player_1P._score + self.calculate_score()[0]
-            score_2P = self.player_2P._score + self.calculate_score()[1]
-            if score_1P > score_2P:
-                self.set_result(GameResultState.FINISH, GameStatus.GAME_1P_WIN)
-            elif score_1P < score_2P:
-                self.set_result(GameResultState.FINISH, GameStatus.GAME_2P_WIN)
-            else:
-                self.set_result(GameResultState.FAIL, GameStatus.GAME_DRAW)
-
-    def reset_game(self):
         # reset init game
         self.__init__(self.is_manual, self.map_path, self.frame_limit, self.sound_path)
         # reset player pos
         self.empty_quadrant_1_pos.append(self.player_1P._origin_xy)
         self.empty_quadrant_2_pos.append(self.player_2P._origin_xy)
-        self.player_1P.rect.topleft = self.empty_quadrant_1_pos.pop(random.randrange(len(self.empty_quadrant_1_pos)))
-        self.player_2P.rect.topleft = self.empty_quadrant_2_pos.pop(random.randrange(len(self.empty_quadrant_2_pos)))
-        self.player_1P.hit_rect.center = self.player_1P.rect.center
-        self.player_2P.hit_rect.center = self.player_2P.rect.center
+        self.player_1P.reset_xy(self.empty_quadrant_1_pos.pop(random.randrange(len(self.empty_quadrant_1_pos))))
+        self.player_2P.reset_xy(self.empty_quadrant_2_pos.pop(random.randrange(len(self.empty_quadrant_2_pos))))
+
+    def get_player_result(self) -> list:
+        """Define the end of game will return the player's info for user"""
+        res = []
+        for player in self.players:
+            get_res = player.get_info_to_game_result()
+            get_res["state"] = self.state
+            get_res["status"] = self.status
+            get_res["used_frame"] = self.used_frame
+            res.append(get_res)
+        return res
+
+    def get_player_end(self):
+        if self.player_1P.get_is_alive() and not self.player_2P.get_is_alive():
+            self.set_result(GameResultState.FINISH, GameStatus.GAME_1P_WIN)
+        elif not self.player_1P.get_is_alive() and self.player_2P.get_is_alive():
+            self.set_result(GameResultState.FINISH, GameStatus.GAME_2P_WIN)
+
+    def get_game_end(self):
+        score_1P = self.player_1P.get_score()
+        score_2P = self.player_2P.get_score()
+        if score_1P > score_2P:
+            self.set_result(GameResultState.FINISH, GameStatus.GAME_1P_WIN)
+        elif score_1P < score_2P:
+            self.set_result(GameResultState.FINISH, GameStatus.GAME_2P_WIN)
+        else:
+            self.set_result(GameResultState.FAIL, GameStatus.GAME_DRAW)
 
     def set_result(self, state: str, status: str):
         self.state = state
         self.status = status
 
-    def get_act_command(self):
-        """
-        Define the actions represented by the key
-        (1) press to execute
-        key_pressed_list = pygame.key.get_pressed()
-        (2)
-        get key to execute
-        for even in pygame.event.get():
-            pass
-        """
-        ai_1P = get_ai_name[0]
-        ai_2P = get_ai_name[1]
-        cmd_1P = self.get_1P_command()
-        cmd_2P = self.get_2P_command()
-
-        return {ai_1P: cmd_1P, ai_2P: cmd_2P}
-
-    def get_1P_command(self) -> list:
-        cmd_1P = []
-        key_pressed_list = pygame.key.get_pressed()
-        if key_pressed_list[pygame.K_UP]:
-            cmd_1P.append(FORWARD_CMD)
-        elif key_pressed_list[pygame.K_DOWN]:
-            cmd_1P.append(BACKWARD_CMD)
-
-        if key_pressed_list[pygame.K_SPACE]:
-            cmd_1P.append(SHOOT)
-
-        for even in pygame.event.get():
-            if even.type == pygame.KEYDOWN:
-                if even.key == pygame.K_RIGHT:
-                    cmd_1P.append(RIGHT_CMD)
-                elif even.key == pygame.K_LEFT:
-                    cmd_1P.append(LEFT_CMD)
-
-        return cmd_1P
-
-    def get_2P_command(self) -> list:
-        cmd_2P = []
-        key_pressed_list = pygame.key.get_pressed()
-        if key_pressed_list[pygame.K_w]:
-            cmd_2P.append(FORWARD_CMD)
-        elif key_pressed_list[pygame.K_s]:
-            cmd_2P.append(BACKWARD_CMD)
-
-        if key_pressed_list[pygame.K_f]:
-            cmd_2P.append(SHOOT)
-
-        for even in pygame.event.get():
-            if even.type == pygame.KEYDOWN:
-                if even.key == pygame.K_d:
-                    cmd_2P.append(RIGHT_CMD)
-                elif even.key == pygame.K_a:
-                    cmd_2P.append(LEFT_CMD)
-
-        return cmd_2P
-
-    def get_scene_info(self):
-        scene_info = {"frame": self.used_frame,
-                      "status": self.status,
-                      "background": [1320, 660],
-                      "1P_xy_pos": self.player_1P.get_xy(),
-                      "2P_xy_pos": self.player_2P.get_xy(),
-                      "game_result": self.get_result(),
-                      "state": self.state}
-
-        return scene_info
-
     def check_collisions(self):
         if not self.is_through_wall:
             collide_with_walls(self.players, self.walls)
         if not self.is_invincible:
-            collide_with_bullets(self.players, self.bullets)
+            self.add_player_score(collide_with_bullets(self.players, self.bullets)[0])
             # TODO refactor stations
             bs = collide_with_bullet_stations(self.players, self.bullet_stations)
             self.change_obj_pos(bs)
@@ -224,12 +140,12 @@ class TankBattleMode(BattleMode):
             self.change_obj_pos(os)
         player_id, score = collide_with_bullets(self.walls, self.bullets)
         if player_id == 1:
-            self.player_1P._score += score
+            self.player_1P.add_score(score)
         elif player_id == 2:
-            self.player_2P._score += score
+            self.player_2P.add_score(score)
 
-    def change_obj_pos(self, stations: list):
-        if not stations:
+    def change_obj_pos(self, stations=None):
+        if stations is None:
             return
         for station in stations:
             if station.get_quadrant() == 1:
@@ -248,16 +164,16 @@ class TankBattleMode(BattleMode):
                 station.set_quadrant(quadrant)
             if quadrant == 1:
                 new_pos = self.empty_quadrant_1_pos.pop(random.randrange(len(self.empty_quadrant_1_pos)))
-                station.change_pos(new_pos)
+                station.reset_xy(new_pos)
             elif quadrant == 2:
                 new_pos = self.empty_quadrant_2_pos.pop(random.randrange(len(self.empty_quadrant_2_pos)))
-                station.change_pos(new_pos)
+                station.reset_xy(new_pos)
             elif quadrant == 3:
                 new_pos = self.empty_quadrant_3_pos.pop(random.randrange(len(self.empty_quadrant_3_pos)))
-                station.change_pos(new_pos)
+                station.reset_xy(new_pos)
             else:
                 new_pos = self.empty_quadrant_4_pos.pop(random.randrange(len(self.empty_quadrant_4_pos)))
-                station.change_pos(new_pos)
+                station.reset_xy(new_pos)
 
     def create_bullet(self, player):
         if isinstance(player, TankPlayer) and not player.get_is_shoot():
@@ -326,8 +242,8 @@ class TankBattleMode(BattleMode):
         all_toggle_data.append(create_text_view_data(f"Frame: {self.frame_limit - self.used_frame}",
                                                      self.WIDTH_CENTER + self.WIDTH_CENTER // 2 + 85, 8, RED,
                                                      "24px Arial BOLD"))
-        score_1P = self.player_1P._score + self.calculate_score()[0]
-        score_2P = self.player_2P._score + self.calculate_score()[1]
+        score_1P = self.player_1P.get_score()
+        score_2P = self.player_2P.get_score()
         x = 24
         y = 20
         for score in range(min(score_1P, score_2P)):
@@ -460,14 +376,14 @@ class TankBattleMode(BattleMode):
 
     def get_other_result(self, origin_result):
         if origin_result["id"] == "1P":
-            origin_result["score"] = self.player_1P._score + self.calculate_score()[0]
+            origin_result["score"] = self.player_1P.get_score()
         else:
-            origin_result["score"] = self.player_2P._score + self.calculate_score()[1]
+            origin_result["score"] = self.player_2P.get_score()
         return origin_result
 
     def get_sound_data(self):
         return [create_sounds_data("shoot", "shoot.wav")
-                , create_sounds_data("touch", "touch.wav")]
+            , create_sounds_data("touch", "touch.wav")]
 
     def get_bgm_data(self):
         return create_bgm_data("BGM.ogg", 0.1)
@@ -487,3 +403,11 @@ class TankBattleMode(BattleMode):
                                                   hit_point[i][1],
                                                   hit_point[i + 1][0], hit_point[i + 1][1], RED, 2))
         return all_line
+
+    def add_player_score(self, player_id: int):
+        if not player_id:
+            return
+        if player_id == 1:
+            self.player_1P.add_score(20)
+        else:
+            self.player_2P.add_score(20)

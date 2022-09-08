@@ -30,10 +30,19 @@ class BattleMode:
     def update(self, command: dict):
         if command["1P"] and "DEBUG" in list(command.values())[0]:
             self.is_debug = not self.is_debug
-        self.update_game(command)
+        if not self.is_paused:
+            self.update_game(command)
+            if not self.is_running():
+                self.reset()
 
     def update_game(self, command):
         raise Exception("Please overwrite update_game")
+
+    def reset(self):
+        raise Exception("Please overwrite reset")
+
+    def is_running(self):
+        return self.status == GameStatus.GAME_ALIVE
 
     def get_background_view_data(self):
         raise Exception("Please overwrite get_background_view_data")

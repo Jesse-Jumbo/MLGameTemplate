@@ -75,5 +75,5 @@ class Game(PaiaGame):
 
     def rank(self):
         self.game_result_state = self.game_mode.state
-        self.attachements = self.game_mode.get_result()
+        self.attachements = self.game_mode.get_player_result()
         return self.attachements
