@@ -1,0 +1,16 @@
+{
+  "game_name": "TutorialGame",
+  "version": "0.2.0",
+  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/main/TutorialGame",
+  "description": "一個用於教學的單人遊戲",
+  "logo": [
+    "./asset/image/player.png",
+    "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/TutorialGame/asset/image/player.png"
+  ],
+  "user_num": {
+    "min": 1,
+    "max": 1
+  },
+  "game_params": [
+  ]
+}
