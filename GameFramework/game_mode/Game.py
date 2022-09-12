@@ -5,7 +5,7 @@ from mlgame.game.paia_game import PaiaGame, GameStatus
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import Scene
 
-from GameFramework.game_mode.BattleMode import BattleMode
+from .BattleMode import BattleMode
 
 GAME_DIR = path.dirname(__file__)
 MAP_DIR = path.join(GAME_DIR, "..", "asset", 'maps')
@@ -83,7 +83,8 @@ class Game(PaiaGame):
         sound_path = ""
         if self.is_sound:
             sound_path = SOUND_DIR
-        game_mode = BattleMode(map_path, sound_path)
+        play_rect_area = pygame.Rect(0, 0, 1000, 600)
+        game_mode = BattleMode(map_path, sound_path, play_rect_area)
         return game_mode
 
     def rank(self):

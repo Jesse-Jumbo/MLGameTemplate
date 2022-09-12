@@ -5,8 +5,7 @@ from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 from .env import WINDOW_WIDTH, WINDOW_HEIGHT, LEFT_CMD, RIGHT_CMD, FORWARD_CMD, BACKWARD_CMD, SHOOT, SHOOT_COOLDOWN, \
     IMAGE_DIR
-from GameFramework.game_role.Player import Player
-from GameFramework.constants import *
+from .template.Player import Player
 
 vec = pygame.math.Vector2
 
@@ -14,10 +13,9 @@ vec = pygame.math.Vector2
 class TankPlayer(Player):
     def __init__(self, construction, **kwargs):
         super().__init__(construction, **kwargs)
+        self._play_rect_area = kwargs["play_rect_area"]
         self.origin_size = (self.rect.width, self.rect.height)
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
-        self.hit_rect = pygame.Rect(0, 0, construction["_init_size"][0]-2, construction["_init_size"][1]-2)
-        self.hit_rect.center = self.rect.center
         self.speed = 8
         # TODO refactor use vel
         self.move = {"left_up": vec(-self.speed, -self.speed), "right_up": vec(self.speed, -self.speed),
@@ -29,14 +27,14 @@ class TankPlayer(Player):
         self.last_turn_frame = self._used_frame
         self.rot_speed = 45
         self.oil = 100
-        self.is_turn = False
         self.is_forward = False
         self.is_backward = False
+        self.is_turn_right = False
+        self.is_turn_left = False
         self.act_cd = kwargs["act_cd"]
 
     def update(self, command: dict):
         self._used_frame += 1
-        self.hit_rect.center = self.rect.center
         self.act(command[get_ai_name(self._id-1)])
         if self._lives <= 0:
             self._is_alive = False
@@ -44,12 +42,16 @@ class TankPlayer(Player):
         self.rotate()
 
         if not self.act_cd:
-            self.is_turn = False
+            self.is_turn_right = False
+            self.is_turn_left = False
         elif self._used_frame - self.last_turn_frame > self.act_cd:
-            self.is_turn = False
+            self.is_turn_right = False
+            self.is_turn_left = False
 
-        if self.hit_rect.right > WINDOW_WIDTH+8 or self.hit_rect.left < -8 \
-                or self.hit_rect.bottom > WINDOW_HEIGHT+8 or self.hit_rect.top < -8:
+        if self.rect.right > self._play_rect_area.right \
+                or self.rect.left < self._play_rect_area.left \
+                or self.rect.bottom > self._play_rect_area.bottom \
+                or self.rect.top < self._play_rect_area.top:
             self.collide_with_walls()
 
     def rotate(self):
@@ -143,21 +145,25 @@ class TankPlayer(Player):
             self.rect.center += self.move["right_up"]
 
     def turn_left(self):
-        if not self.is_turn:
+        if not self.is_turn_left:
             self.last_turn_frame = self._used_frame
             self.rot += self.rot_speed
-            self.is_turn = True
+            self.is_turn_left = True
 
     def turn_right(self):
-        if not self.is_turn:
+        if not self.is_turn_right:
             self.last_turn_frame = self._used_frame
             self.rot -= self.rot_speed
-            self.is_turn = True
+            self.is_turn_right = True
 
     def collide_with_walls(self):
+        if self.is_turn_left:
+            self.turn_right()
+        elif self.is_turn_right:
+            self.turn_left()
         if self.is_forward:
             self.backward()
-        else:
+        elif self.is_backward:
             self.forward()
 
     def collide_with_bullets(self):

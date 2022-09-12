@@ -8,9 +8,8 @@ from mlgame.view.view_model import create_asset_init_data, create_text_view_data
     create_rect_view_data, create_line_view_data, create_polygon_view_data
 from mlgame.view.view_model import create_image_view_data
 
-from GameFramework.SoundController import create_sounds_data, create_bgm_data
-from GameFramework.TiledMap import create_construction
-from GameFramework.game_mode.BattleMode import BattleMode
+from .template.SoundController import create_sounds_data, create_bgm_data
+from .template.BattleMode import BattleMode
 from .TankBullet import TankBullet
 from .TankPlayer import TankPlayer
 from .TankStation import TankStation
@@ -20,9 +19,12 @@ from .env import *
 
 
 # TODO refactor attribute to method
+from .template.TiledMap import create_construction
+
+
 class TankBattleMode(BattleMode):
-    def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str):
-        super().__init__(map_path, sound_path)
+    def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
+        super().__init__(map_path, sound_path, play_rect_area)
         self.obj_rect_list = []
         self.frame_limit = frame_limit
         self.is_manual = is_manual
@@ -42,8 +44,8 @@ class TankBattleMode(BattleMode):
         if self.is_manual:
             act_cd = 10
         # init obj data
-        self.map.add_init_obj_data(PLAYER_1_IMG_NO, TankPlayer, act_cd=act_cd)
-        self.map.add_init_obj_data(PLAYER_2_IMG_NO, TankPlayer, act_cd=act_cd)
+        self.map.add_init_obj_data(PLAYER_1_IMG_NO, TankPlayer, act_cd=act_cd, play_rect_area=self.play_rect_area)
+        self.map.add_init_obj_data(PLAYER_2_IMG_NO, TankPlayer, act_cd=act_cd, play_rect_area=self.play_rect_area)
         self.map.add_init_obj_data(WALL_IMG_NO, TankWall, margin=8, spacing=8)
         self.map.add_init_obj_data(BULLET_STATION_IMG_NO, TankStation, margin=2, spacing=2, capacity=5, quadrant=1)
         self.map.add_init_obj_data(OIL_STATION_IMG_NO, TankStation, margin=2, spacing=2, capacity=30, quadrant=1)
@@ -76,8 +78,6 @@ class TankBattleMode(BattleMode):
         self.used_frame += 1
         self.check_collisions()
         self.walls.update()
-        self.oil_stations.update()
-        self.bullet_stations.update()
         self.create_bullet(self.players)
         self.bullets.update()
         self.players.update(command)
@@ -86,7 +86,7 @@ class TankBattleMode(BattleMode):
 
     def reset(self):
         # reset init game
-        self.__init__(self.is_manual, self.map_path, self.frame_limit, self.sound_path)
+        self.__init__(self.is_manual, self.map_path, self.frame_limit, self.sound_path, self.play_rect_area)
         # reset player pos
         self.empty_quadrant_pos_dict[1].append(self.player_1P._origin_xy)
         self.empty_quadrant_pos_dict[2].append(self.player_2P._origin_xy)
@@ -150,7 +150,7 @@ class TankBattleMode(BattleMode):
                 continue
             self.sound_controller.play_sound("shoot", 0.03, -1)
             init_data = create_construction(sprite.get_id(), 0, sprite.get_center(), (13, 13))
-            bullet = TankBullet(init_data, rot=sprite.get_rot(), margin=2, spacing=2)
+            bullet = TankBullet(init_data, rot=sprite.get_rot(), margin=2, spacing=2, play_rect_area=self.play_rect_area)
             self.bullets.add(bullet)
             self.all_sprites.add(bullet)
             sprite.set_is_shoot(False)
@@ -345,10 +345,13 @@ class TankBattleMode(BattleMode):
             return
         for sprite in self.all_sprites:
             if isinstance(sprite, pygame.sprite.Sprite):
-                points = [sprite.rect.topleft, sprite.rect.topright, sprite.rect.bottomright
-                          , sprite.rect.bottomleft, sprite.rect.topleft]
-                hit_points = [sprite.hit_rect.topleft, sprite.hit_rect.topright, sprite.hit_rect.bottomright
-                              , sprite.hit_rect.bottomleft, sprite.rect.topleft]
+                top_left = sprite.rect.topleft
+                points = [top_left, sprite.rect.topright, sprite.rect.bottomright
+                          , sprite.rect.bottomleft, top_left]
                 for index in range(len(points)-1):
                     self.obj_rect_list.append(create_line_view_data("rect", *points[index], *points[index+1], WHITE))
-                    self.obj_rect_list.append(create_line_view_data("hit_rect", *hit_points[index], *hit_points[index+1], RED))
+                    self.obj_rect_list.append(create_line_view_data("play_rect_area"
+                                                                    , self.play_rect_area.x
+                                                                    , self.play_rect_area.y
+                                                                    , self.play_rect_area.width
+                                                                    , self.play_rect_area.height, RED))

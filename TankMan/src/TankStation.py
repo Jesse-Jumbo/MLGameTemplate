@@ -4,7 +4,7 @@ from os import path
 import pygame
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
-from GameFramework.Props import Props
+from .template.Props import Props
 from .env import IMAGE_DIR, WINDOW_HEIGHT, WINDOW_WIDTH
 
 
@@ -12,9 +12,6 @@ class TankStation(Props):
     def __init__(self, construction, **kwargs):
         super().__init__(construction, **kwargs)
         self.power = kwargs["capacity"]
-        self.hit_rect = pygame.Rect(0, 0, construction["_init_size"][0] - kwargs["margin"]
-                                    , construction["_init_size"][1] - kwargs["spacing"])
-        self.hit_rect.center = self.rect.center
         if self.rect.x >= WINDOW_WIDTH // 2 and self.rect.y < (WINDOW_HEIGHT - 100) // 2:
             self.quadrant = 1
         elif self.rect.x < WINDOW_WIDTH // 2 and self.rect.y < (WINDOW_HEIGHT - 100) // 2:
@@ -23,9 +20,6 @@ class TankStation(Props):
             self.quadrant = 3
         else:
             self.quadrant = 4
-
-    def update(self):
-        self.hit_rect.center = self.rect.center
 
     def get_supply(self):
         return self.power
