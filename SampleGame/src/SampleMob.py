@@ -3,7 +3,7 @@ from os import path
 
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 
-from game_framework.game_role.Mob import Mob
+from game_module.game_role.Mob import Mob
 
 MOB_PATH = path.join(path.dirname(__file__), "..", "asset", "image")
 

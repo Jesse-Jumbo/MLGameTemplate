@@ -3,7 +3,7 @@ from os import path
 import pygame
 from mlgame.view.view_model import create_image_view_data, create_asset_init_data
 
-from template.BattleGame.src.env import IMAGE_DIR
+from game_templates.BattleGame.src.env import IMAGE_DIR
 
 Vec = pygame.math.Vector2
 

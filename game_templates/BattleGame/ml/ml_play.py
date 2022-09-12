@@ -1,6 +1,7 @@
 """
-The template of the main script of the machine learning process
+The game_template of the main script of the machine learning process
 """
+import random
 
 import pygame
 
@@ -10,7 +11,7 @@ class MLPlay:
         """
         Constructor
 
-        @param ai_name A string "1P" or "2P" indicates that the `MLPlay` is used by
+        @param side A string "1P" or "2P" indicates that the `MLPlay` is used by
                which side.
         """
         self.side = ai_name
@@ -26,30 +27,37 @@ class MLPlay:
         if scene_info["status"] != "GAME_ALIVE":
             return "RESET"
 
+        if scene_info["used_frame"] % 30 == 0:
+            act = random.randrange(5)
+            is_shoot = random.randrange(2)
+        else:
+            act = 0
+            is_shoot = 0
+
         command = []
         if self.side == "1P":
-            if pygame.K_RIGHT in keyboard:
+            if act == 1:
                 command.append("RIGHT")
-            elif pygame.K_LEFT in keyboard:
+            elif act == 2:
                 command.append("LEFT")
-            elif pygame.K_UP in keyboard:
+            elif act == 3:
                 command.append("UP")
-            elif pygame.K_DOWN in keyboard:
+            elif act == 4:
                 command.append("DOWN")
 
-            if pygame.K_p in keyboard:
+            if is_shoot:
                 command.append("SHOOT")
-        else:
-            if pygame.K_d in keyboard:
+        elif self.side == "2P":
+            if act == 1:
                 command.append("RIGHT")
-            elif pygame.K_a in keyboard:
+            elif act == 2:
                 command.append("LEFT")
-            elif pygame.K_w in keyboard:
+            elif act == 3:
                 command.append("UP")
-            elif pygame.K_s in keyboard:
+            elif act == 4:
                 command.append("DOWN")
 
-            if pygame.K_f in keyboard:
+            if is_shoot:
                 command.append("SHOOT")
 
         if not command:

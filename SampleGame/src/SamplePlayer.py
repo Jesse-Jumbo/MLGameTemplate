@@ -2,7 +2,6 @@ import pygame
 
 from os import path
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
-from game_framework.game_role.Player import Player
 
 
 PLAYER_PATH = path.join(path.dirname(__file__), "../asset/image/player.png")

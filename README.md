@@ -10,21 +10,23 @@
 
 ---
 # !Notice！
-
 - v0.1.x 以前，範例遊戲未使用GameFramework開發
 - v0.2.x 以後，範例遊戲使用GameFramework所開發
+- v0.4.x 以後，新增單人和雙人遊戲模板，game_module 持續更新中
+- v0.5.x 以後，新增開發教學文件，game_module 持續更新中
 ---
 # 專案說明
-- **games裡的遊戲，根據MLGame框架所開發，可以在PAIA－Desktop透過ＡＩ來玩遊戲，並進行ＡＩ競賽。**
-- **GameFramework是為了快速開發一個符合MLGame ＡＩ遊戲框架的框架**
-- **SampleGame是一個用GameFramework開發的範例遊戲**
+- **games裡的遊戲，根據 MLGame 框架所開發，可以在 PAIA－Desktop 透過ＡＩ來玩遊戲，並進行ＡＩ競賽。**
+- **game_module 是用於方便開發遊戲可被使用的套件**
+- **game_templates 存放不同種類的遊戲模板**
+- **SampleGame 是已開發完成的範例遊戲（正在重構中）**
 
 [//]:# (game gif)
 
 ## 使用方式
 
-1. **Build your game by refactoring the SampleGame.**
-2. **Quickly develop your games with GameFramework.**
+1. **Select the desired template from the game_templates and refactor it.**
+2. **Start the game by following the development_tutorial.**
 
 ## 遊戲啟動規定
 - 請看MLGame ＡＩ遊戲框架說明[README.md](https://github.com/PAIA-Playful-AI-Arena/MLGame/blob/master/README.md)
@@ -40,8 +42,9 @@
 ---
 ## Future Work
 
-1. [ ] 新增不同遊戲模式的框架
-2. [ ] test case
+1. [ ] 新增教學文件
+2. [ ] 更新 game_module
+3. [ ] test case
 
 ---
 ## Game Sours

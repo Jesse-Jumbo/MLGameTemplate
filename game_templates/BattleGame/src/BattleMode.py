@@ -4,7 +4,7 @@ from os import path
 from mlgame.game.paia_game import GameResultState, GameStatus
 from mlgame.utils.enum import get_ai_name
 
-from game_framework.TiledMap import create_construction
+from game_module.TiledMap import create_construction
 from .Player import Player
 
 
