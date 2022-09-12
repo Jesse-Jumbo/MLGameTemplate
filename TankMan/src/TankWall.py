@@ -16,19 +16,13 @@ class TankWall(Props):
         self._lives = 3
 
     def update(self, *args, **kwargs) -> None:
-        self.rect.center = self.hit_rect.center
+        self.hit_rect.center = self.rect.center
         if self._lives <= 0:
             self.kill()
 
     def collide_with_bullets(self):
         if self._lives > 0:
             self._lives -= 1
-
-    def get_lives(self):
-        return self._lives
-
-    def get_xy(self):
-        return self.rect.x, self.rect.y
 
     def get_data_from_obj_to_game(self):
         info = {"id": f"wall_{self._lives}", "x": self.rect.x, "y": self.rect.y, "lives": self._lives}

@@ -11,7 +11,6 @@ from .env import IMAGE_DIR, WINDOW_HEIGHT, WINDOW_WIDTH
 class TankStation(Props):
     def __init__(self, construction, **kwargs):
         super().__init__(construction, **kwargs)
-        self.count_frame = 0
         self.power = kwargs["capacity"]
         self.hit_rect = pygame.Rect(0, 0, construction["_init_size"][0] - kwargs["margin"]
                                     , construction["_init_size"][1] - kwargs["spacing"])

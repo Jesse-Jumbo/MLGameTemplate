@@ -16,10 +16,6 @@ class TankBullet(Props):
                                     , construction["_init_size"][1] - kwargs["spacing"])
         self.hit_rect.center = self.rect.center
         self.speed = 10
-        self.map_height = 0
-        self.map_width = 0
-        self._angle = 0
-
         self.map_width = WINDOW_WIDTH
         self.map_height = WINDOW_HEIGHT
         self.rot = kwargs["rot"]

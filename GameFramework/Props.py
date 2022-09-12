@@ -1,5 +1,5 @@
 import pygame
-
+from mlgame.view.view_model import create_rect_view_data, create_asset_init_data
 
 vec = pygame.math.Vector2
 
@@ -16,6 +16,7 @@ class Props(pygame.sprite.Sprite):
         self._id = construction["_id"]
         self._no = construction["_no"]
         self.rect = pygame.Rect(construction["_init_pos"], construction["_init_size"])
+        self._color = "#ffffff"
         self._origin_xy = self.rect.topleft
         self._origin_center = self.rect.center
         self._angle = 0
@@ -28,14 +29,6 @@ class Props(pygame.sprite.Sprite):
     def update(self, *args, **kwargs) -> None:
         """
         更新物件資料
-        self._used_frame += 1
-        self.rect.center += self._vel
-        if self._shield <= 0:
-            self._lives -= 1
-            self._shield = 100
-            self.reset()
-        if self._lives <= 0:
-            self._is_alive = False
         :param args:
         :param kwargs:
         :return:
@@ -44,22 +37,17 @@ class Props(pygame.sprite.Sprite):
 
     def reset(self) -> None:
         """
-        Reset Prop center = origin_center
+        Reset Prop pos = origin_pos
         :return:
         """
-        self.rect.center = self._origin_center
+        self.rect.topleft = self._origin_xy
 
-    def collide_with_walls(self) -> None:
-        raise Exception("Please overwrite collide_with_walls")
-
-    def collide_with_bullets(self) -> None:
-        raise Exception("Please overwrite collide_with_bullets")
-
-    def collide_with_players(self) -> None:
-        raise Exception("Please overwrite collide_with_players")
-
-    def collide_with_mobs(self) -> None:
-        raise Exception("Please overwrite collide_with_mobs")
+    def reset_xy(self, new_pos: tuple) -> None:
+        """
+        :param new_pos:
+        :return:
+        """
+        self.rect.topleft = new_pos
 
     def get_xy(self) -> tuple:
         """
@@ -106,29 +94,30 @@ class Props(pygame.sprite.Sprite):
             }
         :return:
         """
-        raise Exception("Please overwrite get_data_from_obj_to_game")
+        info = {"id": f"{self._id}"
+                , "x": self.rect.x
+                , "y": self.rect.y
+                }
+        return info
 
     def get_obj_progress_data(self) -> dict or list:
         """
         使用view_model函式，建立符合mlgame物件更新資料格式的資料，在遊戲主程式更新畫面資訊時被調用
         :return:
         """
-        raise Exception("Please overwrite get_obj_progress_data")
+        obj_data = create_rect_view_data(f"{self._id}"
+                                         , *self.rect.topleft
+                                         , self.rect.width
+                                         , self.rect.height
+                                         , self._color
+                                         , self._angle)
+        return obj_data
 
     def get_obj_init_data(self) -> dict or list:
         """
         使用view_model函式，建立符合mlgame物件初始資料格式的資料，在遊戲主程式初始畫面資訊時被調用
         :return:
         """
-        raise Exception("Please overwrite get_obj_progress_data")
-
-    def reset_xy(self, new_pos=()) -> None:
-        """
-        :param new_pos:
-        :return:
-        """
-        if new_pos:
-            self.rect.topleft = new_pos
-        else:
-            self.rect.topleft = self._origin_xy
+        image_init_data = create_asset_init_data(f"{self._id}", self.rect.width, self.rect.height, "image_full_name", "url")
+        return image_init_data
 
