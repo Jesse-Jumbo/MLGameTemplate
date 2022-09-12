@@ -1,4 +1,5 @@
 import pygame
+from mlgame.view.view_model import create_image_view_data, create_asset_init_data
 
 Vec = pygame.math.Vector2
 
@@ -56,18 +57,6 @@ class Player(pygame.sprite.Sprite):
     def act(self, action: list) -> None:
         raise Exception("Please overwrite act")
 
-    def move_right(self) -> None:
-        raise Exception("Please overwrite move_right")
-
-    def move_left(self) -> None:
-        raise Exception("Please overwrite move_left")
-
-    def move_down(self) -> None:
-        raise Exception("Please overwrite move_down")
-
-    def move_up(self) -> None:
-        raise Exception("Please overwrite move_up")
-
     def shoot(self) -> None:
         """
         _is_shoot = True
@@ -91,18 +80,6 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
         self._score += score
-
-    def collide_with_walls(self) -> None:
-        raise Exception("Please overwrite collide_with_walls")
-
-    def collide_with_bullets(self) -> None:
-        raise Exception("Please overwrite collide_with_bullets")
-
-    def collide_with_mobs(self) -> None:
-        raise Exception("Please overwrite collide_with_mobs")
-
-    def collide_with_prop(self) -> None:
-        raise Exception("Please overwrite collide_with_prop")
 
     def get_score(self) -> int:
         """
@@ -140,10 +117,7 @@ class Player(pygame.sprite.Sprite):
         :param is_shoot:
         :return:
         """
-        if type(is_shoot) == bool:
-            self._is_shoot = is_shoot
-        else:
-            raise TypeError('is_shoot need bool')
+        self._is_shoot = is_shoot
 
     def reset_xy(self, new_pos=()) -> None:
         """
@@ -179,36 +153,38 @@ class Player(pygame.sprite.Sprite):
         """
         return self._id
 
-    def get_info_to_game_result(self):
-        """
-        add all player information
-
-        info = {"id": "", "x": 0, "y": 0}
-        """
-        print("please overwrite 'self.get_result' method")
-
     def get_data_from_obj_to_game(self) -> dict:
         """
         在遊戲主程式獲取遊戲資料給AI時被調用
-        return {
-            "x": self.rect.x,
-            "y": self.rect.y
-            }
         :return:
         """
-        raise Exception("Please overwrite get_data_from_obj_to_game")
+        info = {"id": f"{self._id}P",
+                "x": self.rect.x,
+                "y": self.rect.y,
+                "angle": rot
+                }
+        return info
 
     def get_obj_progress_data(self) -> dict or list:
         """
         使用view_model函式，建立符合mlgame物件更新資料格式的資料，在遊戲主程式更新畫面資訊時被調用
         :return:
         """
-        raise Exception("Please overwrite get_obj_progress_data")
+        image_data = create_image_view_data(f"{self._id}P", *self.rect.topleft, self.rect.width, self.rect.height, self._angle)
+        return image_data
 
     def get_obj_init_data(self) -> dict or list:
         """
         使用view_model函式，建立符合mlgame物件初始資料格式的資料，在遊戲主程式初始畫面資訊時被調用
         :return:
         """
-        raise Exception("Please overwrite get_obj_progress_data")
+        image_init_data = create_asset_init_data(f"{self._id}P", self.rect.width, self.rect.height, "player.png", "url")
+        return image_init_data
+
+    def get_info_to_game_result(self):
+        info = {"id": f"{self._id}P"
+                , "x": self.rect.x
+                , "y": self.rect.y
+                }
+        return info
 

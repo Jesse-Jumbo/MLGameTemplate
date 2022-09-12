@@ -200,18 +200,8 @@ class TankPlayer(Player):
                 }
         return info
 
-    def get_info_to_game_result(self) -> dict:
-        info = {"id": f"{self._id}P",
-                "x": self.rect.x,
-                "y": self.rect.y,
-                "score": self._score,
-                "lives": self._lives
-                }
-        return info
-
     def get_obj_progress_data(self) -> dict:
-        image_data = create_image_view_data(f"{self._id}P", self.rect.x, self.rect.y
-                                            , self.origin_size[0], self.origin_size[1], self._angle)
+        image_data = create_image_view_data(f"{self._id}P", *self.rect.topleft, *self.origin_size, self._angle)
         return image_data
 
     def get_obj_init_data(self) -> list:
@@ -222,3 +212,12 @@ class TankPlayer(Player):
             image_init_data.append(create_asset_init_data(id, self.origin_size[0], self.origin_size[1],
                                                           path.join(IMAGE_DIR, f"{id}.png"), url))
         return image_init_data
+
+    def get_info_to_game_result(self) -> dict:
+        info = {"id": f"{self._id}P"
+                , "x": self.rect.x
+                , "y": self.rect.y
+                , "score": self._score
+                , "lives": self._lives
+                }
+        return info
