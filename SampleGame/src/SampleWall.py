@@ -1,7 +1,7 @@
 import random
 
 from mlgame.view.view_model import create_rect_view_data
-from GameFramework.Props import Props
+from game_framework.Props import Props
 
 
 class SampleWall(Props):
