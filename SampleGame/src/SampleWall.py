@@ -1,13 +1,14 @@
 import random
 
 from mlgame.view.view_model import create_rect_view_data
-from GameFramework.Prop import Prop
+from game_module.Props import Props
 
 
-class SampleWall(Prop):
+class SampleWall(Props):
     def __init__(self, construction: dict, **kwargs):
         super().__init__(construction, **kwargs)
         self.color = "#ff0000"
+        self._image_id = kwargs["image_id"]
 
     def update(self, *args, **kwargs) -> None:
         if self._shield <= 0:

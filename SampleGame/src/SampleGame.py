@@ -8,8 +8,8 @@ from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import Scene, create_text_view_data, create_scene_progress_data, create_asset_init_data, \
     create_image_view_data, create_rect_view_data
 
-from GameFramework.SoundController import SoundController, create_music_data
-from GameFramework.TiledMap import TiledMap, create_construction
+from game_module.SoundController import SoundController, create_sounds_data
+from game_module.TiledMap import TiledMap, create_construction
 from .SampleBullet import SampleBullet
 from .SampleMob import SampleMob
 from .SamplePlayer import SamplePlayer
@@ -309,7 +309,7 @@ class SampleGame(PaiaGame):
         if keyboard[pygame.K_f]:
             action.append("SHOOT")
 
-        # print({get_ai_name(0): action})
+        # print({get_ai_name(0): actions})
         return {get_ai_name(0): action}
 
     # 建立mob物件的method，前面加底線，意指規範此method只供此類別（class）或其實例（instance）呼叫使用
@@ -341,4 +341,4 @@ class SampleGame(PaiaGame):
         self.bullets.add(bullet)
 
     def get_music_data(self):
-        return [create_music_data(music_id="test", music_path=path.join(ASSET_PATH, "sound/bgm.ogg"))]
+        return [create_sounds_data(music_id="test", music_name=path.join(ASSET_PATH, "sound/bgm.ogg"))]

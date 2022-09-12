@@ -1,0 +1,16 @@
+{
+  "game_name": "SingleGame",
+  "version": "0.1.0",
+  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/main/SingleGame",
+  "description": "一個單人遊戲模板",
+  "logo": [
+    "./asset/image/logo.png",
+    "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/SingleGame/asset/image/logo.png"
+  ],
+  "user_num": {
+    "min": 1,
+    "max": 1
+  },
+  "game_params": [
+  ]
+}

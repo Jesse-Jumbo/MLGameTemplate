@@ -2,7 +2,6 @@ import pygame
 
 from os import path
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
-from GameFramework.game_role.Player import Player
 
 
 PLAYER_PATH = path.join(path.dirname(__file__), "../asset/image/player.png")
@@ -14,12 +13,12 @@ class SamplePlayer(Player):
         super().__init__(construction, **kwargs)
         self._play_area_rect = kwargs["play_area_rect"]
 
-    def update(self, action: list) -> None:
+    def update(self, command: list) -> None:
         self._used_frame += 1
         self.rect.center += self._vel
         self._vel = vec(0, 0)
         if self._is_alive:
-            self.act(action)
+            self.act(command)
         if self._shield <= 0:
             self._lives -= 1
             self._shield = 100

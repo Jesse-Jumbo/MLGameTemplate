@@ -1,13 +1,12 @@
-# ！Watch out ！正在重構中
-# SampleGame
+# BattleGame
 
 
-![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
+![BattleGame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
-- 這是一款簡單的射擊遊戲，也是GameFramework的遊戲教學範例。
+- 一個雙人遊戲的模板。
 
 [//]:# (game gif)
 
@@ -18,7 +17,7 @@
 
 ## 遊戲參數設定
 
-- `SampleGame`後不輸入參數，則默認使用預設值，即game_config.json內參數default值。
+- `BattleGame`後不輸入參數，則默認使用預設值，即game_config.json內參數default值。
 - 在SampleGame打開終端機，複製貼上即可 以預設參數啟動遊戲。
   ```bash
   python -m mlgame -f 30 -i ./ml/ml_play_manual.py .
@@ -30,13 +29,13 @@ python -m mlgame [options] <game_folder> [game_params]
 # A sample to play the game with manual
 python -m mlgame \
 -f 120 -i ./path/to/ai/ml_play_manual.py \
-./path/to/game/SingleGame \
---map_no 1 --frame_limit 300 --target_score 1000 --is_sound "off"
+./path/to/game/BattleGame \
 # A sample to play the game with AI
 python -m mlgame \
--f 120 -i ./path/to/ai/ml_play_template.py \
-./path/to/game/SingleGame \
- --is_sound "on" --frame_limit 30 --target_score 1000 --map_no 1
+-f 120 -i ./path/to/ai/ml_play_template_1P.py \
+-i ./path/to/ai/ml_play_template_2P.py \
+./path/to/game/BattleGame \
+
 ```
 
 - 指令說明：
@@ -46,9 +45,8 @@ python -m mlgame \
   - `-f`：輸入遊戲的FPS，代表遊戲每秒運行幾幀。
   - `-i`：輸入AI的py檔，代表要mlgame自動執行哪份檔案。
 - 參數說明：
-    - `map_no`： 輸入地圖編號，以選擇遊戲的地圖。
-    - `frame_limit`： 輸入遊戲時間，以規範遊戲進行時間。
-    - `is_sound`： 輸入`on`或`off`，控制是否播放遊戲音效。
+
+    - 
 
 ---
 ## 遊戲玩法：
@@ -69,21 +67,17 @@ python -m mlgame \
 ## 遊戲系統
 
 1. 行動機制
-   - 主角PAIA 上下左右的行動，每次移動`10 px`
-   - 子彈的速度，每次移動`10 px`
-   - 敵人的速度，初始化隨機為`1~4 px`，每次碰到邊界之後，再隨機`1~4 px`之間，並朝反向移動
+   - 主角PAIA
+   - 子彈的速度
+   - 敵人的速度
 
 2. 血量設定
-   - 主角PAIA 每次被敵人子彈打到`-10` 點護盾值，每`-100`則生命`-1`
-   - 怪物被主角PAIA的子彈打到，即死亡
-   - 牆每次被子彈打到會隨機扣護盾值`0~100`之間
+   - 主角PAIA
+   - 怪物
     
 3. 座標系統
     - 螢幕大小 800 x 600 px
-    - 主角 50 x 50 px
-    - 怪物 30+(x*c) x 30+(y*c) px, x=5 px, y=5 px, c=1~6
-    - 牆壁 50 px x 50 px
-    - 子彈 5 x 8 px
+    - 主角大小 50 x 50 px
 
 ---
 ## ＡＩ範例
@@ -93,31 +87,17 @@ python -m mlgame \
 ## 遊戲資訊
 - scene_info 的資料格式如下
 ```json
-{'used_frame': 0,
-  'player_x': 400,
-  'player_y': 520,
-  'walls': [
-    {
-      'x': 133, 'y': 157
-    },
-     ...,
-  ], 
-  'mobs': [
-    {
-      'x': 477, 'y': 119
-    },
-    ..., 
-  ], 
-  'target_score': 0, 
-  'status': 'GAME_ALIVE'}
+{
+  "used_frame": 0,
+  "player_x": 400,
+  "player_y": 520,
+  "status": "GAME_ALIVE"
+}
 ```
 
 - `used_frame`：遊戲已經過的幀數
 - `player_x`：主角PAIA的Ｘ座標，表示左邊座標值。
 - `player_y`：主角PAIA的Ｙ座標，表示上方座標值。
-- `walls`：牆壁的清單，清單內每一個物件都是一個牆壁的左上方座標值
-- `mobs`：怪物的清單，清單內每一個物件都是一個怪物的左上方座標值
-- `target_score`：目前得到的分數
 - `status`： 目前遊戲的狀態
     - `GAME_ALIVE`：遊戲進行中
     - `GAME_PASS`：遊戲通關
@@ -139,7 +119,9 @@ python -m mlgame \
 ```json
 {
     "player": "1P",
-    "score": 0,
+    "used_frame": 3000,
+    "status": "GAME_OVER",
+    "player": "2P",
     "used_frame": 3000,
     "status": "GAME_OVER"
 }
@@ -147,15 +129,11 @@ python -m mlgame \
 
 - `used_frame`：表示使用了多少個frame
 - `player`：玩家編號
-- `score`：獲得的總分
 - `status`：表示遊戲結果
   - `GAME_OVER`：遊戲失敗
   - `GAME_PASS`：遊戲通關
 
 ---
 ## Image Sours
-- [Treasure](https://opengameart.org/content/treasure-chest-1)
-- [SampleWall／Floor](https://opengameart.org/content/wall-grass-rock-stone-wood-and-dirt-480)
 
 ## Sound Sours
-- [BGM／ShootSound](https://opengameart.org/content/rins-theme-loopable-chiptune-adventurebattle-bgm)
