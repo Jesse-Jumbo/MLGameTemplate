@@ -78,6 +78,7 @@ class TankBattleMode(BattleMode):
         self.walls.update()
         self.oil_stations.update()
         self.bullet_stations.update()
+        self.create_bullet(self.players)
         self.bullets.update()
         self.players.update(command)
         if self.used_frame >= self.frame_limit:
@@ -143,15 +144,16 @@ class TankBattleMode(BattleMode):
                 new_pos = self.empty_quadrant_pos_dict[quadrant].pop(random.randrange(len(self.empty_quadrant_pos_dict[quadrant])))
                 obj.reset_xy(new_pos)
 
-    def create_bullet(self, player):
-        if isinstance(player, TankPlayer) and not player.get_is_shoot():
-            return
-        self.sound_controller.play_sound("shoot", 0.03, -1)
-        init_data = create_construction(player.get_id(), 0, player.get_center(), (13, 13))
-        bullet = TankBullet(init_data, rot=player.get_rot(), margin=2, spacing=2)
-        self.bullets.add(bullet)
-        self.all_sprites.add(bullet)
-        player.set_is_shoot(False)
+    def create_bullet(self, sprites: pygame.sprite.Group):
+        for sprite in sprites:
+            if not sprite.get_is_shoot():
+                continue
+            self.sound_controller.play_sound("shoot", 0.03, -1)
+            init_data = create_construction(sprite.get_id(), 0, sprite.get_center(), (13, 13))
+            bullet = TankBullet(init_data, rot=sprite.get_rot(), margin=2, spacing=2)
+            self.bullets.add(bullet)
+            self.all_sprites.add(bullet)
+            sprite.set_is_shoot(False)
 
     def get_background_view_data(self):
         background_view_data = []
