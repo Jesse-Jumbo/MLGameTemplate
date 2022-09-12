@@ -8,8 +8,8 @@ from GameFramework.TiledMap import create_construction
 from .Player import Player
 
 
-SCENE_WIDTH = 1000
-SCENE_HEIGHT = 800
+SCENE_WIDTH = 800
+SCENE_HEIGHT = 600
 
 
 class SingleMode:

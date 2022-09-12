@@ -1,0 +1,16 @@
+{
+  "game_name": "BattleGame",
+  "version": "0.1.0",
+  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/main/BattleGame",
+  "description": "一個雙人遊戲模板",
+  "logo": [
+    "./asset/image/logo.png",
+    "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/BattleGame/asset/image/logo.png"
+  ],
+  "user_num": {
+    "min": 2,
+    "max": 2
+  },
+  "game_params": [
+  ]
+}
