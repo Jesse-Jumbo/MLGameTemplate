@@ -1,5 +1,7 @@
 import pygame.draw
 from os import path
+
+from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import create_asset_init_data, create_image_view_data
 from .env import WINDOW_WIDTH, WINDOW_HEIGHT, LEFT_CMD, RIGHT_CMD, FORWARD_CMD, BACKWARD_CMD, SHOOT, SHOOT_COOLDOWN, \
     IMAGE_DIR
@@ -32,10 +34,10 @@ class TankPlayer(Player):
         self.is_backward = False
         self.act_cd = kwargs["act_cd"]
 
-    def update(self, actions: list):
+    def update(self, command: dict):
         self._used_frame += 1
         self.hit_rect.center = self.rect.center
-        self.act(actions)
+        self.act(command[get_ai_name(self._id-1)])
         if self._lives <= 0:
             self._is_alive = False
 

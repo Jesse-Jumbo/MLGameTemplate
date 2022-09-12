@@ -26,10 +26,13 @@ class TankBattleMode(BattleMode):
         self.obj_rect_list = []
         self.frame_limit = frame_limit
         self.is_manual = is_manual
+        self.scene_height = self.map.map_height + 100
         # control variables
         self.is_invincible = False
         self.is_through_wall = False
         # initialize sprites group
+        self.all_sprites = pygame.sprite.Group()
+        self.players = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.bullet_stations = pygame.sprite.Group()
@@ -76,13 +79,7 @@ class TankBattleMode(BattleMode):
         self.oil_stations.update()
         self.bullet_stations.update()
         self.bullets.update()
-        number = 0
-        for player in self.players:
-            self.create_bullet(player)
-            player.update(command[get_ai_name(number)])
-            if not player.get_is_alive():
-                self.get_player_end()
-            number += 1
+        self.players.update(command)
         if self.used_frame >= self.frame_limit:
             self.get_game_end()
 
@@ -94,17 +91,6 @@ class TankBattleMode(BattleMode):
         self.empty_quadrant_pos_dict[2].append(self.player_2P._origin_xy)
         self.player_1P.reset_xy(self.empty_quadrant_pos_dict[1].pop(random.randrange(len(self.empty_quadrant_pos_dict[1]))))
         self.player_2P.reset_xy(self.empty_quadrant_pos_dict[2].pop(random.randrange(len(self.empty_quadrant_pos_dict[2]))))
-
-    def get_player_result(self) -> list:
-        """Define the end of game will return the player's info for user"""
-        res = []
-        for player in self.players:
-            get_res = player.get_info_to_game_result()
-            get_res["state"] = self.state
-            get_res["status"] = self.status
-            get_res["used_frame"] = self.used_frame
-            res.append(get_res)
-        return res
 
     def get_player_end(self):
         if self.player_1P.get_is_alive() and not self.player_2P.get_is_alive():
@@ -194,26 +180,23 @@ class TankBattleMode(BattleMode):
 
         obj_progress_data.extend(self.obj_rect_list)
 
-        obj_progress_data.append(create_image_view_data("border", 0, -50, self.map.map_width, WINDOW_HEIGHT, 0))
+        obj_progress_data.append(create_image_view_data("border", 0, -50, self.scene_width, WINDOW_HEIGHT, 0))
 
         return obj_progress_data
 
-    def get_bias_toggle_progress_data(self):
-        return []
-
     def get_toggle_progress_data(self):
-        all_toggle_data = []
+        toggle_data = []
         hourglass_index = 0
         if self.is_manual:
             hourglass_index = self.used_frame // 10 % 15
-        all_toggle_data.append(
+        toggle_data.append(
             create_image_view_data(image_id=f"hourglass_{hourglass_index}", x=0, y=2, width=20, height=20, angle=0))
         x = 23
         y = 8
         for frame in range((self.frame_limit - self.used_frame) // int((30 * 2))):
-            all_toggle_data.append(create_rect_view_data("frame", x, y, 3, 10, RED))
+            toggle_data.append(create_rect_view_data("frame", x, y, 3, 10, RED))
             x += 3.5
-        all_toggle_data.append(create_text_view_data(f"Frame: {self.frame_limit - self.used_frame}",
+        toggle_data.append(create_text_view_data(f"Frame: {self.frame_limit - self.used_frame}",
                                                      self.WIDTH_CENTER + self.WIDTH_CENTER // 2 + 85, 8, RED,
                                                      "24px Arial BOLD"))
         score_1P = self.player_1P.get_score()
@@ -221,7 +204,7 @@ class TankBattleMode(BattleMode):
         x = 24
         y = 20
         for score in range(min(score_1P, score_2P)):
-            all_toggle_data.append(create_rect_view_data(name="score", x=x, y=y, width=1, height=10, color=ORANGE))
+            toggle_data.append(create_rect_view_data(name="score", x=x, y=y, width=1, height=10, color=ORANGE))
             x += 1.5
             if x > self.WIDTH_CENTER:
                 if y == 32:
@@ -231,9 +214,9 @@ class TankBattleMode(BattleMode):
                 x = 24
         for score in range(abs(score_1P - score_2P)):
             if score_1P > score_2P:
-                all_toggle_data.append(create_rect_view_data("score", x, y, 1, 10, DARKGREEN))
+                toggle_data.append(create_rect_view_data("score", x, y, 1, 10, DARKGREEN))
             else:
-                all_toggle_data.append(create_rect_view_data("score", x, y, 1, 10, BLUE))
+                toggle_data.append(create_rect_view_data("score", x, y, 1, 10, BLUE))
             x += 1.5
             if x > self.WIDTH_CENTER:
                 if y == 32:
@@ -244,123 +227,107 @@ class TankBattleMode(BattleMode):
         # 1P
         x = WINDOW_WIDTH - 105
         y = WINDOW_HEIGHT - 40
-        all_toggle_data.append(create_text_view_data(f"Score: {score_1P}", x, y, DARKGREEN, "24px Arial BOLD"))
+        toggle_data.append(create_text_view_data(f"Score: {score_1P}", x, y, DARKGREEN, "24px Arial BOLD"))
         x = self.WIDTH_CENTER + 5
         y = WINDOW_HEIGHT - 40
         for live in range(self.player_1P._lives):
-            all_toggle_data.append(create_image_view_data("1P_lives", x, y, 30, 30))
+            toggle_data.append(create_image_view_data("1P_lives", x, y, 30, 30))
             x += 35
         # 620 px
         x = self.WIDTH_CENTER + 120
         y = WINDOW_HEIGHT - 40
-        all_toggle_data.append(
+        toggle_data.append(
             create_rect_view_data("1P_oil", x, y, self.player_1P.oil, 10, ORANGE))
         x = self.WIDTH_CENTER + 121
         y = WINDOW_HEIGHT - 20
         for power in range(self.player_1P._power):
-            all_toggle_data.append(create_rect_view_data("1P_power", x, y, 8, 10, BLUE))
+            toggle_data.append(create_rect_view_data("1P_power", x, y, 8, 10, BLUE))
             x += 10
         # 2P
         x = 5
         y = WINDOW_HEIGHT - 40
-        all_toggle_data.append(create_text_view_data(f"Score: {score_2P}", x, y, BLUE, "24px Arial BOLD"))
+        toggle_data.append(create_text_view_data(f"Score: {score_2P}", x, y, BLUE, "24px Arial BOLD"))
         x = self.WIDTH_CENTER - 40
         y = WINDOW_HEIGHT - 40
         for live in range(self.player_2P._lives):
-            all_toggle_data.append(create_image_view_data("2P_lives", x, y, 30, 30))
+            toggle_data.append(create_image_view_data("2P_lives", x, y, 30, 30))
             x -= 35
         # 375 px
         x = self.WIDTH_CENTER - 125 - 100 + (100 - self.player_2P.oil)
         y = WINDOW_HEIGHT - 40
-        all_toggle_data.append(
+        toggle_data.append(
             create_rect_view_data("2P_oil", x, y, self.player_2P.oil, 10,
                                   ORANGE))
         x = self.WIDTH_CENTER - 125 - 9
         y = WINDOW_HEIGHT - 20
         for power in range(self.player_2P._power):
-            all_toggle_data.append(create_rect_view_data("2P_power", x, y, 8, 10, BLUE))
+            toggle_data.append(create_rect_view_data("2P_power", x, y, 8, 10, BLUE))
             x -= 10
 
-        return all_toggle_data
-
-    def get_foreground_progress_data(self):
-        all_foreground_data = []
-
-        return all_foreground_data
-
-    def get_user_info_data(self):
-        return []
-
-    def get_game_sys_info_data(self):
-        return {}
+        return toggle_data
 
     def get_init_image_data(self):
-        all_init_image_data = []
+        init_image_data = []
         for i in range(3):
-            all_init_image_data.append(create_asset_init_data(f"floor_{i}", 50, 50
+            init_image_data.append(create_asset_init_data(f"floor_{i}", 50, 50
                                                               , path.join(IMAGE_DIR, f"grass_{i}.png"),
                                                               f"https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/grass_{i}.png"))
         for i in range(15):
-            all_init_image_data.append(create_asset_init_data(f"hourglass_{i}", 42, 42
+            init_image_data.append(create_asset_init_data(f"hourglass_{i}", 42, 42
                                                               , path.join(IMAGE_DIR, f"hourglass_{i}.png"),
                                                               f"https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/hourglass_{i}.png"))
         for station in self.bullet_stations:
             if isinstance(station, TankStation):
                 for data in station.get_obj_init_data():
-                    all_init_image_data.append(data)
+                    init_image_data.append(data)
                 break
         for wall in self.walls:
             if isinstance(wall, TankWall):
                 for data in wall.get_obj_init_data():
-                    all_init_image_data.append(data)
+                    init_image_data.append(data)
                 break
         img_id = "bullet"
         img_url = "https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/bullet.png"
         bullet_image_init_data = create_asset_init_data(img_id, BULLET_SIZE[0], BULLET_SIZE[1],
                                                         path.join(IMAGE_DIR, f"{img_id}.png"), img_url)
-        all_init_image_data.append(bullet_image_init_data)
-        border_image_init_data = create_asset_init_data("border", self.map.map_width, WINDOW_HEIGHT,
+        init_image_data.append(bullet_image_init_data)
+        border_image_init_data = create_asset_init_data("border", self.scene_width, WINDOW_HEIGHT,
                                                         path.join(IMAGE_DIR, "border.png"),
                                                         f"https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/border.png")
-        all_init_image_data.append(border_image_init_data)
+        init_image_data.append(border_image_init_data)
         for data in self.player_1P.get_obj_init_data():
-            all_init_image_data.append(data)
+            init_image_data.append(data)
         lives_image_init_data_1 = create_asset_init_data("1P_lives", 30, 30, path.join(IMAGE_DIR, "1P_lives.png"),
                                                          "https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/1P_lives.png")
-        all_init_image_data.append(lives_image_init_data_1)
+        init_image_data.append(lives_image_init_data_1)
         lives_image_init_data_2 = create_asset_init_data("2P_lives", 30, 30, path.join(IMAGE_DIR, "2P_lives.png"),
                                                          "https://raw.githubusercontent.com/Jesse-Jumbo/TankMan/main/asset/image/2P_lives.png")
-        all_init_image_data.append(lives_image_init_data_2)
-        return all_init_image_data
+        init_image_data.append(lives_image_init_data_2)
+        return init_image_data
 
-    def get_ai_data_to_player(self, ai_no: int):
-        if ai_no == 1:
-            player = self.player_1P
-        else:
-            player = self.player_2P
-        to_game_data = player.get_data_from_obj_to_game()
-        to_game_data["used_frame"] = self.used_frame
-        to_game_data["status"] = self.status
-        to_game_data["player_info"] = [ai.get_data_from_obj_to_game() for ai in self.players if isinstance(ai, TankPlayer)]
-        to_game_data["walls_info"] = [wall.get_data_from_obj_to_game() for wall in self.walls if isinstance(wall, TankWall)]
-        to_game_data["bullet_stations_info"] = [bullst_station.get_data_from_obj_to_game() for bullst_station in self.bullet_stations if isinstance(bullst_station, TankStation)]
-        to_game_data["oil_stations_info"] = [oil_station.get_data_from_obj_to_game() for oil_station in self.oil_stations if isinstance(oil_station, TankStation)]
+    def get_ai_data_to_player(self):
+        to_player_data = {}
+        num = 0
+        for player in self.players:
+            if isinstance(player, TankPlayer):
+                to_game_data = player.get_data_from_obj_to_game()
+                to_game_data["used_frame"] = self.used_frame
+                to_game_data["status"] = self.status
+                to_game_data["player_info"] = [ai.get_data_from_obj_to_game() for ai in self.players if isinstance(ai, TankPlayer)]
+                to_game_data["walls_info"] = [wall.get_data_from_obj_to_game() for wall in self.walls if isinstance(wall, TankWall)]
+                to_game_data["bullet_stations_info"] = [bullst_station.get_data_from_obj_to_game() for bullst_station in self.bullet_stations if isinstance(bullst_station, TankStation)]
+                to_game_data["oil_stations_info"] = [oil_station.get_data_from_obj_to_game() for oil_station in self.oil_stations if isinstance(oil_station, TankStation)]
+                to_player_data[get_ai_name(num)] = to_game_data
+                num += 1
 
-        return to_game_data
-
-    def get_other_result(self, origin_result):
-        if origin_result["id"] == "1P":
-            origin_result["score"] = self.player_1P.get_score()
-        else:
-            origin_result["score"] = self.player_2P.get_score()
-        return origin_result
-
-    def get_sound_data(self):
-        return [create_sounds_data("shoot", "shoot.wav")
-            , create_sounds_data("touch", "touch.wav")]
+        return to_player_data
 
     def get_bgm_data(self):
         return create_bgm_data("BGM.ogg", 0.1)
+
+    def get_sound_data(self):
+        return [create_sounds_data("shoot", "shoot.wav")
+                , create_sounds_data("touch", "touch.wav")]
 
     def add_player_score(self, player_id: int):
         if not player_id:

@@ -14,12 +14,12 @@ class SamplePlayer(Player):
         super().__init__(construction, **kwargs)
         self._play_area_rect = kwargs["play_area_rect"]
 
-    def update(self, actions: list) -> None:
+    def update(self, command: list) -> None:
         self._used_frame += 1
         self.rect.center += self._vel
         self._vel = vec(0, 0)
         if self._is_alive:
-            self.act(actions)
+            self.act(command)
         if self._shield <= 0:
             self._lives -= 1
             self._shield = 100

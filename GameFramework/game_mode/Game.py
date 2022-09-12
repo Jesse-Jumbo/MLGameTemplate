@@ -1,6 +1,15 @@
+from os import path
+
 import pygame.key
 from mlgame.game.paia_game import PaiaGame, GameStatus
 from mlgame.utils.enum import get_ai_name
+from mlgame.view.view_model import Scene
+
+from GameFramework.game_mode.BattleMode import BattleMode
+
+GAME_DIR = path.dirname(__file__)
+MAP_DIR = path.join(GAME_DIR, "..", "asset", 'maps')
+SOUND_DIR = path.join(GAME_DIR, "..", "asset", "sound")
 
 
 class Game(PaiaGame):
@@ -12,11 +21,11 @@ class Game(PaiaGame):
         self.is_sound = False
         if sound == "on":
             self.is_sound = True
+        self.game_mode = self.set_game_mode()
+        self.attachements = []
 
     def get_data_from_game_to_player(self) -> dict:
-        to_players_data = {}
-        for num in range(self.user_num):
-            to_players_data[f"{get_ai_name(num)}"] = self.game_mode.get_ai_data_to_player(num + 1)
+        to_players_data = self.game_mode.get_ai_data_to_player()
         return to_players_data
 
     def update(self, commands: dict):
@@ -24,12 +33,9 @@ class Game(PaiaGame):
         self.game_mode.debugging(self.is_debug)
         if not self.is_paused:
             self.frame_count += 1
-            self.update_game(commands)
+            self.game_mode.update(commands)
             if not self.is_running():
                 return "RESET"
-
-    def update_game(self, commands: dict):
-        raise Exception("Please over writing update_game")
 
     def reset(self):
         self.frame_count = 0
@@ -73,7 +79,12 @@ class Game(PaiaGame):
         return self.game_mode.status == GameStatus.GAME_ALIVE
 
     def set_game_mode(self):
-        raise Exception("Please over writing set_game_mode")
+        map_path = path.join(MAP_DIR, self.map_name)
+        sound_path = ""
+        if self.is_sound:
+            sound_path = SOUND_DIR
+        game_mode = BattleMode(map_path, sound_path)
+        return game_mode
 
     def rank(self):
         self.game_result_state = self.game_mode.state

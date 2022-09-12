@@ -29,19 +29,19 @@ class Player(pygame.sprite.Sprite):
         self._is_alive = True
         self._is_shoot = False
 
-    def update(self, actions: list) -> None:
+    def update(self, command: dict) -> None:
         """
         更新玩家資料
         self._used_frame += 1
         self.rect.center += self._vel
-        self.act(action)
+        self.act(command["get_ai_name(self._id)"])
         if self._shield <= 0:
             self._lives -= 1
             self._shield = 100
             self.reset()
         if self._lives <= 0:
             self._is_alive = False
-        :param actions:
+        :param command:
         :return:
         """
         raise Exception("Please overwrite update")
