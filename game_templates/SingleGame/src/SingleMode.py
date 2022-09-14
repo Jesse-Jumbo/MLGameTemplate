@@ -8,14 +8,14 @@ from game_module.TiledMap import create_construction
 from .Player import Player
 
 
-SCENE_WIDTH = 800
-SCENE_HEIGHT = 600
+SCENE_WIDTH = 1000
+SCENE_HEIGHT = 800
 
 
 class SingleMode:
     def __init__(self, play_rect_area: pygame.Rect):
         pygame.init()
-        self._user_num = 2
+        self._user_num = 1
         self.scene_width = SCENE_WIDTH
         self.scene_height = SCENE_HEIGHT
         self.play_rect_area = play_rect_area

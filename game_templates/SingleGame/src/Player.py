@@ -183,7 +183,7 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
         image_init_data = create_asset_init_data(f"{self._id}P", self.rect.width, self.rect.height
-                                                 , path.join(IMAGE_DIR, f"{self._id}.png"), "url")
+                                                 , path.join(IMAGE_DIR, "player.png"), "url")
         return image_init_data
 
     def get_info_to_game_result(self):
