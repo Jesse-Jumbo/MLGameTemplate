@@ -1,7 +1,7 @@
 # A Game Framework For Rapid Development That Conforms To The MLGame AI Game Framework
 
 
-![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
+[![GameFramework](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)](https://github.com/Jesse-Jumbo/GameFramework/tree/0.4.1)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 
 
