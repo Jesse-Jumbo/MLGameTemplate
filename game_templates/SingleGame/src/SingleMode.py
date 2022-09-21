@@ -3,8 +3,10 @@ import pygame
 from os import path
 from mlgame.game.paia_game import GameResultState, GameStatus
 from mlgame.utils.enum import get_ai_name
+from mlgame.view.view_model import create_line_view_data
 
 from game_module.TiledMap import create_construction
+from .env import WHITE, RED
 from .Player import Player
 
 
@@ -27,11 +29,12 @@ class SingleMode:
         self.status = GameStatus.GAME_ALIVE
         self.width_center = SCENE_WIDTH // 2
         self.height_center = SCENE_HEIGHT // 2
+        self.obj_rect_list = []
 
     def update(self, command: dict) -> None:
         self.used_frame += 1
         self.player.update(command)
-        if not self.player.get_is_alive():
+        if not self.player.is_alive:
             self.get_player_end()
 
     def reset(self) -> None:
@@ -54,9 +57,6 @@ class SingleMode:
         res.append(get_res)
         return res
 
-    def check_collisions(self):
-        raise Exception("Please overwrite check_collisions")
-
     def get_init_image_data(self):
         init_image_data = [self.player.get_obj_init_data()]
         return init_image_data
@@ -65,44 +65,23 @@ class SingleMode:
         to_player_data = self.player.get_data_from_obj_to_game()
         to_player_data["used_frame"] = self.used_frame
         to_player_data["status"] = self.status
-        to_player_data["player_info"] = [self.player.get_data_from_obj_to_game()]
 
         return {get_ai_name(0): to_player_data}
 
-    def get_background_view_data(self) -> list:
-        background_view_data = []
-        return background_view_data
-
     def get_obj_progress_data(self) -> list:
-        obj_progress_data = [self.draw_player()]
+        obj_progress_data = [self.player.get_obj_progress_data()]
+        if self.obj_rect_list:
+            obj_progress_data.extend(self.obj_rect_list)
         return obj_progress_data
 
-    def get_bias_toggle_progress_data(self) -> list:
-        bias_toggle_progress_data = []
-        return bias_toggle_progress_data
-
-    def get_toggle_progress_data(self) -> list:
-        toggle_data = []
-        return toggle_data
-
-    def get_foreground_progress_data(self) -> list:
-        foreground_data = []
-        return foreground_data
-
-    def get_user_info_data(self) -> list:
-        user_info_data = []
-        return user_info_data
-
-    def get_game_sys_info_data(self) -> dict:
-        game_sys_info_data = {}
-        return game_sys_info_data
-
-    def draw_player(self) -> list:
-        player_data = self.player.get_obj_progress_data()
-
-        return player_data
-
     def debugging(self, is_debug: bool) -> list:
-        if is_debug:
-            raise Exception("Please over writing debugging")
-        return []
+        self.obj_rect_list = []
+        if not is_debug:
+            return
+        for sprite in self.all_sprites:
+            if isinstance(sprite, pygame.sprite.Sprite):
+                top_left = sprite.rect.topleft
+                points = [top_left, sprite.rect.topright, sprite.rect.bottomright
+                    , sprite.rect.bottomleft, top_left]
+                for index in range(len(points) - 1):
+                    self.obj_rect_list.append(create_line_view_data("rect", *points[index], *points[index + 1], WHITE))

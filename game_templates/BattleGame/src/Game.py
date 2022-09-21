@@ -7,9 +7,12 @@ from mlgame.view.view_model import Scene
 
 from .BattleMode import BattleMode
 
+
 GAME_DIR = path.dirname(__file__)
 MAP_DIR = path.join(GAME_DIR, "..", "asset", 'maps')
 SOUND_DIR = path.join(GAME_DIR, "..", "asset", "sound")
+HEIGHT = 600
+WIDTH = 1000
 
 
 class Game(PaiaGame):
@@ -52,13 +55,13 @@ class Game(PaiaGame):
         """
         Get the position of src objects for drawing on the web
         """
-        scene_progress = {'background': self.game_mode.get_background_view_data(),
+        scene_progress = {'background': [],
                           'object_list': self.game_mode.get_obj_progress_data(),
-                          'toggle_with_bias': self.game_mode.get_bias_toggle_progress_data(),
-                          'toggle': self.game_mode.get_toggle_progress_data(),
-                          'foreground': self.game_mode.get_foreground_progress_data(),
-                          'user_info': self.game_mode.get_user_info_data(),
-                          'game_sys_info': self.game_mode.get_game_sys_info_data()}
+                          'toggle_with_bias': [],
+                          'toggle': [],
+                          'foreground': [],
+                          'user_info': [],
+                          'game_sys_info': {}}
 
         return scene_progress
 
@@ -75,11 +78,6 @@ class Game(PaiaGame):
     def is_running(self):
         return self.game_mode.status == GameStatus.GAME_ALIVE
 
-    def set_game_mode(self):
-        play_rect_area = pygame.Rect(0, 0, 1000, 600)
-        game_mode = BattleMode(play_rect_area)
-        return game_mode
-
     def rank(self):
         self.game_result_state = self.game_mode.state
         self.attachements = self.game_mode.get_player_result()
@@ -91,3 +89,8 @@ class Game(PaiaGame):
             self.is_debug = not self.is_debug
         if key_board_list[pygame.K_SPACE]:
             self.is_paused = not self.is_paused
+
+    def set_game_mode(self):
+        play_rect_area = pygame.Rect(0, 0, WIDTH, HEIGHT)
+        game_mode = BattleMode(play_rect_area)
+        return game_mode

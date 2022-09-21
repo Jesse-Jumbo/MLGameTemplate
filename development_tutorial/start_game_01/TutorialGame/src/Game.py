@@ -5,9 +5,12 @@ from mlgame.game.paia_game import PaiaGame, GameStatus
 
 from .SingleMode import SingleMode
 
+
 GAME_DIR = path.dirname(__file__)
 MAP_DIR = path.join(GAME_DIR, "..", "asset", 'maps')
 SOUND_DIR = path.join(GAME_DIR, "..", "asset", "sound")
+WIDTH = 1000
+HEIGHT = 600
 
 
 class Game(PaiaGame):
@@ -50,13 +53,13 @@ class Game(PaiaGame):
         """
         Get the position of src objects for drawing on the web
         """
-        scene_progress = {'background': self.game_mode.get_background_view_data(),
+        scene_progress = {'background': [],
                           'object_list': self.game_mode.get_obj_progress_data(),
-                          'toggle_with_bias': self.game_mode.get_bias_toggle_progress_data(),
-                          'toggle': self.game_mode.get_toggle_progress_data(),
-                          'foreground': self.game_mode.get_foreground_progress_data(),
-                          'user_info': self.game_mode.get_user_info_data(),
-                          'game_sys_info': self.game_mode.get_game_sys_info_data()}
+                          'toggle_with_bias': [],
+                          'toggle': [],
+                          'foreground': [],
+                          'user_info': [],
+                          'game_sys_info': {}}
 
         return scene_progress
 
@@ -74,7 +77,7 @@ class Game(PaiaGame):
         return self.game_mode.status == GameStatus.GAME_ALIVE
 
     def set_game_mode(self):
-        play_rect_area = pygame.Rect(0, 0, 1000, 600)
+        play_rect_area = pygame.Rect(0, 0, WIDTH, HEIGHT)
         game_mode = SingleMode(play_rect_area)
         return game_mode
 
