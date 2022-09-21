@@ -14,9 +14,9 @@
 - **條件判斷：** 菱形說明必須做決策的點，通常會有「是」或「否」兩個選項從這個點分岔開來。
 - **延遲符號：** D 形符號表示程式中的延遲（Delay）。
 - **電腦螢幕：** 通常表示輸出，若具有觸控式功能的螢幕亦做為輸入符號。
-    ![電腦螢幕符號](https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/tree/main/Iron_article_2022/03/image/couputer_display.png)   
+    ![電腦螢幕符號](https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/Iron_article_2022/03/image/computer_display.png)   
     - （補充）**輸出入符號：** 平行四邊形為一般通用的輸出入。
-        ![通用輸出入符號](https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/tree/main/Iron_article_2022/03/image/std_i_o.png)
+        ![通用輸出入符號](https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/Iron_article_2022/03/image/std_i_o.png)
 > **流程圖**~~**延伸**~~**學習：**
 > 
 > - **學習資料參考：** 流程圖繪製指南：定義、方法及提示 **[@asana](https://asana.com/zh-tw/resources/process-mapping)**
