@@ -13,19 +13,19 @@
 - **[games](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/games) 存放來自各方遊戲開發者所貢獻的遊戲 [Game Share Contributors](https://github.com/Jesse-Jumbo/MLGameTemplate#Game-Share-Contributors)**
 - **[game_module](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/game_module) 是用於方便開發遊戲可被使用的工具庫**
 - **[game_templates](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/game_templates) 存放不同種類的遊戲模板**
-- **[development_tutorial](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/development_tutorial) 是遊戲開發教學（正在開發中）**
+- **[development_tutorial](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/development_tutorial) 是遊戲開發教學（持續開發中）**
 - **[SampleGame](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/SampleGame) 是已開發完成的範例遊戲（正在重構中）**
 
 [//]:# (game gif)
 
 ## 使用方式
 
-1. **fork** this project
+1. （**fork** this project）
 2. **Select a template** in game_templates to copy
 3. Paste it in games and **become a new project**
 4. Give the project **a new game name**
 5. **Add your game content** to the project
-6. **Submit PR** to share your game project
+6. （**Submit PR** to share your game project）
 
 ## 更新專案
 ![Sync fork](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/doc/readme_image/Update_branch.png)
