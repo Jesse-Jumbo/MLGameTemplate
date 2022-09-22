@@ -1,11 +1,11 @@
 {
   "game_name": "MyGame",
   "version": "0.0.1",
-  "url": "https://github.com/Jesse-Jumbo/GameFramework",
+  "url": "https://github.com/Jesse-Jumbo/MLGameTemplate",
   "description": "一個打造PAIAGame的簡易模板",
   "logo": [
     "./asset/image/TreasureChest.svg",
-    "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/TreasureChest.svg"
+    "https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/TreasureChest.svg"
   ],
   "user_num": {
     "min": 1,

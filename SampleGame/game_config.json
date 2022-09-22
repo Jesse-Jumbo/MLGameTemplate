@@ -1,11 +1,11 @@
 {
   "game_name": "SampleGame",
   "version": "0.2.0",
-  "url": "https://github.com/Jesse-Jumbo/GameFramework/tree/feature/SampleGame",
+  "url": "https://github.com/Jesse-Jumbo/MLGameTemplate/tree/feature/SampleGame",
   "description": "一個簡易完整的遊戲",
   "logo": [
     "./asset/image/TreasureChest.svg",
-    "https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/TreasureChest.svg"
+    "https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/TreasureChest.svg"
   ],
   "user_num": {
     "min": 1,

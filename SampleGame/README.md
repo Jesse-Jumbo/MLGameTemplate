@@ -1,13 +1,13 @@
-# ！Watch out ！正在重構中
+# ！Watch out ！正在重構中，遊戲無法順利運行
 # SampleGame
 
 
-![mlgame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)
+[![MLGameTemplate](https://img.shields.io/github/v/tag/Jesse-Jumbo/MLGameTemplate)](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/0.4.3)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
-- 這是一款簡單的射擊遊戲，也是GameFramework的遊戲教學範例。
+- 這是一款簡單的射擊遊戲，也是 MLGameTemplate 的遊戲教學範例。
 
 [//]:# (game gif)
 

@@ -73,7 +73,7 @@ class SamplePlayer(Player):
             , width=self.rect.width
             , height=self.rect.height
             , file_path=PLAYER_PATH
-            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/player.png")
+            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/player.png")
 
     def get_data_from_obj_to_game(self) -> dict:
         return {"x": self.rect.x, "y": self.rect.y}

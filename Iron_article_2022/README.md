@@ -4,7 +4,7 @@
 
 ## 隊名：[台南巷弄美食獵人](https://ithelp.ithome.com.tw/2022ironman/signup/team/256)
 
-<img src="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/Iron_article_2022/image/iconv2.png" alt="logo" width="130"/> 
+<img src="https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/iconv2.png" alt="logo" width="130"/> 
 
 ### 介紹：
 
@@ -23,7 +23,7 @@
 # 競賽主題
 ##  Software Development
 ### [用程式寫遊戲給AI玩 系列](https://ithelp.ithome.com.tw/users/20151585/ironman/5325) —— [JesseJumbo](https://ithelp.ithome.com.tw/users/20151585)
-[用程式寫遊戲給AI玩](https://github.com/Jesse-Jumbo/GameFramework/tree/main) ——以Python語言開發，結合MLGame框架的2D Pygame雙人對戰遊戲。
+[用程式寫遊戲給AI玩](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main) ——以Python語言開發，結合MLGame框架的2D Pygame雙人對戰遊戲。
 
 這是一篇與只懂一些Python語法的初學者站在一起的教學向文章。
 

@@ -43,13 +43,13 @@ class SampleMob(Mob):
                 , width=self.rect.width
                 , height=self.rect.height
                 , file_path=path.join(MOB_PATH, f"mob_0.png")
-                , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/mob_0.png")
+                , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/mob_0.png")
             , create_asset_init_data(
                 image_id="mob_1"
                 , width=self.rect.width
                 , height=self.rect.height
                 , file_path=path.join(MOB_PATH, f"mob_1.png")
-                , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/mob_1.png")
+                , github_raw_url=f"https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/mob_1.png")
         ]
 
     def get_data_from_obj_to_game(self) -> dict:

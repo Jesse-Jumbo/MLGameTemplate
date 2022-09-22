@@ -203,7 +203,7 @@ class SampleGame(PaiaGame):
             , width=WIDTH-50
             , height=HEIGHT-50
             , file_path=bg_path
-            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/GameFramework/main/MyGame/asset/image/background.png")
+            , github_raw_url="https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/MyGame/asset/image/background.png")
         # 定義遊戲圖片初始資料，將場景的屬性，轉化為字典
         # 將所有圖片資訊加入assets裡
         scene_init_data = {"scene": self.scene.__dict__,
