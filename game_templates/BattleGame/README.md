@@ -18,7 +18,7 @@
 ## 遊戲參數設定
 
 - `BattleGame`後不輸入參數，則默認使用預設值，即game_config.json內參數default值。
-- 在SampleGame打開終端機，複製貼上即可 以預設參數啟動遊戲。
+- 在 BattleGame 打開終端機，複製貼上即可 以預設參數啟動遊戲。
   ```bash
   python -m mlgame -f 30 -i ./ml/ml_play_manual.py .
   ```

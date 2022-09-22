@@ -6,7 +6,7 @@
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
-- 一個用於教學的遊戲。
+- 一個用於教學可直接啟動的單、雙人遊戲。
 
 [//]:# (game gif)
 
@@ -16,26 +16,41 @@
 1. 在命令行輸入命令執行。
 
 ## 遊戲參數設定
-
+```bash
+# command line format
+python -m mlgame [options] <game_folder> [game_params]
+```
 - `TutorialGame`後不輸入參數，則默認使用預設值，即game_config.json內參數default值。
-- 在SampleGame打開終端機，複製貼上即可 以預設參數啟動遊戲。
+- 在 TutorialGame打開終端機，複製貼上即以預設參數啟動遊戲。
   ```bash
   python -m mlgame -f 30 -i ./ml/ml_play_manual.py .
   ```
 
-```bash
-# command line format
-python -m mlgame [options] <game_folder> [game_params]
-# A sample to play the game with manual
-python -m mlgame \
--f 120 -i ./path/to/ai/ml_play_manual.py \
-./path/to/game/SingleGame \
-# A sample to play the game with AI
-python -m mlgame \
--f 120 -i ./path/to/ai/ml_play_template.py \
-./path/to/game/SingleGame \
+- A sample to play the game with manual
+  - SingleMode
+    ```bash
+    python -m mlgame \
+    -f 120 -i ./path/to/ai/ml_play_manual.py \
+    ./path/to/game/SingleGame \
+    
+    ```
+  - BattleMode
+    ```bash
+    python -m mlgame \
+    -f 120 -i ./path/to/ai/ml_play_manual.py \
+    -i ./path/to/ai/ml_play_manual.py \
+    ./path/to/game/SingleGame \
+    
+    ```
+  - 以此類推，輸入愈多AI，愈多人執行遊戲（目前最多兩個）
 
-```
+- A sample to play the game with AI
+  ```bash
+  python -m mlgame \
+  -f 120 -i ./path/to/ai/ml_play_template.py \
+  ./path/to/game/SingleGame \
+  
+  ```
 
 - 指令說明：
   - `python`：代表用python啟動遊戲。
