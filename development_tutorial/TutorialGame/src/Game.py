@@ -2,19 +2,22 @@ from os import path
 
 import pygame.key
 from mlgame.game.paia_game import PaiaGame, GameStatus
+from mlgame.utils.enum import get_ai_name
+from mlgame.view.view_model import Scene
 
+from .BattleMode import BattleMode
 from .SingleMode import SingleMode
 
 
 GAME_DIR = path.dirname(__file__)
 MAP_DIR = path.join(GAME_DIR, "..", "asset", 'maps')
 SOUND_DIR = path.join(GAME_DIR, "..", "asset", "sound")
-WIDTH = 1000
 HEIGHT = 600
+WIDTH = 1000
 
 
 class Game(PaiaGame):
-    def __init__(self, user_num):
+    def __init__(self, user_num=1):
         super().__init__(user_num)
         self.is_paused = False
         self.is_debug = False
@@ -76,11 +79,6 @@ class Game(PaiaGame):
     def is_running(self):
         return self.game_mode.status == GameStatus.GAME_ALIVE
 
-    def set_game_mode(self):
-        play_rect_area = pygame.Rect(0, 0, WIDTH, HEIGHT)
-        game_mode = SingleMode(play_rect_area)
-        return game_mode
-
     def rank(self):
         self.game_result_state = self.game_mode.state
         self.attachements = self.game_mode.get_player_result()
@@ -92,3 +90,11 @@ class Game(PaiaGame):
             self.is_debug = not self.is_debug
         if key_board_list[pygame.K_SPACE]:
             self.is_paused = not self.is_paused
+
+    def set_game_mode(self):
+        play_rect_area = pygame.Rect(0, 0, WIDTH, HEIGHT)
+        if self.user_num == 1:
+            game_mode = SingleMode(play_rect_area)
+        else:
+            game_mode = BattleMode(play_rect_area)
+        return game_mode

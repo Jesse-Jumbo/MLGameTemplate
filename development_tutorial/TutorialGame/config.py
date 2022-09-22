@@ -7,3 +7,4 @@ from src.Game import Game
 GAME_SETUP = {
     "game": Game,
 }
+

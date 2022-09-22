@@ -4,7 +4,7 @@ import pygame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import create_image_view_data, create_asset_init_data
 
-from .env import IMAGE_DIR
+from game_templates.BattleGame.src.env import IMAGE_DIR
 
 Vec = pygame.math.Vector2
 
@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.origin_center = self.rect.center
         self.angle = 0
         self.used_frame = 0
-        self.vel = Vec(0, 0)
+        self.vel = Vec(10, 10)
         self.is_alive = True
 
     def update(self, command: dict) -> None:
@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
         self.used_frame += 1
-        self.rect.center += self.vel
+        # self.rect.center += self.vel
         self.act(command[self.id])
 
     def reset(self) -> None:
@@ -47,7 +47,16 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self.origin_xy
 
     def act(self, action: list) -> None:
-        pass
+        if "RIGHT" in action:
+            self.rect.x += self.vel.x
+        elif "LEFT" in action:
+            self.rect.x -= self.vel.x
+        if "UP" in action:
+            self.rect.y -= self.vel.y
+        elif "DOWN" in action:
+            self.rect.y += self.vel.y
+        if "SHOOT" in action:
+            pass
 
     def get_size(self) -> tuple:
         """
@@ -81,7 +90,7 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
         image_init_data = create_asset_init_data(f"{self.id}P", self.rect.width, self.rect.height
-                                                 , path.join(IMAGE_DIR, f"player.png"), "url")
+                                                 , path.join(IMAGE_DIR, f"{self.id}.png"), "url")
         return image_init_data
 
     def get_info_to_game_result(self):

@@ -1,12 +1,12 @@
 # TutorialGame
 
 
-[![TutorialGame](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)](https://github.com/Jesse-Jumbo/GameFramework/tree/0.4.2)
+[![TutorialGame](https://img.shields.io/github/v/tag/Jesse-Jumbo/MLGameTemplate)](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/0.4.2)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![pytmx](https://img.shields.io/badge/pytmx-3.31-blue.svg)](https://github.com/bitcraft/pytmx/releases/tag/v3.31)
 
-- 一個用於教學的單人遊戲。
+- 一個用於教學的遊戲。
 
 [//]:# (game gif)
 
