@@ -1,7 +1,7 @@
 # A collection Of Templates For Rapid Development Of MLGame Games
 
 
-[![GameFramework](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)](https://github.com/Jesse-Jumbo/GameFramework/tree/0.4.2)
+[![GameFramework](https://img.shields.io/github/v/tag/Jesse-Jumbo/GameFramework)](https://github.com/Jesse-Jumbo/GameFramework/tree/0.4.3)
 [![MLGame](https://img.shields.io/badge/MLGame-10.0.0-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 
 
