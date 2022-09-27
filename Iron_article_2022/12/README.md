@@ -1,6 +1,6 @@
 # 讀取自製地圖建立遊戲角色程式
 
-此文會透過[GitHub@TankMan](https://github.com/Jesse-Jumbo/TankMan) 坦克大作戰描述，透過讀取用*Tiled*這個軟體製作的地圖，來建立遊戲物件的程式碼
+此文會透過[GitHub@TankMan](https://github.com/Jesse-Jumbo/TankMan) 坦克大作戰描述，如何透過讀取用*Tiled*這個軟體製作的地圖，來建立遊戲物件的程式碼
 
 ### 關於如何製作地圖，請閱讀 TankMan/Mapping.md [地圖製作教學](https://github.com/Jesse-Jumbo/TankMan/blob/main/Mapping.md)
 
