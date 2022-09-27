@@ -1,6 +1,8 @@
-這次我們會透過[GitHub@TankMan](https://github.com/Jesse-Jumbo/TankMan) 講，我如何透過使用*`Tiled`*這個軟體製作的地圖建立遊戲物件
+# 讀取自製地圖建立遊戲角色程式
 
-### 關於如何製作地圖，請看地圖製作教學 @[TankMan/Mapping.md](https://github.com/Jesse-Jumbo/TankMan/blob/main/Mapping.md)
+此文會透過[GitHub@TankMan](https://github.com/Jesse-Jumbo/TankMan) 坦克大作戰描述，透過讀取用*Tiled*這個軟體製作的地圖，來建立遊戲物件的程式碼
+
+### 關於如何製作地圖，請閱讀 TankMan/Mapping.md [地圖製作教學](https://github.com/Jesse-Jumbo/TankMan/blob/main/Mapping.md)
 
 ### 以地圖no.1為範例說明 @[TankMan/asset/maps/map_01.tmx](https://github.com/Jesse-Jumbo/TankMan/blob/main/asset/maps/map_01.tmx)
 
@@ -47,8 +49,8 @@
     
     ```python
     class BattleMode:
-    		def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
-          self.map = TiledMap(map_path)
+        def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
+            self.map = TiledMap(map_path)
     ```
     
 - `TiledMap`透過`pytmx`這個套件裡的`TiledMap`類別，傳入地圖路徑，建立地圖物件
@@ -83,13 +85,13 @@
     
     ```python
     class BattleMode:
-    		def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
-          # init obj data
-          self.map.add_init_obj_data(PLAYER_1_IMG_NO, Player, act_cd=act_cd, play_rect_area=self.play_rect_area)
-          self.map.add_init_obj_data(PLAYER_2_IMG_NO, Player, act_cd=act_cd, play_rect_area=self.play_rect_area)
-          self.map.add_init_obj_data(WALL_IMG_NO, Wall, margin=8, spacing=8)
-          self.map.add_init_obj_data(BULLET_STATION_IMG_NO, Station, margin=2, spacing=2, capacity=5, quadrant=1)
-          self.map.add_init_obj_data(OIL_STATION_IMG_NO, Station, margin=2, spacing=2, capacity=30, quadrant=1)
+        def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
+            # init obj data
+            self.map.add_init_obj_data(PLAYER_1_IMG_NO, Player, act_cd=act_cd, play_rect_area=self.play_rect_area)
+            self.map.add_init_obj_data(PLAYER_2_IMG_NO, Player, act_cd=act_cd, play_rect_area=self.play_rect_area)
+            self.map.add_init_obj_data(WALL_IMG_NO, Wall, margin=8, spacing=8)
+            self.map.add_init_obj_data(BULLET_STATION_IMG_NO, Station, margin=2, spacing=2, capacity=5, quadrant=1)
+            self.map.add_init_obj_data(OIL_STATION_IMG_NO, Station, margin=2, spacing=2, capacity=30, quadrant=1)
     ```
     
 - 將收到的物件初始化資料，以`image_id`為`key`，`value`為`class_name`和`obj_other_params`，更新到`all_obj_data_dict`儲存，並在`all_obj`初始化`key`為`image_id`的`value`為一空陣列
@@ -112,9 +114,9 @@
     
     ```python
     class BattleMode:
-    		def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
-          # create obj
-          all_obj = self.map.create_init_obj_dict()
+        def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
+            # create obj
+            all_obj = self.map.create_init_obj_dict()
     ```
     
 - `TiledMap`開始讀取地圖上的每一格，若有物件，則從`all_obj_data_dict`獲取初始化物件資料，打包地圖該格的資料，初始化物件後，儲存進`all_obj[img_id]`內，最後回傳以`image_id`為`key`，`value`為`object_list`的`all_obj`所有物件字典
@@ -146,8 +148,8 @@
     
     ```python
     class BattleMode:
-    		def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
-    	      # init player
+        def __init__(self, is_manual: bool, map_path: str, frame_limit: int, sound_path: str, play_rect_area: pygame.Rect):
+            # init player
             self.player_1P = all_obj[PLAYER_1_IMG_NO][0]
             self.player_2P = all_obj[PLAYER_2_IMG_NO][0]
             # init walls
