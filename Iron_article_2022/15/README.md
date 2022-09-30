@@ -4,17 +4,17 @@
 
 ## 快速建立新的雙人遊戲
 
-關於如何快速建立新的雙人遊戲，請看此系列文的第八篇「**[快速開始一個新的遊戲 @MLGame Template](https://ithelp.ithome.com.tw/articles/10297015) 」。**
+關於如何快速建立新的雙人遊戲，請看此系列文的第八篇「[**快速開始一個新的遊戲 @MLGame Template**](https://ithelp.ithome.com.tw/articles/10297015) 」。
 
 ### 這次我們要做的是TankMan，所以複製雙人模式的模板，
 
 1. **MLGameTemplate** 專案底下，進入 **game_templates** 資料夾，複製 **BattleMode** 到**games** 成為新專案。 [點我](https://github.com/Jesse-Jumbo/MLGameTemplate/tree/main/game_templates)
-2. **MLGameTemplate** 專案底下，複製 **game_module** 資料夾，貼上在 **BattleMode.src** 裡面。
+2. **MLGameTemplate** 專案底下，複製 **game_module** 資料夾，貼上在 **BattleMode.src** 裡面。[點我](https://github.com/Jesse-Jumbo/MLGameTemplate)
 3. 把遊戲資料夾改成新遊戲的名字。
 
 ### 完成畫面
 
-關於遊戲專案的結構，請看此系列文的第七篇「[**PaiaGame Strictures**](https://ithelp.ithome.com.tw/articles/10296404) 」的 **MLGame專案架構介紹**。
+關於遊戲專案的結構，請看此系列文的第七篇「[**PaiaGame Structures**](https://ithelp.ithome.com.tw/articles/10296404) 」的 **MLGame專案架構介紹**。
 
 ![project_structure](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/project_structure.png)
 
