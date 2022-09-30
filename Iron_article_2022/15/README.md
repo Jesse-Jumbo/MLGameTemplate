@@ -22,10 +22,7 @@
 
 因為專案路徑可能不同，所以需要修改import的路徑，以 **ITHomeGame** 角度描述。
 
-- 我們要來改一下，這兩個檔案
-    
-    ![day1_refactor](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day1_refactor.png)
-    
+- 我們要來改一下 **BattleMode.py**
 1. 進入 **BattleMode.py**，將第 8 行從原本call 在外的資料夾 **game_module** 的絕對路徑，變成相對路徑，因為移到 src 裡面
     
     ```python
@@ -35,17 +32,6 @@
     # after
     from .game_module.TiledMap import create_construction
     ```
-    
-2. 再來進入 **Player.py**，將第 7 行從原本我當初不小心打錯的改成正確的，不好意思
-    
-    ```python
-    # before
-    from .BattleGame.src.env import IMAGE_DIR
-    
-    # after
-    from .env import IMAGE_DIR
-    ```
-    
 
 ## 啟動遊戲
 
