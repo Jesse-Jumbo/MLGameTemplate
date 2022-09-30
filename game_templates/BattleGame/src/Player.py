@@ -4,7 +4,7 @@ import pygame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.view_model import create_image_view_data, create_asset_init_data
 
-from game_templates.BattleGame.src.env import IMAGE_DIR
+from .env import IMAGE_DIR
 
 Vec = pygame.math.Vector2
 
