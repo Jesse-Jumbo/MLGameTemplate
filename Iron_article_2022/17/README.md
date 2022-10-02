@@ -48,7 +48,7 @@
         # before
         class Mob(pygame.sprite.Sprite):
             def __init__(self, construction: dict, **kwargs):
-        		self.image_id = "1P"
+                self.image_id = "1P"
         ```
         
         ```python
@@ -58,7 +58,7 @@
                 self.image_id = "mob"
         ```
         
-        - 程式碼中，所有原本是 `f"{self.id}P"` 的，也都改成  `self.image_id`
+        - **程式碼中，所有原本是 `f"{self.id}P"` 的，也都改成  `self.image_id`**
     - 在 `update` 刪除 `command` 和 `act`
         
         ```python
@@ -112,7 +112,7 @@
         ```
         
     
-    ### 然後，別忘了在 README.md 文件，新增圖片來源或圖片作者
+    ### 最後，別忘了在 README.md 文件，新增圖片來源或圖片作者
     
     ```
     ## Image Sours
@@ -141,7 +141,7 @@
             self.all_sprites.add(*self.mobs)
     ```
     
-- 要注意使用變數時，變數宣告的順序喔！
+- **要注意使用變數時，變數宣告的順序喔！**
 
 ## 繪製怪物
 
@@ -167,7 +167,7 @@ class BattleMode:
                 obj_progress_data.append(mob.get_obj_progress_data())
 ```
 
-- 注意，繪製的順序是根據清單的順序，一層一層畫上去的！
+- **注意，繪製的順序是根據清單的順序，一層一層畫上去的！**
 
 ### 今日畫面
 
