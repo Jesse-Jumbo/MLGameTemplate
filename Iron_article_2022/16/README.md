@@ -222,4 +222,4 @@ class Player(sprite.Sprite):
 
 ### 小提示，**play_rect_area 最開始宣告的地方**
 
-## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/day_2)
+## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/ThomeMan_day_16)

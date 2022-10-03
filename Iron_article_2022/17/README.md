@@ -192,4 +192,4 @@ class BattleMode:
     
 ![day17_end_view](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day17_end_view.png)
 
-## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/day_3)
+## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/ThomeMan_day_17)

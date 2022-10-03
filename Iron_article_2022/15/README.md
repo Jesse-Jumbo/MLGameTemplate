@@ -67,4 +67,4 @@
 
 ![day1_end_view](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day1_end_view.png)
 
-### 這十天的內容，都會更新在 TankMan 的 ithome_30 的分支上。 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/day_1)
+### 這十天的內容，都會更新在 TankMan 的 ithome_30 的分支上。 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/ThomeMan_day_15)
