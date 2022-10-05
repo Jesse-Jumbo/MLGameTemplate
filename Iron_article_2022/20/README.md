@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
 
 這時若是長按射擊鍵，應該就可以看到以下的畫面，子彈會連續發射
 
-![day_20_wrong_end_view](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day_20_wrong_end_view.png)
+![day_20_wrong_end_view](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day20_wrong_end_view.png)
 
 ## 增加射擊限制
 
@@ -136,9 +136,10 @@ class Player(pygame.sprite.Sprite):
 
 ## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/releases/tag/ThomeMan_day_20)
 
-![day_20_end_view.pag](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day_20_end_view.png)
+![day_20_end_view.png](https://raw.githubusercontent.com/Jesse-Jumbo/MLGameTemplate/main/Iron_article_2022/image/day20_end_view.png)
 
 > 今日檔案更新有：
 > 
-> 1. Player
+> 1. [Player](https://github.com/Jesse-Jumbo/TankMan/blob/ThomeMan_day_19/ITHomeGame/src/Player.py)
 > 2. [BattleMode](https://github.com/Jesse-Jumbo/TankMan/blob/ThomeMan_day_19/ITHomeGame/src/BattleMode.py)
+> 
