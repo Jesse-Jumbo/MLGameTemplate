@@ -8,15 +8,15 @@
 
 ## Mob 的射擊
 
-- 跟昨天玩家射擊一樣，這裡簡單解釋並附上程式碼，詳情可參考上篇「****[實作！雙人射擊遊戲 —— 玩家射擊](https://ithelp.ithome.com.tw/articles/10304464)」**
+- 跟昨天玩家射擊一樣，這裡簡單解釋並附上程式碼，詳情可參考上篇「[實作！雙人射擊遊戲 —— 玩家射擊](https://ithelp.ithome.com.tw/articles/10304464) 」
 1. **初始化子彈儲存位置**和**射擊時間變數**
     
     ```python
     class Mob(pygame.sprite.Sprite):
         def __init__(self, construction: dict, **kwargs):
-    				self.last_shoot_frame = 0
-    				self.shoot_cd = random.randint(120, 300)
-    				self.bullets = pygame.sprite.Group()
+            self.last_shoot_frame = 0
+            self.shoot_cd = random.randint(120, 300)
+            self.bullets = pygame.sprite.Group()
     ```
     
     - `shoot_cd` 這次我簡單在初始化Mob時，隨機期值為 `120~300` 之間的 `frame`，大家可以有更多不同的做法喔！
@@ -25,7 +25,7 @@
     ```python
     class Mob(pygame.sprite.Sprite):
         def update(self) -> None:
-    				self.bullets.update()
+            self.bullets.update()
             if self.used_frame - self.last_shoot_frame > self.shoot_cd:
                 self.shoot()
     ```
@@ -80,7 +80,7 @@
 
 # 新增遊戲參數 is_manual
 
-- 關於遊戲參數詳情，請看第 1 1 天的「****[遊戲啟動入口與參數說明 @TankMan](https://ithelp.ithome.com.tw/articles/10298977)****」
+- 關於遊戲參數詳情，請看第 1 1 天的「[遊戲啟動入口與參數說明 @TankMan](https://ithelp.ithome.com.tw/articles/10298977) 」
 
 ```json
 # game_config.json before
@@ -161,20 +161,20 @@
     # before
     class BattleMode:
         def __init__(self, play_rect_area: pygame.Rect):
-    				self.player_1P = Player(create_construction(get_ai_name(0), 0
-    																										, (self.width_center//2-50, self.scene_height-50)
-    																										, (50, 50)), play_rect_area=play_rect_area)
+            self.player_1P = Player(create_construction(get_ai_name(0), 0
+                                                        , (self.width_center//2-50, self.scene_height-50)
+                                                        , (50, 50)), play_rect_area=play_rect_area)
             self.player_2P = Player(create_construction(get_ai_name(1), 1
-    																										, (self.width_center+self.width_center//2, SCENE_HEIGHT-50)
-    																										, (50, 50)), play_rect_area=play_rect_area)
+                                                        , (self.width_center+self.width_center//2, SCENE_HEIGHT-50)
+                                                        , (50, 50)), play_rect_area=play_rect_area)
     ```
     
     ```python
     # after
     class BattleMode:
         def __init__(self, play_rect_area: pygame.Rect, is_manual: bool):
-    				self.is_manual = is_manual
-    				self.player_1P = Player(create_construction(get_ai_name(0), 0
+            self.is_manual = is_manual
+            self.player_1P = Player(create_construction(get_ai_name(0), 0
                                                         , (self.width_center//2-50, self.scene_height-50)
                                                         , (50, 50)), play_rect_area=play_rect_area, is_manual=is_manual)
             self.player_2P = Player(create_construction(get_ai_name(1), 1
@@ -204,17 +204,17 @@
 ```python
 # before
 class Player(pygame.sprite.Sprite):
-		def __init__(self, construction: dict, **kwargs):
+   def __init__(self, construction: dict, **kwargs):
         self.shoot_cd = 10
-				self.speed = 10
+        self.speed = 10
 ```
 
 ```python
 # after
 class Player(pygame.sprite.Sprite):
-		def __init__(self, construction: dict, **kwargs):
+   def __init__(self, construction: dict, **kwargs):
         self.is_manual = kwargs["is_manual"]
-				self.shoot_cd = 0
+        self.shoot_cd = 0
         if self.is_manual:
             self.shoot_cd = 10
 ```
