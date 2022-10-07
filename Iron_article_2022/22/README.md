@@ -67,7 +67,7 @@ class BattleMode:
 
 - 遍歷每一個 **mob**
     - 判斷 mob 和玩家裡的子彈，是否有碰撞
-        - 若有，則將 mob 從mob group —— mobs裡移除
+        - 若有，則將 mob 從 mob group——mobs 裡移除
         - 玩家分數加 10 分
     - 判斷玩家和 mob 裡的子彈，是否有碰撞
         - 若有，則該玩家的護盾值，每被擊中一次，扣 10 點
