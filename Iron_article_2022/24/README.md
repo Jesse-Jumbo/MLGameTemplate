@@ -195,7 +195,7 @@ class Mob(pygame.sprite.Sprite):
 
 下回我們來新增 level 5 怪物的移動模式，讓怪物會掉下來攻擊玩家
 
-## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/tree/ThomeMan_day_24)
+## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/releases/tag/ThomeMan_day_24)
 
 ### 因為是重構，所以遊戲畫面跟之前一樣，可看上一篇的「 [實作！雙人射擊遊戲 —— 新增文字與改變背景](https://ithelp.ithome.com.tw/articles/10306204) 」不同的只有遊戲結果，就大家去試試吧！
 
