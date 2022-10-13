@@ -67,7 +67,7 @@ class Mob(pygame.sprite.Sprite):
         return progress_date_list
 ```
 
-## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/releases/tag/ThomeMan_day_24)
+## 本日進度完整程式碼 [點我](https://github.com/Jesse-Jumbo/TankMan/releases/tag/ThomeMan_day_25)
 
 > 今日檔案更新有：
 > 
